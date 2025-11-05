@@ -1,2 +1,2 @@
-import handler from '../backend/adapters/vercel.js';
+const handler = await import('../backend/adapters/vercel.js');
 export default handler;
