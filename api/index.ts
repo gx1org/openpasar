@@ -1,1 +1,2 @@
-export { default, config } from '../backend/adapters/vercel.js'
+import handler from '../backend/adapters/vercel.js';
+export default handler;
