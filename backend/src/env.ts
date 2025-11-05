@@ -1,4 +1,4 @@
-import dotenv from 'dotenv'
+// import dotenv from 'dotenv'
 
 // Load .env hanya kalau dijalankan lokal
 // if (!process.env.VERCEL && !process.env.CF_PAGES) {

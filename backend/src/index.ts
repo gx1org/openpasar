@@ -1,4 +1,4 @@
-import { Hono } from 'hono'
+import { Hono, type Context } from 'hono'
 import { jwt, type JwtVariables } from 'hono/jwt'
 import { envCheck, getEnv } from './env.js';
 import { authorize, refreshToken } from './controllers/auth.js';
@@ -18,6 +18,7 @@ import { adminTransactionDetail, adminTransactionList, adminTransactionStatusUpd
 import { adminUserDetail, adminUserList, adminUserSuspendStatusUpdate } from './controllers/admin/user.js';
 import { adminProductUpdate, adminProductDetail, adminProductList } from './controllers/admin/product.js';
 import { cors } from 'hono/cors';
+import type { HandlerResponse } from 'hono/types';
 
 envCheck();
 
@@ -25,6 +26,9 @@ type Variables = JwtVariables
 const app = new Hono<{ Variables: Variables }>().basePath('/api');
 app.use('/*', cors({ origin: '*' }))
 
+app.get('/ok', async (c: Context): Promise<HandlerResponse<any>> => {
+    return c.json({ ok: true })
+});
 app.get('/config', getConfig);
 app.post('/authorize', authorize);
 app.post('/refresh-token', jwt({ secret: jwt_secret }), refreshToken);

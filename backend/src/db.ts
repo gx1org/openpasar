@@ -1,6 +1,6 @@
 import { neon } from '@neondatabase/serverless'
 import { drizzle } from 'drizzle-orm/neon-http'
-import dotenv from 'dotenv'
+// import dotenv from 'dotenv'
 
 // Load .env kalau lokal
 // if (!process.env.VERCEL && !process.env.CF_PAGES) {
