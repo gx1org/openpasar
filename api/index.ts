@@ -1,1 +1,1 @@
-export { default, config } from '../backend/adapters/vercel.ts'
+export { default, config } from '../backend/adapters/vercel.js'
