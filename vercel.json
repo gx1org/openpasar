@@ -6,7 +6,7 @@
   ],
   "routes": [
     { "src": "^/api/(.*)$", "dest": "backend/adapters/vercel.js" },
-    { "src": "/(.*)", "dest": "frontend/dist/$1" }
+    { "src": "/(.*)", "dest": "frontend/dist/index.html" }
   ],
   "outputDirectory": "frontend/dist"
 }
