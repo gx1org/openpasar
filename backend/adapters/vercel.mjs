@@ -1,5 +1,5 @@
 import { Hono } from 'hono'
-import { handle } from 'hono/vercel'
+// import { handle } from 'hono/vercel'
 
 const app = new Hono()
 
@@ -12,4 +12,4 @@ export const config = {
   runtime: 'nodejs', // atau 'nodejs' kalau kamu butuh modul Node
 }
 
-export default handle(app)
+export default app
