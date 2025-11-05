@@ -5,16 +5,12 @@
       "src": "frontend/package.json",
       "use": "@vercel/static-build",
       "config": { "distDir": "dist" }
-    },
-    {
-      "src": "backend/adapters/vercel.ts",
-      "use": "@vercel/node"
     }
   ],
   "routes": [
     {
       "src": "/api/(.*)",
-      "dest": "backend/adapters/vercel.ts"
+      "dest": "server.ts"
     },
     {
       "src": "/(.*)",
