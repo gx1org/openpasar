@@ -1,17 +1,16 @@
-// api/index.ts
 export const config = {
-  runtime: 'edge'
+  runtime: 'edge',
 }
 
-export default async function handler(req: Request): Promise<Response> {
+export default async function handler() {
   return new Response(
     JSON.stringify({
-      status: "ok",
-      message: "Dummy adapter aktif. Tidak konek ke Hono atau DB.",
+      status: 'ok',
+      message: 'API dummy running from Vercel Edge',
       time: new Date().toISOString(),
     }),
     {
-      headers: { "Content-Type": "application/json" },
+      headers: { 'Content-Type': 'application/json' },
     }
-  );
+  )
 }
