@@ -1,6 +1,6 @@
 import { serve } from '@hono/node-server'
-import app from '../src/index.js';
-import { port } from '../src/config.js';
+import app from './index.js';
+import { port } from './config.js';
 
 serve({
   fetch: app.fetch,
