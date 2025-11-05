@@ -1,9 +1,3 @@
-import { Hono } from 'hono';
- 
-const app = new Hono();
+import app from './backend/src/index'
 
-app.get('/api/ok', (c) => {
-    return c.json({ ok: true })
-})
-
-export default app;
+export default app
