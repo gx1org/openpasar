@@ -7,14 +7,14 @@
       "config": { "distDir": "dist" }
     },
     {
-      "src": "api/**/*.ts",
+      "src": "backend/adapters/vercel.ts",
       "use": "@vercel/node"
     }
   ],
   "routes": [
     {
       "src": "/api/(.*)",
-      "dest": "api/$1"
+      "dest": "backend/adapters/vercel.ts"
     },
     {
       "src": "/(.*)",

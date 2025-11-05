@@ -1,5 +1,11 @@
+import { Hono } from 'hono'
 import { handle } from 'hono/vercel'
-import app from '../src/index.js'
+
+const app = new Hono()
+
+app.get('/api/ok', (c) => {
+    return c.json({ ok: true })
+})
 
 // Gunakan default export, bukan GET/POST satu-satu
 export const config = {
