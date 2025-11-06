@@ -1,11 +1,12 @@
 <script setup>
-import { onMounted, ref, watch } from 'vue';
-import { useAuthStore } from '../stores/auth';
+import { onMounted, ref } from 'vue';
 import { useMiscStore } from '../stores/misc';
-import { useRouter } from 'vue-router';
-import { apiReq, handleErrorApi, Rp } from '../helpers/fns';
+import { apiReq, handleErrorApi } from '../helpers/fns';
 import SpinnerBox from '../components/partial/SpinnerBox.vue';
 import ProductView from '../components/modal/ProductView.vue';
+import ProductItem from '../components/partial/ProductItem.vue';
+
+const misc = useMiscStore()
 
 const products = ref([])
 const isFetching = ref(true)
@@ -28,7 +29,6 @@ const showProduct = (p) => {
   document.getElementById('ProductView-btn').click()
 }
 
-const misc = useMiscStore()
 
 onMounted(() => {
   fetchData()
@@ -52,17 +52,7 @@ onMounted(() => {
     <template v-else>
       <div class="row g-2">
         <div v-for="p,i in products" :key="i" class="col-6 col-sm-4">
-          <a :href="'/search/?show='+p.sku" @click="showProduct(p)" class="text-decoration-none">
-            <div class="card h-100">
-              <img :src="p.image_url" class="card-img-top" alt="image" style="aspect-ratio: 1/1;">
-              <div class="card-body p-2 border-top">
-                <p class="card-title mb-1 small">{{ p.name }}</p>
-                <p class="card-text text-primary small fw-bold">
-                  {{ Rp(p.price) }}
-                </p>
-              </div>
-            </div>
-          </a>
+          <ProductItem :data="p" @clicked="showProduct(p)" />
         </div>
       </div>
     </template>

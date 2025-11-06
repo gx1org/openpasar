@@ -22,6 +22,27 @@
       "when": 1762238062728,
       "tag": "0002_known_white_tiger",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1762462064501,
+      "tag": "0003_slippery_beyonder",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1762463965396,
+      "tag": "0004_glamorous_blazing_skull",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1762464699602,
+      "tag": "0005_chief_mad_thinker",
+      "breakpoints": true
     }
   ]
 }

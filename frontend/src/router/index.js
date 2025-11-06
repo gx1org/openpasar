@@ -3,7 +3,7 @@ import IndexView from '../views/IndexView.vue'
 import CreateView from '../views/CreateView.vue'
 import PostView from '../views/PostView.vue'
 import PostEditorView from '../views/PostEditorView.vue'
-import DirectoryView from '../views/DirectoryView.vue'
+import SearchView from '../views/SearchView.vue'
 import DirectoryEditorView from '../views/DirectoryEditorView.vue'
 import ContentView from '../views/ContentView.vue'
 import DatasetView from '../views/DatasetView.vue'
@@ -59,12 +59,10 @@ const router = createRouter({
       },
     },
     {
-      path: '/directories',
-      name: 'Directory',
-      component: DirectoryView,
+      path: '/search',
+      name: 'Search',
+      component: SearchView,
       meta: {
-        requireAuth: true,
-        requireSite: true,
       },
     },
     {

@@ -16,6 +16,7 @@ export const Store = pgTable('store', {
     name: text('name').notNull().default(''),
     description: text('description').notNull().default(''),
     image_url: text('image_url').notNull().default(''),
+    phone: text('phone').notNull().default(''),
     created_at: timestamp('created_at').defaultNow(),
 })
 
@@ -28,6 +29,8 @@ export const Product = pgTable('products', {
     price: integer('price').notNull().default(0),
     in_stock: integer('in_stock').notNull().default(0),
     is_active: integer('is_active').notNull().default(1),
+    sold_count: integer('sold_count').notNull().default(0),
+    featured: integer('featured').notNull().default(0),
     image_url: text('image_url').notNull().default(''),
     created_at: timestamp('created_at').defaultNow(),
 })

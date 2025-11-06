@@ -1,0 +1,1 @@
+ALTER TABLE "store" ADD COLUMN "phone" text DEFAULT '' NOT NULL;

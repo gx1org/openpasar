@@ -22,9 +22,12 @@ const prop = defineProps({
             <span class="fw-bold text-primary">{{ Rp(data.price) }}</span>
           </p>
           <p style="white-space: pre-line;">{{ data.description }}</p>
-          <p class="small text-muted mb-0">
-            Penjual: {{ data.store_name }}
-          </p>
+          <div class="border p-2 small text-muted mb-0 d-flex bg-light">
+            <span>Penjual: {{ data.store_name }}</span>
+            <a :href="'https://wa.me/'+data.store_phone" target="_blank" rel="noopener noreferrer" class="text-success ms-auto">
+              Hubungi
+            </a>
+          </div>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-primary w-100">

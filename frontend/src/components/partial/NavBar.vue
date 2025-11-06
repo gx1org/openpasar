@@ -1,40 +1,23 @@
 <script setup>
-import { watch } from 'vue';
-import { useAuthStore } from '../../stores/auth';
-import { RouterLink, useRoute } from 'vue-router';
+import { useRouter } from 'vue-router';
 import { useMiscStore } from '../../stores/misc';
-import { apiReq, handleErrorApi, img } from '../../helpers/fns';
+import { img } from '../../helpers/fns';
+import { onMounted } from 'vue';
 
-const route = useRoute()
-const auth = useAuthStore()
+const router = useRouter()
 const misc = useMiscStore()
 
-watch(() => route.path, () => {
-  let nt = document.getElementById('navbar_top')
-  if (!nt) return
-  if (nt.classList.contains('show')) {
-    document.getElementById('navbar_top_btn').click()
+const handleSearch = (e) => {
+  const v = e.target.value
+  router.push(`/search?q=${v}`)
+}
+onMounted(() => {
+  const qs = new URLSearchParams(location.search)
+  const q = qs.get('q') || ''
+  if (q) {
+    document.getElementById('search_top').value = q
   }
 })
-
-const logoutBtn = () => {
-  if (confirm('Logout now?')) {
-    apiReq('post', '/logout').then(() => {
-      auth.setLogout()
-      location.href = 'https://berdikori.com'
-    })
-    .catch(handleErrorApi)
-  }
-}
-
-const switchBtn = () => {
-  if (!confirm('Switch account?')) return
-  apiReq('post', '/logout').then(() => {
-    auth.setLogout()
-    location.reload()
-  })
-  .catch(handleErrorApi)
-}
 </script>
 
 <template>
@@ -43,8 +26,8 @@ const switchBtn = () => {
       <img :src="img(misc.config.site_icon)" alt="logo" width="30" class="mb-1" />
     </RouterLink>
     <div class="input-group">
-      <input class="form-control" :placeholder="misc.config.site_name" aria-label="Search" aria-describedby="basic-addon2">
-      <button class="btn btn-light border" type="button" id="basic-addon2">
+      <input class="form-control" id="search_top" :placeholder="misc.config.site_name" aria-label="Search" type="search" @change="handleSearch">
+      <button class="btn btn-light border" type="button" id="basic-addon2" @click="handleSearch">
         <i class="bi bi-search"></i>
       </button>
     </div>
