@@ -2,8 +2,10 @@
 </script>
 
 <template>
-  <div>
-    <h2 class="my-4">Halaman tidak ditemukan</h2>
-    <RouterLink to="/" class="btn btn-primary">Beranda</RouterLink>
+  <div class="text-center py-4 border">
+    <h5 class="mb-3">Halaman tidak ditemukan</h5>
+    <RouterLink to="/" class="btn btn-outline-primary btn-sm">
+      &larr; Ke Beranda
+    </RouterLink>
   </div>
 </template>

@@ -29,7 +29,6 @@ const showProduct = (p) => {
   document.getElementById('ProductView-btn').click()
 }
 
-
 onMounted(() => {
   fetchData()
 })
@@ -54,6 +53,9 @@ onMounted(() => {
         <div v-for="p,i in products" :key="i" class="col-6 col-sm-4">
           <ProductItem :data="p" @clicked="showProduct(p)" />
         </div>
+      </div>
+      <div v-if="products.length == 0" class="text-center p-3 border bg-white rounded">
+        Tidak ada Produk Unggulan
       </div>
     </template>
     <button id="ProductView-btn" type="button" class="d-none" data-bs-toggle="modal" data-bs-target="#ProductView"></button>

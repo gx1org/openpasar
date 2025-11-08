@@ -30,9 +30,9 @@ const prop = defineProps({
           </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-primary w-100">
+          <RouterLink :to="'/cart?add='+data.sku" class="btn btn-primary w-100">
             Beli Sekarang
-          </button>
+          </RouterLink>
         </div>
       </div>
     </div>

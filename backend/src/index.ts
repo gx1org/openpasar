@@ -90,7 +90,7 @@ adminRoute.patch('/transactions/:id/status', adminTransactionStatusUpdate)
 adminRoute.get('/withdrawals', adminWithdrawalList)
 adminRoute.post('/withdrawals/:id/action', adminWithdrawalApproveReject)
 
-app.route('/api/user', userRoute)
+app.route('/user', userRoute)
 app.route('/api/admin', adminRoute)
 
 export default app;

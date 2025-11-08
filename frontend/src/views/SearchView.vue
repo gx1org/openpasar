@@ -83,15 +83,19 @@ const removeShowQuery = () => {
 onMounted(() => {
   fetchData()
   const myModalEl = document.getElementById('ProductView')
-  myModalEl.addEventListener('hidden.bs.modal', () => {
-    removeShowQuery()
-  })
+  if (myModalEl) {
+    myModalEl.addEventListener('hidden.bs.modal', () => {
+      removeShowQuery()
+    })
+  }
 })
 onUnmounted(() => {
   const myModalEl = document.getElementById('ProductView')
-  myModalEl.removeEventListener('hidden.bs.modal', () => {
-    removeShowQuery()
-  })
+  if (myModalEl) {
+    myModalEl.removeEventListener('hidden.bs.modal', () => {
+      removeShowQuery()
+    })
+  }
 })
 </script>
 

@@ -1,7 +1,7 @@
 <script setup>
-import { useMiscStore } from '../../stores/misc';
+import { useAuthStore } from '../../stores/auth';
 
-const misc = useMiscStore()
+const auth = useAuthStore()
 </script>
 
 <template>
@@ -13,17 +13,23 @@ const misc = useMiscStore()
     </div>
     <div class="w-100">
       <RouterLink to="/search">
-      <i class="bi bi-search"></i>
+        <i class="bi bi-tags-fill"></i>
       </RouterLink>
     </div>
     <div class="w-100">
       <RouterLink to="/cart">
-      <i class="bi bi-cart-fill"></i>
+        <i class="bi bi-cart-fill"></i>
+      </RouterLink>
+    </div>
+    <div class="w-100">
+      <RouterLink to="/orders">
+        <i class="bi bi-box-seam-fill"></i>
       </RouterLink>
     </div>
     <div class="w-100">
       <RouterLink to="/account">
-      <i class="bi bi-person-fill"></i>
+        <i v-if="auth.isLogin" class="bi bi-person-check-fill"></i>
+        <i v-else class="bi bi-person-fill"></i>
       </RouterLink>
     </div>
   </footer>

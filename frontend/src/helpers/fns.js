@@ -37,7 +37,7 @@ export const handleErrorApi = (err) => {
 
   if ([401].includes(err.response.status)) {
     store.setLogout()
-    location.reload()
+    alert(err.response.data.message || err.response.data)
     return
   }
 
@@ -46,7 +46,7 @@ export const handleErrorApi = (err) => {
     console.error(err);
   } else {
     console.log(err.response.data);
-    alert(err.response.data.message)
+    alert(err.response.data.message || err.response.data)
   }
 }
 

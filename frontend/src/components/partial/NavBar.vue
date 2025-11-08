@@ -31,5 +31,8 @@ onMounted(() => {
         <i class="bi bi-search"></i>
       </button>
     </div>
+    <button class="btn btn-light border ms-2">
+      <i class="bi bi-info-circle"></i>
+    </button>
   </nav>
 </template>

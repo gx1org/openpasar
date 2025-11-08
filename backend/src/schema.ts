@@ -33,6 +33,7 @@ export const Product = pgTable('products', {
     featured: integer('featured').notNull().default(0),
     image_url: text('image_url').notNull().default(''),
     created_at: timestamp('created_at').defaultNow(),
+    updated_at: timestamp('updated_at').defaultNow(),
 })
 
 export const Cart = pgTable('carts', {
@@ -55,6 +56,7 @@ export const Transaction = pgTable('transactions', {
     items: jsonb("items").$type<Record<string, any>>().notNull().default([]),
     histories: jsonb("histories").$type<Record<string, any>>().notNull().default([]),
     created_at: timestamp('created_at').defaultNow(),
+    updated_at: timestamp('updated_at').defaultNow(),
 })
 
 export const Withdrawal = pgTable('withdrawals', {

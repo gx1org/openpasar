@@ -1,9 +1,9 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import IndexView from '../views/IndexView.vue'
-import CreateView from '../views/CreateView.vue'
+import SearchView from '../views/SearchView.vue'
+import CartView from '../views/CartView.vue'
 import PostView from '../views/PostView.vue'
 import PostEditorView from '../views/PostEditorView.vue'
-import SearchView from '../views/SearchView.vue'
 import DirectoryEditorView from '../views/DirectoryEditorView.vue'
 import ContentView from '../views/ContentView.vue'
 import DatasetView from '../views/DatasetView.vue'
@@ -20,6 +20,7 @@ import NotFoundView from '../views/NotFoundView.vue'
 import { useAuthStore } from '../stores/auth'
 import { useMiscStore } from '../stores/misc'
 import { apiReq, handleErrorApi } from '../helpers/fns'
+import OrderView from '../views/OrderView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -29,24 +30,22 @@ const router = createRouter({
       name: 'Index',
       component: IndexView,
       meta: {
-        requireAuth: true,
       },
     },
     {
-      path: '/create',
-      name: 'Create',
-      component: CreateView,
+      path: '/cart',
+      name: 'Cart',
+      component: CartView,
       meta: {
         requireAuth: true,
       },
     },
     {
-      path: '/posts',
-      name: 'Post',
-      component: PostView,
+      path: '/orders',
+      name: 'Order',
+      component: OrderView,
       meta: {
         requireAuth: true,
-        requireSite: true,
       },
     },
     {
@@ -189,24 +188,10 @@ router.beforeEach(() => {
   }
 })
 
-const getOnboardingLink = async () => {
-  return await apiReq('get', '/authurl').then(r => {
-    return r.data.url + redir
-  })
-  .catch(handleErrorApi)
-}
-
 router.beforeResolve(async (to, from, next) => {
   const auth = useAuthStore()
   if (!auth.accessToken) {
     auth.accessToken = localStorage.getItem('token')
-  }
-
-  const misc = useMiscStore()
-  if (!misc.config.site_name) {
-    if (!(await misc.getConfig())) {
-      return
-    }
   }
 
   if (to.query.auth_code) {
@@ -219,19 +204,19 @@ router.beforeResolve(async (to, from, next) => {
     return
   }
 
+  const misc = useMiscStore()
+  if (!misc.config.site_name) {
+    if (!(await misc.getConfig())) {
+      return
+    }
+  }
+
   if (auth.isLoading && auth.accessToken) {
     await auth.refreshAccessToken()
   }
 
-  if (to.meta.requireAuth && !auth.isLogin) {
-    const redir = `?callback_url=${encodeURIComponent(location.origin)}`
-    const link = `https://autz.org/onboarding/${misc.config.autzorg_app_id}${redir}`
-    location.href = link
-    return
-  } else {
-    auth.isLoading = false
-    next()
-  }
+  auth.isLoading = false
+  next()
 })
 
 export default router
