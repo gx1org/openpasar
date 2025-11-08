@@ -17,6 +17,10 @@
       "dest": "backend/src/index.ts"
     },
     {
+      "src": "/(.*)\\.(js|css|png|jpg|jpeg|gif|svg|ico|woff2?)$",
+      "dest": "frontend/$1.$2"
+    },
+    {
       "src": "/(.*)",
       "dest": "frontend/index.html"
     }
