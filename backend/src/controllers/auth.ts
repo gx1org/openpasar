@@ -5,10 +5,11 @@ import { db } from "../db.js";
 import { User } from "../schema.js";
 import { eq } from "drizzle-orm";
 import { generateJwt } from "../utils/jwt.js";
+import { getConfig } from "../config.js";
 
 export const authorize = async (c: Context): Promise<HandlerResponse<any>> => {
     const { auth_code } = await c.req.json();
-    const appId = getEnv('AUTZORG_APP_ID');
+    const appId = await getConfig('autzorg_app_id');
     const res = await fetch(`https://autz.org/api/client/${appId}/userinfo?code=${auth_code}`)
     const data = await res.json()
     if (!res.ok) {

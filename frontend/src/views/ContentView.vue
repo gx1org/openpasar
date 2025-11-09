@@ -5,7 +5,6 @@ import { apiReq, handleErrorApi } from '../helpers/fns';
 import { useMiscStore } from '../stores/misc';
 import TrashIcon from '../components/icon/TrashIcon.vue'
 import InputImage from '../components/partial/InputImage.vue'
-import SyntaxGuide from '../components/modal/SyntaxGuide.vue'
 
 const misc = useMiscStore()
 const route = useRoute()
@@ -191,6 +190,5 @@ onMounted(() => {
           </button>
       </div>
     </div>
-    <SyntaxGuide />
   </div>
 </template>

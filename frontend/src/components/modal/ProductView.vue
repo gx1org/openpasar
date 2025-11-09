@@ -24,8 +24,9 @@ const prop = defineProps({
           <p style="white-space: pre-line;">{{ data.description }}</p>
           <div class="border p-2 small text-muted mb-0 d-flex bg-light">
             <span>Penjual: {{ data.store_name }}</span>
-            <a :href="'https://wa.me/'+data.store_phone" target="_blank" rel="noopener noreferrer" class="text-success ms-auto">
-              Hubungi
+            <a :href="'https://wa.me/'+data.store_phone" target="_blank" rel="noopener noreferrer" class="text-success ms-auto text-decoration-none">
+              <i class="bi bi-whatsapp"></i>
+              Chat
             </a>
           </div>
         </div>

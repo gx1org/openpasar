@@ -17,15 +17,7 @@ export const getEnv = (key: string, fallback?: string): string => {
 export const envCheck = () => {
   const requiredVars = [
     'DATABASE_URL',
-    'ADMIN_EMAIL',
-    'AUTZORG_APP_ID',
-    'PAKASIR_SLUG',
-    'PAKASIR_API_KEY',
-    'SMTP_HOST',
-    'SMTP_PORT',
-    'SMTP_USER',
-    'SMTP_PASS',
-    'SMTP_FROM',
+    'JWT_SECRET',
   ]
   requiredVars.forEach((key) => {
     if (!getEnv(key)) {

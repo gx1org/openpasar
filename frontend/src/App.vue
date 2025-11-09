@@ -7,25 +7,34 @@ import FooterBar from './components/partial/FooterBar.vue';
 import { useMiscStore } from './stores/misc';
 import { watch } from 'vue';
 import LoginView from './views/LoginView.vue';
+import ConfigView from './views/admin/ConfigView.vue';
+import InfoModal from './components/modal/InfoModal.vue';
 
 const auth = useAuthStore()
+const misc = useMiscStore()
 const route = useRoute()
 </script>
 
 <template>
   <div v-if="!auth.isLoading" class="container">
-    <NavBar />
-    <main class="bg-light px-3 d-flex flex-column overflow-y-auto">
-      <LoginView v-if="!auth.isLogin && route.meta.requireAuth"/>
-      <RouterView v-else class="h-100" style="" />
-      <p class="text-muted small mb-3 pt-5 text-center mt-auto">
-        powered by
-        <a href="https://github.com/gx1org/openpasar" target="_blank" class="text-reset">
-          OpenPasar
-          <i class="bi bi-github"></i>
-        </a>
-      </p>
+    <main v-if="!misc.installed" class="bg-light px-3 d-flex flex-column overflow-y-auto mb-0 py-4">
+      <ConfigView />
     </main>
-    <FooterBar />
+    <template v-else>
+      <NavBar />
+      <main class="bg-light px-3 d-flex flex-column overflow-y-auto">
+        <LoginView v-if="!auth.isLogin && route.meta.requireAuth"/>
+        <RouterView v-else class="h-100" style="" />
+        <p class="text-muted small mb-3 pt-4 text-center mt-auto">
+          powered by
+          <a href="https://github.com/gx1org/openpasar" target="_blank" class="text-reset">
+            OpenPasar
+            <i class="bi bi-github"></i>
+          </a>
+        </p>
+      </main>
+      <FooterBar />
+      <InfoModal />
+    </template>
   </div>
 </template>

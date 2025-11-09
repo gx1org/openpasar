@@ -50,6 +50,20 @@
       "when": 1762586051091,
       "tag": "0006_nice_peter_parker",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1762636652706,
+      "tag": "0007_careless_red_shift",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1762638567241,
+      "tag": "0008_conscious_grim_reaper",
+      "breakpoints": true
     }
   ]
 }

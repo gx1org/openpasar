@@ -31,7 +31,7 @@ onMounted(() => {
         <i class="bi bi-search"></i>
       </button>
     </div>
-    <button class="btn btn-light border ms-2">
+    <button class="btn btn-light border ms-2" type="button" data-bs-toggle="modal" data-bs-target="#InfoModal">
       <i class="bi bi-info-circle"></i>
     </button>
   </nav>

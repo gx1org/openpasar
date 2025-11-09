@@ -40,7 +40,7 @@ onMounted(() => {
               <div class="flex-fill">
                 <div class="d-flex align-items-center">
                   <div class="flex-fill">
-                    <div class="fw-bold">
+                    <div class="fw-bold mb-2">
                       #{{ d.id }}
                     </div>
                     <div class="text-muted small">
@@ -48,11 +48,11 @@ onMounted(() => {
                     </div>
                   </div>
                   <div class="text-end">
-                    <div class="fw-bold">
-                      {{ Rp(d.total_amount) }}
+                    <div class="mb-2">
+                      {{ d.status }}
                     </div>
                     <div class="text-muted small">
-                      {{ d.status }}
+                      {{ Rp(d.total_amount) }}
                     </div>
                   </div>
                 </div>

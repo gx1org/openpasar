@@ -113,22 +113,20 @@ export const checkout = async (c: Context): Promise<HandlerResponse<any>> => {
         total_amount: carts.reduce((total, cart) => total + cart.quantity * cart.price, 0),
         status: statusPending,
         items: carts.map((cart) => ({
-            product_id: cart.product_id,
+            id: cart.product_id,
             quantity: cart.quantity,
             price: cart.price,
             name: cart.name,
             image_url: cart.image_url,
-            description: cart.description
+            description: cart.description,
+            sku: cart.sku
         })),
         histories: [{
             status: statusPending,
             created_at: new Date(),
         }],
-        description: carts[0].name
+        description: carts.map((cart) => cart.name).join(", "),
     };
-    if (carts.length > 1) {
-        transaction.description += ` + ${carts.length - 1} lainnya`;
-    }
 
     await db.insert(Transaction).values(transaction).returning();
     await db.delete(Cart).where(and(

@@ -1,7 +1,8 @@
 import { sign } from 'hono/jwt'
-import { jwt_secret } from '../config.js'
+import { getEnv } from '../env.js';
 
 export const generateJwt = async (id: string, email: string): Promise<string> => {
+    const jwt_secret = getEnv('JWT_SECRET', 'default_secret');
     const token = await sign({
         id: id,           // ID user (optional, bisa ganti dengan data lain)
         email: email,

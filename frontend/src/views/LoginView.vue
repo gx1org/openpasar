@@ -12,8 +12,8 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="py-5 text-center">
-    <h6 class="mb-4">Login untuk melanjutkan</h6>
+  <div class="py-5 text-center px-3 border rounded bg-white">
+    <h6 class="mb-3">Login untuk melanjutkan</h6>
     <a :href="url" class="btn btn-primary">Login Sekarang</a>
   </div>
 </template>

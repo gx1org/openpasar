@@ -3,13 +3,12 @@ import { jwt, type JwtVariables } from 'hono/jwt'
 import { envCheck, getEnv } from './env.js';
 import { authorize, refreshToken } from './controllers/auth.js';
 import { profile, updateProfile } from './controllers/user.js';
-import { getConfig } from './controllers/config.js';
-import { jwt_secret } from './config.js';
+import { getSiteConfig, getSiteConfigAll, setSiteConfig } from './controllers/config.js';
 import { catalogueDetail, catalogueList } from './controllers/catalogue.js';
 import { addToCart, cartList, checkout, removeFromCart } from './controllers/cart.js';
 import { storeTransactionDetail, storeTransactionList, storeTransactionStatusUpdate, transactionDetail, transactionList, transactionStatusUpdate } from './controllers/transaction.js';
 import { withdrawCreate, withdrawList } from './controllers/withdraw.js';
-import { hasStore, isAdmin } from './utils/middleware.js';
+import { hasStore, initialConfig, isAdmin } from './utils/middleware.js';
 import { storeCreate, storeDetail, storeUpdate } from './controllers/store.js';
 import { storeProductCreate, storeProductDelete, storeProductDetail, storeProductList, storeProductUpdate } from './controllers/product.js';
 import { adminStoreDetail, adminStoreList } from './controllers/admin/store.js';
@@ -21,15 +20,14 @@ import { cors } from 'hono/cors';
 import type { HandlerResponse } from 'hono/types';
 
 envCheck();
+const jwt_secret = getEnv('JWT_SECRET', 'default_secret');
 
 type Variables = JwtVariables
 const app = new Hono<{ Variables: Variables }>().basePath('/api');
 app.use('/*', cors({ origin: '*' }))
 
-app.get('/ok', async (c: Context): Promise<HandlerResponse<any>> => {
-    return c.json({ ok: true })
-});
-app.get('/config', getConfig);
+app.get('/config', getSiteConfig);
+app.post('/config', initialConfig, setSiteConfig);
 app.post('/authorize', authorize);
 app.post('/refresh-token', jwt({ secret: jwt_secret }), refreshToken);
 
@@ -72,6 +70,9 @@ const adminRoute = new Hono<{ Variables: Variables }>();
 adminRoute.use('/*', jwt({ secret: jwt_secret }))
 adminRoute.use('/*', isAdmin)
 
+adminRoute.get('/config', getSiteConfigAll);
+adminRoute.post('/config', setSiteConfig);
+
 adminRoute.get('/users', adminUserList)
 adminRoute.get('/users/:id', adminUserDetail)
 adminRoute.post('/users/:id/suspend', adminUserSuspendStatusUpdate)
@@ -91,6 +92,6 @@ adminRoute.get('/withdrawals', adminWithdrawalList)
 adminRoute.post('/withdrawals/:id/action', adminWithdrawalApproveReject)
 
 app.route('/user', userRoute)
-app.route('/api/admin', adminRoute)
+app.route('/admin', adminRoute)
 
 export default app;

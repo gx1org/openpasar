@@ -2,7 +2,7 @@
   "name": "openpasar-be",
   "type": "module",
   "scripts": {
-    "dev": "tsx watch src/local.ts",
+    "dev": "tsx watch src/serve.ts",
     "build": "tsc",
     "start": "node dist/index.js",
     "db:migrate": "drizzle-kit generate && drizzle-kit push"
