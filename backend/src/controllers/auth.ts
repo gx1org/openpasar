@@ -2,7 +2,7 @@ import type { Context } from "hono";
 import { getEnv } from "../env.js";
 import type { HandlerResponse } from "hono/types";
 import { db } from "../db.js";
-import { User } from "../schema.js";
+import { Store, User } from "../schema.js";
 import { eq } from "drizzle-orm";
 import { generateJwt } from "../utils/jwt.js";
 import { getConfig } from "../config.js";
@@ -17,6 +17,7 @@ export const authorize = async (c: Context): Promise<HandlerResponse<any>> => {
     }
 
     const users = await db.select().from(User).where(eq(User.autzorg_id, data.user.id));
+    let isNewUser = false
     if (users.length === 0) {
         const [newUser] = await db.insert(User).values({
             autzorg_id: data.user.id,
@@ -25,16 +26,22 @@ export const authorize = async (c: Context): Promise<HandlerResponse<any>> => {
             phone: data.user.phone,
         }).returning();
         users.push(newUser);
+        isNewUser = true
     }
     
     const user = users[0];
     const token = await generateJwt(String(user.id), user.email);
-    return c.json({ message: "Authorized", token, user });
+    let store = {}
+    if (!isNewUser) {
+        [store] = await db.select().from(Store).where(eq(Store.user_id, user.id)).limit(1);
+    }
+    return c.json({ message: "Authorized", token, user, store });
 }
 
 export const refreshToken = async (c: Context): Promise<HandlerResponse<any>> => {
     const userId = c.get('jwtPayload')?.id;
     const token = await generateJwt(String(userId), c.get('jwtPayload').email);
-    const users = await db.select().from(User).where(eq(User.id, userId));
-    return c.json({ message: "Authorized", token, user: users[0] });
+    const [user] = await db.select().from(User).where(eq(User.id, userId)).limit(1);
+    const [store] = await db.select().from(Store).where(eq(Store.user_id, userId)).limit(1);
+    return c.json({ message: "Authorized", token, user, store });
 }

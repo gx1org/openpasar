@@ -6,6 +6,7 @@ export const useAuthStore = defineStore('auth', () => {
   const isLoading = ref(true)
   const accessToken = ref('')
   const user = ref({})
+  const store = ref({})
   const role = ref('')
   const isLogin = computed(() => user.value.id)
 
@@ -34,6 +35,7 @@ export const useAuthStore = defineStore('auth', () => {
   const setAuth = async (data) => {
     role.value = data.role
     user.value = data.user
+    store.value = data.store || {}
     accessToken.value = data.token
     localStorage.setItem('token', data.token)
   }
@@ -44,12 +46,10 @@ export const useAuthStore = defineStore('auth', () => {
     role.value = ''
   }
 
-  const updateUser = (data) => {
-    user.value = data
-  }
 
   return {
     user,
+    store,
     role,
     isLogin,
     isLoading,
@@ -58,6 +58,5 @@ export const useAuthStore = defineStore('auth', () => {
     authorize,
     setAuth,
     setLogout,
-    updateUser,
   }
 })

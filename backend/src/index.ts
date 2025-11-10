@@ -38,7 +38,7 @@ const userRoute = new Hono<{ Variables: Variables }>();
 userRoute.use('/*', jwt({ secret: jwt_secret }))
 
 userRoute.get('/profile', profile);
-userRoute.patch('/profile', updateProfile);
+userRoute.put('/profile', updateProfile);
 
 userRoute.get('/carts', cartList)
 userRoute.post('/carts', addToCart)
@@ -54,7 +54,7 @@ userRoute.post('/withdrawals', withdrawCreate)
 
 userRoute.post('/stores', storeCreate)
 userRoute.get('/stores', hasStore, storeDetail)
-userRoute.get('/stores', hasStore, storeUpdate)
+userRoute.put('/stores', hasStore, storeUpdate)
 
 userRoute.get('/stores/products', hasStore, storeProductList)
 userRoute.post('/stores/products', hasStore, storeProductCreate)

@@ -1,10 +1,13 @@
 <script setup>
-import { Rp } from '../helpers/fns';
+import EditProfile from '../components/modal/EditProfile.vue';
+import EditStoreProfile from '../components/modal/EditStoreProfile.vue';
+import { apiReq, Rp } from '../helpers/fns';
 import { useAuthStore } from '../stores/auth';
 import { useMiscStore } from '../stores/misc';
 
 const auth = useAuthStore()
 const misc = useMiscStore()
+
 </script>
 
 <template>
@@ -26,7 +29,7 @@ const misc = useMiscStore()
         </div>
       </div>
       <div class="list-group list-group-flush">
-        <a class="list-group-item d-flex" href="#">
+        <a class="list-group-item d-flex" href="javascript:;" data-bs-toggle="modal" data-bs-target="#EditProfile">
           <span>Edit Profil</span>
           <div class="ms-auto">
             <i class="bi bi-chevron-right"></i>
@@ -51,9 +54,9 @@ const misc = useMiscStore()
           <i class="bi bi-shop" style="font-size: 30px;"></i>
         </div>
         <div class="ms-3">
-          <p class="mb-0 fw-bold">{{ auth.user.name }}</p>
-          <p class="mb-0 small">{{ auth.user.email }}</p>
-          <p class="mb-0 small">{{ auth.user.phone }}</p>
+          <p class="mb-0 fw-bold">{{ auth.store.name }}</p>
+          <p class="mb-0 small">{{ auth.store.email }}</p>
+          <p class="mb-0 small">{{ auth.store.phone }}</p>
         </div>
       </div>
       <div class="list-group list-group-flush">
@@ -69,7 +72,7 @@ const misc = useMiscStore()
             <i class="bi bi-chevron-right"></i>
           </div>
         </a>
-        <a class="list-group-item d-flex" href="#">
+        <a class="list-group-item d-flex" href="javascript:;" data-bs-toggle="modal" data-bs-target="#EditStoreProfile">
           <span>Pengaturan</span>
           <div class="ms-auto">
             <i class="bi bi-chevron-right"></i>
@@ -122,5 +125,7 @@ const misc = useMiscStore()
         </RouterLink>
       </div>
     </template>
+    <EditProfile />
+    <EditStoreProfile />
   </div>
 </template>

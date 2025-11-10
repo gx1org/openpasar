@@ -145,13 +145,15 @@ onMounted(() => {
         </div>
         <ul class="list-group list-group-flush small">
           <li class="list-group-item">
-            <a class="" href="#">
-              Hubungi Penjual &nearr;
+            <a href="#" class="text-decoration-none text-success">
+              <i class="bi bi-whatsapp"></i>
+              Hubungi Penjual
             </a>
           </li>
           <li class="list-group-item">
-            <a class="" href="#">
-              Lapor Admin &nearr;
+            <a href="#" class="text-decoration-none text-success">
+              <i class="bi bi-whatsapp"></i>
+              Lapor Admin
             </a>
           </li>
         </ul>

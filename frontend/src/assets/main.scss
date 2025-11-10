@@ -48,11 +48,12 @@ footer a.router-link-active {
   margin-top: 15px;
   margin-right: 15px;
 }
-.modal-open footer, .modal-open .navbar {
-  // right: 15px;
-}
+
 @media (min-width: 576px) {
   .container {
     max-width: 540px;
+  }
+  body.modal-open  {
+    padding-right: 0px !important;
   }
 }

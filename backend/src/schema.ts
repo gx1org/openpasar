@@ -3,9 +3,9 @@ import { integer, jsonb, pgTable, serial, text, timestamp, varchar } from 'drizz
 export const User = pgTable('users', {
     id: serial('id').primaryKey(),
     autzorg_id: varchar('autzorg_id').notNull().default(''),
-    email: varchar('email').notNull().default(''),
+    email: varchar('email').unique().notNull().default(''),
     name: varchar('name').notNull().default(''),
-    phone: varchar('phone').notNull().default(''),
+    phone: varchar('phone').unique().notNull().default(''),
     balance: integer('balance').notNull().default(0),
     created_at: timestamp('created_at').defaultNow(),
 })

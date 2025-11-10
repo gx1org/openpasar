@@ -29,6 +29,15 @@ const misc = useMiscStore()
             </div>
           </div>
         </div>
+        <div class="modal-footer justify-content-center">
+          <p class="text-muted small text-center">
+            powered by
+            <a href="https://github.com/gx1org/openpasar" target="_blank" class="text-reset">
+              OpenPasar
+              <i class="bi bi-github"></i>
+            </a>
+          </p>
+        </div>
       </div>
     </div>
   </div>

@@ -40,7 +40,7 @@ export const getConfig = async (key: string): Promise<string> => {
 }
 
 export const setConfig = async (key: string, value: string) => {
-    await db.insert(Config)
+  await db.insert(Config)
   .values({
     config_key: key,
     value,
@@ -51,6 +51,7 @@ export const setConfig = async (key: string, value: string) => {
       value,
     },
   });
+  configCache[key] = value
 }
 
 export const getAllConfigs = async (): Promise<Record<string, string | undefined>> => {
