@@ -88,6 +88,9 @@ onMounted(() => {
         Konfigurasi
       </h5>
       <div class="ms-auto">
+        <RouterLink to="/account" class="btn btn-outline-primary btn-sm">
+          &larr; Kembali
+        </RouterLink>
       </div>
     </div>
     <SpinnerBox v-if="isFetching" />

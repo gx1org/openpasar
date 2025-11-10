@@ -16,7 +16,7 @@ const isValidForm = computed(() => {
 const isSending = ref(false)
 const updateBtn = () => {
   isSending.value = true
-  apiReq('put', `/user/stores`, form.value)
+  apiReq(auth.store.id ? 'put' : 'post', `/user/stores`, form.value)
     .then(res => {
       auth.store = res.data.store
       emit('updated')

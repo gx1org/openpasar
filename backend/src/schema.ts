@@ -16,6 +16,7 @@ export const Store = pgTable('store', {
     name: varchar('name').notNull().default(''),
     description: varchar('description').notNull().default(''),
     image_url: varchar('image_url').notNull().default(''),
+    email: varchar('email').notNull().default(''),
     phone: varchar('phone').notNull().default(''),
     created_at: timestamp('created_at').defaultNow(),
 })

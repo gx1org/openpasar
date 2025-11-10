@@ -40,8 +40,11 @@ export const authorize = async (c: Context): Promise<HandlerResponse<any>> => {
 
 export const refreshToken = async (c: Context): Promise<HandlerResponse<any>> => {
     const userId = c.get('jwtPayload')?.id;
-    const token = await generateJwt(String(userId), c.get('jwtPayload').email);
     const [user] = await db.select().from(User).where(eq(User.id, userId)).limit(1);
+    if (!user) {
+        return c.json({ message: "User not found" }, 404);
+    }
+    const token = await generateJwt(String(userId), c.get('jwtPayload').email);
     const [store] = await db.select().from(Store).where(eq(Store.user_id, userId)).limit(1);
     return c.json({ message: "Authorized", token, user, store });
 }

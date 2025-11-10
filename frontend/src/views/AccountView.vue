@@ -43,43 +43,58 @@ const misc = useMiscStore()
         </a>
       </div>
     </div>
-    <div class="d-flex">
-      <h5 class="mb-4">Toko Saya</h5>
-      <div class="ms-auto">
-      </div>
-    </div>
-    <div class="card mb-4">
-      <div class="card-header d-flex">
-        <div>
-          <i class="bi bi-shop" style="font-size: 30px;"></i>
-        </div>
-        <div class="ms-3">
-          <p class="mb-0 fw-bold">{{ auth.store.name }}</p>
-          <p class="mb-0 small">{{ auth.store.email }}</p>
-          <p class="mb-0 small">{{ auth.store.phone }}</p>
+    <template v-if="!(misc.config.site_mode == 'official_store' && !auth.store.id)">
+      <div class="d-flex">
+        <h5 class="mb-4">Toko Saya</h5>
+        <div class="ms-auto">
         </div>
       </div>
-      <div class="list-group list-group-flush">
-        <a class="list-group-item d-flex" href="#">
-          <span>Penjualan</span>
-          <div class="ms-auto">
-            <i class="bi bi-chevron-right"></i>
+      <div v-if="auth.store.id" class="card mb-4">
+        <div class="card-header d-flex">
+          <div>
+            <i class="bi bi-shop" style="font-size: 30px;"></i>
           </div>
-        </a>
-        <a class="list-group-item d-flex" href="#">
-          <span>Produk</span>
-          <div class="ms-auto">
-            <i class="bi bi-chevron-right"></i>
+          <div class="ms-3">
+            <p class="mb-0 fw-bold">{{ auth.store.name }}</p>
+            <p class="mb-0 small">{{ auth.store.email }}</p>
+            <p class="mb-0 small">{{ auth.store.phone }}</p>
           </div>
-        </a>
-        <a class="list-group-item d-flex" href="javascript:;" data-bs-toggle="modal" data-bs-target="#EditStoreProfile">
-          <span>Pengaturan</span>
-          <div class="ms-auto">
-            <i class="bi bi-chevron-right"></i>
-          </div>
-        </a>
+        </div>
+        <div class="list-group list-group-flush">
+          <a class="list-group-item d-flex" href="#">
+            <span>Penjualan</span>
+            <div class="ms-auto">
+              <i class="bi bi-chevron-right"></i>
+            </div>
+          </a>
+          <a class="list-group-item d-flex" href="#">
+            <span>Produk</span>
+            <div class="ms-auto">
+              <i class="bi bi-chevron-right"></i>
+            </div>
+          </a>
+          <a class="list-group-item d-flex" href="javascript:;" data-bs-toggle="modal" data-bs-target="#EditStoreProfile">
+            <span>Pengaturan</span>
+            <div class="ms-auto">
+              <i class="bi bi-chevron-right"></i>
+            </div>
+          </a>
+        </div>
       </div>
-    </div>
+      <div v-else  class="card mb-4">
+        <div class="card-header text-center">
+          Belum memiliki toko
+        </div>
+        <div class="list-group list-group-flush">
+          <a class="list-group-item d-flex" href="javascript:;" data-bs-toggle="modal" data-bs-target="#EditStoreProfile">
+            <span>Buat toko</span>
+            <div class="ms-auto">
+              <i class="bi bi-chevron-right"></i>
+            </div>
+          </a>
+        </div>
+      </div>
+    </template>
     <template v-if="auth.user.email == misc.config.admin_email">
       <div class="d-flex">
         <h5 class="mb-4">Menu Admin</h5>
