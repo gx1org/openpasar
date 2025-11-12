@@ -19,6 +19,9 @@ const defaultForm = {
   autzorg_app_id: '',
   pakasir_slug: '',
   pakasir_api_key: '',
+  seller_fee: 5,
+  content_info: '',
+  content_seller_rules: ''
 }
 
 const form = ref({})
@@ -87,9 +90,9 @@ onMounted(() => {
       <h5 class="mb-4">
         Konfigurasi
       </h5>
-      <div class="ms-auto">
-        <RouterLink to="/account" class="btn btn-outline-primary btn-sm">
-          &larr; Kembali
+      <div v-if="misc.config.installed" class="ms-auto">
+        <RouterLink to="/account" class="small">
+          &larr; Akun
         </RouterLink>
       </div>
     </div>
@@ -135,14 +138,33 @@ onMounted(() => {
           <input type="text" class="form-control" v-model="form.site_description">
         </div>
         <div class="mb-3">
-          <label for="" class="form-label">Ikon</label>
+          <div class="d-flex">
+            <label for="" class="form-label">Ikon</label>
+            <a href="https://upld.zone.id" target="_blank" class="small ms-auto">Upld &nearr;</a>
+          </div>
           <input type="text" class="form-control" v-model="form.site_icon">
         </div>
         <div class="mb-3">
           <label for="" class="form-label">Tema</label>
           <select class="form-control" v-model="form.site_theme">
             <option value="default">default</option>
+            <option value="cerulean">cerulean</option>
+            <option value="cosmo">cosmo</option>
+            <option value="flatly">flatly</option>
+            <option value="lumen">lumen</option>
+            <option value="litera">litera</option>
+            <option value="minty">minty</option>
+            <option value="sandstone">sandstone</option>
+            <option value="simplex">simplex</option>
+            <option value="spacelab">spacelab</option>
+            <option value="united">united</option>
+            <option value="yeti">yeti</option>
+            <option value="zephyr">zephyr</option>
           </select>
+        </div>
+        <div class="mb-3">
+          <label for="" class="form-label">Seller Fee (%)</label>
+          <input type="number" class="form-control" v-model="form.seller_fee">
         </div>
       </div>
       <div class="p-3 border rounded bg-white mb-4">

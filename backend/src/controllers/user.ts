@@ -4,6 +4,7 @@ import { User } from "../schema.js";
 import { db } from "../db.js";
 import { eq } from "drizzle-orm";
 import { getConfig, setConfig } from "../config.js";
+import { hashString } from "../utils/helper.js";
 
 export const profile = async (c: Context): Promise<HandlerResponse<any>> => {
     const userId = c.get('jwtPayload')?.id;
@@ -45,4 +46,28 @@ export const updateProfile = async (c: Context): Promise<HandlerResponse<any>> =
     return c.json({
         user: { ...user, ...updatedUser }
     });
+}
+
+export const updatePin = async (c: Context): Promise<HandlerResponse<any>> => {
+    const userId = c.get('jwtPayload').id;
+    const { old_pin, new_pin } = await c.req.json();
+    const [user] = await db.select().from(User).where(eq(User.id, userId)).limit(1);
+    if (!user) {
+        return c.json({ message: "User not found" }, 404);
+    }
+
+    if (user.hashed_pin != '') {
+        const hashedOldPin = await hashString(old_pin);
+        if (user.hashed_pin !== hashedOldPin) {
+            return c.json({ message: "Invalid old pin" }, 400);
+        }
+    }
+ 
+    const hashedNewPin = await hashString(new_pin);
+    await db.update(User)
+    .set({
+        hashed_pin: hashedNewPin,
+    })
+    .where(eq(User.id, user.id));
+    return c.json({ message: "Success" });
 }

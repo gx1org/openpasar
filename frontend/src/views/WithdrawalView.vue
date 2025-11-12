@@ -4,15 +4,12 @@ import SpinnerBox from '../components/partial/SpinnerBox.vue';
 import { apiReq, formatDate, handleErrorApi, Rp } from '../helpers/fns';
 
 const isFetching = ref(true)
-const orders = ref([])
-const form = ref({
-  status: '',
-  search: '',
-})
+const withdrawals = ref([])
+
 const fetchData = () => {
   isFetching.value = true
-  apiReq('get', `/user/transactions?status=${form.value.status}&search=${form.value.search}`).then(res => {
-    orders.value = res.data.transactions
+  apiReq('get', '/user/withdrawals').then(res => {
+    withdrawals.value = res.data.withdrawals
   })
   .catch(handleErrorApi)
   .finally(() => {
@@ -27,28 +24,20 @@ onMounted(() => {
 <template>
   <div>
     <div class="d-flex">
-      <h5 class="mb-4">Pesanan Saya</h5>
+      <h5 class="mb-4">Penarikan Saldo</h5>
       <div class="ms-auto">
+        <RouterLink to="/account" class="small">
+          &larr; Akun
+        </RouterLink>
       </div>
     </div>
     <SpinnerBox v-if="isFetching" />
     <template v-else>
-      <div class="d-flex mb-4 gap-2">
-        <input type="search" class="form-control form-control-sm" placeholder="Cari..." v-model="form.search" @change="fetchData">
-        <select class="form-control form-control-sm" v-model="form.status" @change="fetchData">
-          <option value="">Semua status</option>
-          <option value="in_process">in_process</option>
-          <option value="sent">sent</option>
-          <option value="completed">completed</option>
-          <option value="rejected">rejected</option>
-          <option value="complained">complained</option>
-        </select>
+      <div v-if="withdrawals.length == 0" class="text-center p-3 border bg-white rounded">
+        Belum ada penarikan :)
       </div>
-      <div v-if="orders.length == 0" class="text-center p-3 border bg-white rounded">
-        Yahh, belum ada pesanan :)
-      </div>
-      <div v-for="d,i in orders" :key="i" class="mb-3 border bg-white rounded">
-        <RouterLink :to="`/orders/${d.id}`" class="text-decoration-none text-reset">
+      <div v-for="d,i in withdrawals" :key="i" class="mb-3 border bg-white rounded">
+        <RouterLink :to="`/withdrawals/${d.id}`" class="text-decoration-none text-reset">
           <div class="p-3">
             <div class="d-flex gap-2">
               <div class="flex-fill">
@@ -66,7 +55,7 @@ onMounted(() => {
                       {{ d.status }}
                     </div>
                     <div class="text-muted small">
-                      {{ Rp(d.total_amount) }}
+                      {{ Rp(d.amount) }}
                     </div>
                   </div>
                 </div>

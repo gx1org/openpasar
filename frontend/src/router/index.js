@@ -9,6 +9,10 @@ import { useMiscStore } from '../stores/misc'
 import OrderView from '../views/OrderView.vue'
 import ConfigView from '../views/admin/ConfigView.vue'
 import OrderDetailView from '../views/OrderDetailView.vue'
+import WithdrawalView from '../views/WithdrawalView.vue'
+import SaleView from '../views/seller/SaleView.vue'
+import SaleDetailView from '../views/seller/SaleDetailView.vue'
+import ProductView from '../views/seller/ProductView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -19,6 +23,11 @@ const router = createRouter({
     { path: '/orders', name: 'Order', component: OrderView, meta: { requireAuth: true } },
     { path: '/orders/:id', name: 'OrderDetail', component: OrderDetailView, meta: { requireAuth: true } },
     { path: '/account', name: 'Account', component: AccountView, meta: { requireAuth: true } },
+    { path: '/withdrawals', name: 'Withdrawal', component: WithdrawalView, meta: { requireAuth: true } },
+
+    { path: '/sales', name: 'Sale', component: SaleView, meta: { requireAuth: true } },
+    { path: '/sales/:id', name: 'SaleDetail', component: SaleDetailView, meta: { requireAuth: true } },
+    { path: '/products', name: 'Product', component: ProductView, meta: { requireAuth: true } },
 
     { path: '/admin/config', name: 'Config', component: ConfigView, meta: { requireAuth: true, requireAdmin: true } },
 

@@ -1,23 +1,23 @@
-import { Hono, type Context } from 'hono'
+import { Hono } from 'hono'
 import { jwt, type JwtVariables } from 'hono/jwt'
 import { envCheck, getEnv } from './env.js';
 import { authorize, refreshToken } from './controllers/auth.js';
-import { profile, updateProfile } from './controllers/user.js';
+import { profile, updatePin, updateProfile } from './controllers/user.js';
 import { getSiteConfig, getSiteConfigAll, setSiteConfig } from './controllers/config.js';
 import { catalogueDetail, catalogueList } from './controllers/catalogue.js';
 import { addToCart, cartList, checkout, removeFromCart } from './controllers/cart.js';
-import { storeTransactionDetail, storeTransactionList, storeTransactionStatusUpdate, transactionDetail, transactionList, transactionStatusUpdate } from './controllers/transaction.js';
-import { withdrawCreate, withdrawList } from './controllers/withdraw.js';
+import { transactionDetail, transactionList, transactionStatusUpdate } from './controllers/transaction.js';
+import { withdrawalCreate, withdrawalList } from './controllers/withdraw.js';
 import { hasStore, initialConfig, isAdmin } from './utils/middleware.js';
 import { storeCreate, storeDetail, storeUpdate } from './controllers/store.js';
-import { storeProductCreate, storeProductDelete, storeProductDetail, storeProductList, storeProductUpdate } from './controllers/product.js';
+import { storeProductCreate, storeProductToggle, storeProductDetail, storeProductList, storeProductUpdate } from './controllers/store-product.js';
 import { adminStoreDetail, adminStoreList } from './controllers/admin/store.js';
 import { adminWithdrawalApproveReject, adminWithdrawalList } from './controllers/admin/withdraw.js';
 import { adminTransactionDetail, adminTransactionList, adminTransactionStatusUpdate } from './controllers/admin/transaction.js';
 import { adminUserDetail, adminUserList, adminUserSuspendStatusUpdate } from './controllers/admin/user.js';
 import { adminProductUpdate, adminProductDetail, adminProductList } from './controllers/admin/product.js';
 import { cors } from 'hono/cors';
-import type { HandlerResponse } from 'hono/types';
+import { storeTransactionDetail, storeTransactionList, storeTransactionStatusUpdate } from './controllers/store-transaction.js';
 
 envCheck();
 const jwt_secret = getEnv('JWT_SECRET', 'default_secret');
@@ -39,6 +39,7 @@ userRoute.use('/*', jwt({ secret: jwt_secret }))
 
 userRoute.get('/profile', profile);
 userRoute.put('/profile', updateProfile);
+userRoute.put('/pin', updatePin);
 
 userRoute.get('/carts', cartList)
 userRoute.post('/carts', addToCart)
@@ -49,8 +50,8 @@ userRoute.get('/transactions', transactionList)
 userRoute.get('/transactions/:id', transactionDetail)
 userRoute.patch('/transactions/:id/status', transactionStatusUpdate)
 
-userRoute.get('/withdrawals', withdrawList)
-userRoute.post('/withdrawals', withdrawCreate)
+userRoute.get('/withdrawals', withdrawalList)
+userRoute.post('/withdrawals', withdrawalCreate)
 
 userRoute.post('/stores', storeCreate)
 userRoute.get('/stores', hasStore, storeDetail)
@@ -60,7 +61,7 @@ userRoute.get('/stores/products', hasStore, storeProductList)
 userRoute.post('/stores/products', hasStore, storeProductCreate)
 userRoute.get('/stores/products/:id', hasStore, storeProductDetail)
 userRoute.put('/stores/products/:id', hasStore, storeProductUpdate)
-userRoute.delete('/stores/products/:id', hasStore, storeProductDelete)
+userRoute.post('/stores/products/:id/toggle', hasStore, storeProductToggle)
 
 userRoute.get('/stores/transactions', hasStore, storeTransactionList)
 userRoute.get('/stores/transactions/:id', hasStore, storeTransactionDetail)

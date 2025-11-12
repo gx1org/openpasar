@@ -1,4 +1,4 @@
-import { integer, jsonb, pgTable, serial, text, timestamp, varchar } from 'drizzle-orm/pg-core'
+import { boolean, integer, jsonb, pgTable, serial, text, timestamp, varchar } from 'drizzle-orm/pg-core'
 
 export const User = pgTable('users', {
     id: serial('id').primaryKey(),
@@ -7,6 +7,7 @@ export const User = pgTable('users', {
     name: varchar('name').notNull().default(''),
     phone: varchar('phone').unique().notNull().default(''),
     balance: integer('balance').notNull().default(0),
+    hashed_pin: varchar('hashed_pin').notNull().default(''),
     created_at: timestamp('created_at').defaultNow(),
 })
 
@@ -28,8 +29,8 @@ export const Product = pgTable('products', {
     name: varchar('name').notNull().default(''),
     description: varchar('description').notNull().default(''),
     price: integer('price').notNull().default(0),
-    in_stock: integer('in_stock').notNull().default(0),
-    is_active: integer('is_active').notNull().default(1),
+    in_stock: varchar('in_stock').notNull().default(''),
+    is_active: boolean('is_active').notNull().default(true),
     sold_count: integer('sold_count').notNull().default(0),
     featured: integer('featured').notNull().default(0),
     image_url: varchar('image_url').notNull().default(''),

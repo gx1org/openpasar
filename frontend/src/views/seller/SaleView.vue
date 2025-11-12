@@ -1,18 +1,18 @@
 <script setup>
 import { onMounted, ref } from 'vue';
-import SpinnerBox from '../components/partial/SpinnerBox.vue';
-import { apiReq, formatDate, handleErrorApi, Rp } from '../helpers/fns';
+import SpinnerBox from '../../components/partial/SpinnerBox.vue';
+import { apiReq, formatDate, handleErrorApi, Rp } from '../../helpers/fns';
 
 const isFetching = ref(true)
-const orders = ref([])
+const transactions = ref([])
 const form = ref({
   status: '',
   search: '',
 })
 const fetchData = () => {
   isFetching.value = true
-  apiReq('get', `/user/transactions?status=${form.value.status}&search=${form.value.search}`).then(res => {
-    orders.value = res.data.transactions
+  apiReq('get', `/user/stores/transactions?status=${form.value.status}&search=${form.value.search}`).then(res => {
+    transactions.value = res.data.transactions
   })
   .catch(handleErrorApi)
   .finally(() => {
@@ -27,8 +27,11 @@ onMounted(() => {
 <template>
   <div>
     <div class="d-flex">
-      <h5 class="mb-4">Pesanan Saya</h5>
+      <h5 class="mb-4">Penjualan Saya</h5>
       <div class="ms-auto">
+        <RouterLink to="/account" class="small">
+          &larr; Akun
+        </RouterLink>
       </div>
     </div>
     <SpinnerBox v-if="isFetching" />
@@ -44,11 +47,11 @@ onMounted(() => {
           <option value="complained">complained</option>
         </select>
       </div>
-      <div v-if="orders.length == 0" class="text-center p-3 border bg-white rounded">
-        Yahh, belum ada pesanan :)
+      <div v-if="transactions.length == 0" class="text-center p-3 border bg-white rounded">
+        Belum ada penjualan
       </div>
-      <div v-for="d,i in orders" :key="i" class="mb-3 border bg-white rounded">
-        <RouterLink :to="`/orders/${d.id}`" class="text-decoration-none text-reset">
+      <div v-for="d,i in transactions" :key="i" class="mb-3 border bg-white rounded">
+        <RouterLink :to="`/sales/${d.id}`" class="text-decoration-none text-reset">
           <div class="p-3">
             <div class="d-flex gap-2">
               <div class="flex-fill">
@@ -66,7 +69,7 @@ onMounted(() => {
                       {{ d.status }}
                     </div>
                     <div class="text-muted small">
-                      {{ Rp(d.total_amount) }}
+                      {{ Rp(d.amount) }}
                     </div>
                   </div>
                 </div>

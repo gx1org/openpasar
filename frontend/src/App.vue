@@ -20,7 +20,7 @@ const route = useRoute()
     </main>
     <template v-else>
       <NavBar />
-      <main class="bg-light px-3 d-flex flex-column overflow-y-auto">
+      <main class="bg-light px-3 d-flex flex-column overflow-y-auto pb-4">
         <LoginView v-if="!auth.isLogin && route.meta.requireAuth"/>
         <RouterView v-else class="h-100" style="" />
       </main>

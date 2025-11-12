@@ -21,6 +21,7 @@ export const configKeys = [
     'smtp_from',
     'content_info',
     'content_seller_rules',
+    'seller_fee'
 ]
 
 export const configCache: Record<string, string | undefined> = {

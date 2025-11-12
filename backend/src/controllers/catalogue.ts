@@ -37,7 +37,7 @@ export const catalogueList = async (c: Context): Promise<HandlerResponse<any>> =
     .from(Product)
     .innerJoin(Store, eq(Store.id, Product.store_id))
     .where(and(
-        eq(Product.is_active, 1),
+        eq(Product.is_active, true),
         searchQuery,
         featuredQuery,
     ))
@@ -65,7 +65,7 @@ export const catalogueDetail = async (c: Context): Promise<HandlerResponse<any>>
     .innerJoin(Store, eq(Store.id, Product.store_id))
     .where(and(
         eq(Product.sku, sku),
-        eq(Product.is_active, 1),
+        eq(Product.is_active, true),
     ))
     .limit(1);
     if (products.length === 0) {

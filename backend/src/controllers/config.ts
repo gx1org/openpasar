@@ -16,6 +16,7 @@ export const getSiteConfig = async (c: Context): Promise<HandlerResponse<any>> =
         admin_phone: await getConfig('admin_phone'),
         content_info: await getConfig('content_info'),
         content_seller_rules: await getConfig('content_seller_rules'),
+        seller_fee: await getConfig('seller_fee'),
     }
     return c.json({ config });
 }

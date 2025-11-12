@@ -119,7 +119,10 @@ onUnmounted(() => {
     </div>
     <SpinnerBox v-if="isFetching" />
     <template v-else>
-      <div class="row g-2">
+      <div v-if="products.length == 0" class="text-center p-3 border bg-white rounded">
+        Yahh, tidak ada produk yang sesuai :)
+      </div>
+      <div v-else class="row g-2">
         <div v-for="p,i in products" :key="i" class="col-6 col-sm-4">
           <ProductItem :data="p" @clicked="showProduct(p)" />
         </div>

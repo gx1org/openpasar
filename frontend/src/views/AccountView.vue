@@ -1,4 +1,5 @@
 <script setup>
+import EditPin from '../components/modal/EditPin.vue';
 import EditProfile from '../components/modal/EditProfile.vue';
 import EditStoreProfile from '../components/modal/EditStoreProfile.vue';
 import { apiReq, Rp } from '../helpers/fns';
@@ -7,7 +8,10 @@ import { useMiscStore } from '../stores/misc';
 
 const auth = useAuthStore()
 const misc = useMiscStore()
-
+const logoutBtn = () => {
+  if(!confirm('Logout Sekarang?')) return
+  auth.setLogout()
+}
 </script>
 
 <template>
@@ -35,8 +39,14 @@ const misc = useMiscStore()
             <i class="bi bi-chevron-right"></i>
           </div>
         </a>
-        <a class="list-group-item d-flex" href="#">
-          <span>Penarikan (Saldo: {{ Rp(auth.user.balance) }})</span>
+        <RouterLink to="/withdrawals" class="list-group-item d-flex">
+          <span>Penarikan Saldo ({{ Rp(auth.user.balance) }})</span>
+          <div class="ms-auto">
+            <i class="bi bi-chevron-right"></i>
+          </div>
+        </RouterLink>
+        <a class="list-group-item d-flex" href="javascript:;" data-bs-toggle="modal" data-bs-target="#EditPin">
+          <span>Atur PIN Penarikan</span>
           <div class="ms-auto">
             <i class="bi bi-chevron-right"></i>
           </div>
@@ -61,18 +71,18 @@ const misc = useMiscStore()
           </div>
         </div>
         <div class="list-group list-group-flush">
-          <a class="list-group-item d-flex" href="#">
+          <RouterLink to="/sales" class="list-group-item d-flex">
             <span>Penjualan</span>
             <div class="ms-auto">
               <i class="bi bi-chevron-right"></i>
             </div>
-          </a>
-          <a class="list-group-item d-flex" href="#">
+          </RouterLink>
+          <RouterLink to="/products" class="list-group-item d-flex">
             <span>Produk</span>
             <div class="ms-auto">
               <i class="bi bi-chevron-right"></i>
             </div>
-          </a>
+          </RouterLink>
           <a class="list-group-item d-flex" href="javascript:;" data-bs-toggle="modal" data-bs-target="#EditStoreProfile">
             <span>Pengaturan</span>
             <div class="ms-auto">
@@ -140,7 +150,13 @@ const misc = useMiscStore()
         </RouterLink>
       </div>
     </template>
+    <div class="" @click="logoutBtn">
+      <button class="btn btn-light border w-100 text-danger">
+        Logout
+      </button>
+    </div>
     <EditProfile />
+    <EditPin />
     <EditStoreProfile />
   </div>
 </template>
