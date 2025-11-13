@@ -98,7 +98,7 @@ onMounted(() => {
     </div>
     <SpinnerBox v-if="isFetching" />
     <div v-else class="">
-      <div class="p-3 border rounded bg-white mb-4">
+      <div class="p-3 border card bg-white mb-4">
         <p>Admin</p>
         <div class="mb-3">
           <label for="" class="form-label">Email</label>
@@ -115,8 +115,8 @@ onMounted(() => {
           </p>
         </div>
       </div>
-      <div class="p-3 border rounded bg-white mb-4">
-        <p>Website</p>
+      <div class="p-3 border card bg-white mb-4">
+        <p>Platform</p>
         <div class="mb-3">
           <label for="" class="form-label">Mode</label>
           <select class="form-control" v-model="form.site_mode">
@@ -129,6 +129,13 @@ onMounted(() => {
             'Hanya admin yang dapat membuat toko' }}
           </p>
         </div>
+        <div class="mb-3">
+          <label for="" class="form-label">Seller Fee (%)</label>
+          <input type="number" class="form-control" v-model="form.seller_fee">
+        </div>
+      </div>
+      <div class="p-3 border card bg-white mb-4">
+        <p>Website</p>
         <div class="mb-3">
           <label for="" class="form-label">Nama</label>
           <input type="text" class="form-control" v-model="form.site_name">
@@ -162,12 +169,8 @@ onMounted(() => {
             <option value="zephyr">zephyr</option>
           </select>
         </div>
-        <div class="mb-3">
-          <label for="" class="form-label">Seller Fee (%)</label>
-          <input type="number" class="form-control" v-model="form.seller_fee">
-        </div>
       </div>
-      <div class="p-3 border rounded bg-white mb-4">
+      <div class="p-3 border card bg-white mb-4">
         <p>Integrasi</p>
         <div class="mb-3">
           <label for="" class="form-label">Autz.org App ID</label>
@@ -182,7 +185,7 @@ onMounted(() => {
           <input type="text" class="form-control" v-model="form.pakasir_api_key">
         </div>
       </div>
-      <div class="p-3 border rounded bg-white mb-4">
+      <div class="p-3 border card bg-white mb-4">
         <p>Email SMTP</p>
         <div class="mb-3">
           <label for="" class="form-label">Host</label>
@@ -205,7 +208,7 @@ onMounted(() => {
           <input type="text" class="form-control" v-model="form.smtp_from">
         </div>
       </div>
-      <div class="p-3 border rounded bg-white mb-4">
+      <div class="p-3 border card bg-white mb-4">
         <p>Konten</p>
         <div class="mb-3">
           <label for="" class="form-label">Info dan Tentang Website</label>

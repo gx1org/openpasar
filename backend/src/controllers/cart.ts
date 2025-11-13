@@ -17,6 +17,7 @@ export const cartList = async (c: Context): Promise<HandlerResponse<any>> => {
         image_url: Product.image_url,
         description: Product.description,
         price: Product.price,
+        store_sales_count: Store.sales_count,
         store_name: Store.name,
         store_phone: Store.phone
     })
@@ -92,12 +93,9 @@ export const checkout = async (c: Context): Promise<HandlerResponse<any>> => {
         image_url: Product.image_url,
         description: Product.description,
         price: Product.price,
-        store_name: Store.name,
-        store_phone: Store.phone
     })
     .from(Cart)
     .innerJoin(Product, eq(Cart.product_id, Product.id))
-    .innerJoin(Store, eq(Cart.store_id, Store.id))
     .where(and(
         eq(Cart.user_id, userId),
         eq(Cart.store_id, store_id),

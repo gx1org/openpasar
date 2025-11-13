@@ -112,36 +112,36 @@ const logoutBtn = () => {
         </div>
       </div>
       <div class="list-group mb-4">
-        <a class="list-group-item d-flex" href="#">
+        <RouterLink to="/admin/all-transactions" class="list-group-item d-flex">
           <span>Semua Transaksi</span>
           <div class="ms-auto">
             <i class="bi bi-chevron-right"></i>
           </div>
-        </a>
-        <a class="list-group-item d-flex" href="#">
+        </RouterLink>
+        <RouterLink to="/admin/all-products" class="list-group-item d-flex">
           <span>Semua Produk</span>
           <div class="ms-auto">
             <i class="bi bi-chevron-right"></i>
           </div>
-        </a>
-        <a class="list-group-item d-flex" href="#">
+        </RouterLink>
+        <RouterLink to="/admin/featured-products" class="list-group-item d-flex">
           <span>Produk Unggulan</span>
           <div class="ms-auto">
             <i class="bi bi-chevron-right"></i>
           </div>
-        </a>
-        <a class="list-group-item d-flex" href="#">
+        </RouterLink>
+        <RouterLink to="/admin/all-stores" class="list-group-item d-flex">
           <span>Semua Toko</span>
           <div class="ms-auto">
             <i class="bi bi-chevron-right"></i>
           </div>
-        </a>
-        <a class="list-group-item d-flex" href="#">
+        </RouterLink>
+        <RouterLink to="/admin/all-users" class="list-group-item d-flex">
           <span>Semua Pengguna</span>
           <div class="ms-auto">
             <i class="bi bi-chevron-right"></i>
           </div>
-        </a>
+        </RouterLink>
         <RouterLink class="list-group-item d-flex" to="/admin/config">
           <span>Konfigurasi</span>
           <div class="ms-auto">

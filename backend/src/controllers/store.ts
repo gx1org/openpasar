@@ -2,7 +2,34 @@ import type { Context } from "hono";
 import type { HandlerResponse } from "hono/types";
 import { db } from "../db.js";
 import { Store } from "../schema.js";
-import { and, eq, ne } from "drizzle-orm";
+import { and, desc, eq, ilike, ne } from "drizzle-orm";
+
+export const storeList = async (c: Context): Promise<HandlerResponse<any>> => {
+    const page = parseInt(c.req.query('page') || '1');
+    const q = c.req.query('q') || '';
+    type sortType = 'latest' | 'sales'
+    const sort = (c.req.query('sort') || 'latest') as sortType;
+    const limit = 10;
+    const offset = (page - 1) * limit;
+
+    const searchQuery = q ? ilike(Store.name, `%${q}%`) : undefined;
+    const orderByMap = {
+        latest: desc(Store.created_at),
+        sales: desc(Store.sales_count),
+    };
+    const orderBy = orderByMap[sort];
+
+    const stores = await db.select()
+    .from(Store)
+    .where(and(
+        searchQuery,
+    ))
+    .orderBy(orderBy, orderByMap['latest'])
+    .limit(limit)
+    .offset(offset);
+
+    return c.json({ stores });
+}
 
 export const storeCreate = async (c: Context): Promise<HandlerResponse<any>> => {
     const body = await c.req.json();
@@ -18,14 +45,12 @@ export const storeCreate = async (c: Context): Promise<HandlerResponse<any>> => 
         user_id: c.get('jwtPayload')?.id,
         name: body.name,
         email: body.email,
-        phone: body.phone
+        phone: body.phone,
+        description: body.description,
     }).returning()
     return c.json({ store });
 }
 
-export const storeDetail = async (c: Context): Promise<HandlerResponse<any>> => {
-    return c.json({})
-}
 
 export const storeUpdate = async (c: Context): Promise<HandlerResponse<any>> => {
     const store = c.get('store');
@@ -33,7 +58,8 @@ export const storeUpdate = async (c: Context): Promise<HandlerResponse<any>> => 
     const updatedStore = {
         name: body.name,
         email: body.email,
-        phone: body.phone
+        phone: body.phone,
+        description: body.description,
     }
     const [check] = await db.select()
     .from(Store)
@@ -51,4 +77,14 @@ export const storeUpdate = async (c: Context): Promise<HandlerResponse<any>> => 
         ...store,
         ...updatedStore,
     } })
+}
+
+export const storeDetail = async (c: Context): Promise<HandlerResponse<any>> => {
+    const { id } = c.req.param();
+    const stores = await db.select().from(Store).where(eq(Store.id, Number(id)));
+    if (stores.length === 0) {
+        return c.json({ message: "Store not found" }, 404);
+    }
+    const store = stores[0];
+    return c.json({ store });
 }

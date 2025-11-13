@@ -1,14 +1,22 @@
 <script setup>
 import { onMounted, onUnmounted, ref, watch } from 'vue';
 import { useRoute, useRouter} from 'vue-router'
-import { apiReq, handleErrorApi } from '../helpers/fns';
+import { apiReq, handleErrorApi, formatDate } from '../helpers/fns';
 import SpinnerBox from '../components/partial/SpinnerBox.vue';
 import ProductView from '../components/modal/ProductView.vue';
 import ProductItem from '../components/partial/ProductItem.vue';
 
 const router = useRouter()
 const route = useRoute()
-const page = ref(1)
+const store = ref({})
+const fetchStore = () => {
+  apiReq('get', `/stores/${route.params.id}`)
+  .then(res => {
+    store.value = res.data.store
+    fetchData()
+  })
+  .catch(handleErrorApi)
+}
 
 const products = ref([])
 const isFetching = ref(true)
@@ -16,10 +24,11 @@ const fetchData = () => {
   isFetching.value = true
   const qs = new URLSearchParams(location.search)
   const q = qs.get('q') || ''
+  const page = qs.get('page') || 1
   const sort = qs.get('sort') || 'latest'
   const show = qs.get('show')
 
-  apiReq('get', `/catalogues?q=${q}&page=${page.value}&sort=${sort}`)
+  apiReq('get', `/catalogues?q=${q}&page=${page}&sort=${sort}&store=${route.params.id}`)
   .then(res => {
     products.value = res.data.products
     if (show) {
@@ -81,7 +90,7 @@ const removeShowQuery = () => {
 }
 
 onMounted(() => {
-  fetchData()
+  fetchStore()
   const myModalEl = document.getElementById('ProductView')
   if (myModalEl) {
     myModalEl.addEventListener('hidden.bs.modal', () => {
@@ -102,30 +111,27 @@ onUnmounted(() => {
 <template>
   <div class="">
     <div class="d-flex">
-      <h5 class="mb-4">Pencarian</h5>
+      <h5 class="mb-4">{{ store.name }}</h5>
       <div class="ms-auto">
-        <div class="input-group input-group-sm">
-          <div class="input-group-text">
-            <i class="bi bi-filter"></i>
-          </div>
-          <select v-model="sorting" class="form-control form-control-sm" @change="handleSort">
-            <option value="latest">Terbaru</option>
-            <option value="lowest">Termurah</option>
-            <option value="highest">Termahal</option>
-            <option value="sell">Terlaris</option>
-          </select>
-        </div>
-      </div>
-      <div class="ms-2">
-        <RouterLink to="/stores" class="btn btn-outline-primary btn-sm">
-          Cari Toko &nearr;
-        </RouterLink>
+        <button class="btn btn-sm btn-outline-success">
+          <i class="bi bi-whatsapp"></i>
+          Chat Penjual
+        </button>
       </div>
     </div>
     <SpinnerBox v-if="isFetching" />
     <template v-else>
+      <div class="bg-white p-2 border rounded mb-3">
+        <div class="d-flex mb-3">
+          <div>Sejak {{ formatDate(store.created_at) }}</div>
+          <div class="ms-auto">{{ store.sales_count }}&times; penjualan</div>
+        </div>
+        <div class="small" style="white-space: pre-line;">
+          {{ store.description }}
+        </div>
+      </div>
       <div v-if="products.length == 0" class="text-center p-3 border bg-white rounded">
-        Yahh, tidak ada produk yang sesuai :)
+        Yahh, tidak ada produk :)
       </div>
       <div v-else class="row g-2">
         <div v-for="p,i in products" :key="i" class="col-6 col-sm-4">

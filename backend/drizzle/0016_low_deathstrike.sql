@@ -1,0 +1,1 @@
+ALTER TABLE "store" ADD COLUMN "sales_count" integer DEFAULT 0 NOT NULL;

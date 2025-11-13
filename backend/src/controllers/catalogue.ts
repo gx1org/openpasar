@@ -19,7 +19,7 @@ export const catalogueList = async (c: Context): Promise<HandlerResponse<any>> =
         lowest: asc(Product.price),
         highest: desc(Product.price),
         sell: desc(Product.sold_count),
-        featured: desc(Product.in_stock),
+        featured: desc(Product.featured),
     };
     const orderBy = orderByMap[sort];
 
@@ -31,6 +31,7 @@ export const catalogueList = async (c: Context): Promise<HandlerResponse<any>> =
         price: Product.price,
         in_stock: Product.in_stock,
         store_name: Store.name,
+        store_sales_count: Store.sales_count,
         store_id: Store.id,
         store_phone: Store.phone,
     })
@@ -41,7 +42,7 @@ export const catalogueList = async (c: Context): Promise<HandlerResponse<any>> =
         searchQuery,
         featuredQuery,
     ))
-    .orderBy(orderBy, orderByMap['latest'])
+    .orderBy(orderBy, orderByMap['latest'], asc(eq(Product.in_stock, 'empty')))
     .limit(limit)
     .offset(offset);
 
@@ -58,6 +59,7 @@ export const catalogueDetail = async (c: Context): Promise<HandlerResponse<any>>
         price: Product.price,
         in_stock: Product.in_stock,
         store_name: Store.name,
+        store_sales_count: Store.sales_count,
         store_id: Store.id,
         store_phone: Store.phone,       
     })

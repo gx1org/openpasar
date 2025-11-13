@@ -1,0 +1,1 @@
+ALTER TABLE "transactions" RENAME COLUMN "delivery_note" TO "seller_response";

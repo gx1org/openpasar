@@ -13,7 +13,7 @@ const auth = useAuthStore()
     </div>
     <div class="w-100">
       <RouterLink to="/search">
-        <i class="bi bi-tags-fill"></i>
+        <i class="bi bi-compass-fill"></i>
       </RouterLink>
     </div>
     <div class="w-100">

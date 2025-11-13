@@ -12,9 +12,8 @@ const form = ref({
 const products = ref([])
 
 const fetchData = () => {
-  productEditing.value = {}
   isFetching.value = true
-  apiReq('get', `/user/stores/products?is_active=${form.value.is_active}&search=${form.value.search}`).then(res => {
+  apiReq('get', `/admin/products?is_active=${form.value.is_active}&search=${form.value.search}`).then(res => {
     products.value = res.data.products
   })
   .catch(handleErrorApi)
@@ -26,12 +25,19 @@ const fetchData = () => {
 const productEditing = ref({})
 const editBtn = (p) => {
   productEditing.value = p
-  productEditing.value.key = Math.random()
   document.getElementById('ProductForm-btn').click()
 }
 
 const deleteBtn = (p) => {
-  apiReq('post', `/user/stores/products/${p.id}/toggle`)
+  apiReq('post', `/admin/products/${p.id}/toggle`)
+    .then(() => {
+      fetchData()
+    }) 
+    .catch(handleErrorApi)
+}
+
+const featuredBtn = (p) => {
+  apiReq('post', `/admin/products/${p.id}/featured`, { featured: 1 })
     .then(() => {
       fetchData()
     }) 
@@ -45,7 +51,7 @@ onMounted(() => {
 <template>
   <div>
     <div class="d-flex">
-      <h5 class="mb-4">Produk Saya</h5>
+      <h5 class="mb-4">Semua Produk</h5>
       <div class="ms-auto">
         <RouterLink to="/account" class="small">
           &larr; Akun
@@ -60,9 +66,6 @@ onMounted(() => {
           <option value="1">Produk aktif</option>
           <option value="0">Produk dihapus</option>
         </select>
-        <button @click="editBtn({})" class="btn btn-sm btn-primary text-nowrap">
-          Produk Baru
-        </button>
       </div>
       <div class="table-responsive">
         <table class="table table-bordered">
@@ -73,19 +76,20 @@ onMounted(() => {
               <th>Nama</th>
               <th>Stok</th>
               <th>Harga</th>
+              <th>Penjual</th>
             </tr>
           </thead>
           <tbody>
             <tr v-for="p,i in products" :key="i">
               <td>
-                <button @click="editBtn(p)" class="btn btn-sm btn-primary">
-                  <i class="bi bi-pencil"></i>
-                </button>
                 <button v-if="p.is_active" @click="deleteBtn(p)" class="btn btn-sm btn-danger ms-1">
                   <i class="bi bi-eye-slash"></i>
                 </button>
                 <button v-else @click="deleteBtn(p)" class="btn btn-sm btn-success ms-1">
                   <i class="bi bi-eye"></i>
+                </button>
+                <button v-if="p.featured == 0" @click="featuredBtn(p)" class="btn btn-sm btn-warning ms-1">
+                  <i class="bi bi-star"></i>
                 </button>
               </td>
               <td class="small">
@@ -103,6 +107,9 @@ onMounted(() => {
               <td>
                 {{ Rp(p.price) }}
               </td>
+              <td class="small">
+                {{ p.store.name }}
+              </td>
             </tr>
             <tr v-if="products.length == 0">
               <td colspan="100%" class="text-center">Tidak ada data</td>
@@ -112,6 +119,6 @@ onMounted(() => {
       </div>
     </template>
     <button id="ProductForm-btn" type="button" class="d-none" data-bs-toggle="modal" data-bs-target="#ProductForm"></button>
-    <ProductForm :data="productEditing" @updated="fetchData" />
+    <ProductForm :data="productEditing" @updated="fetchData" :key="productEditing.id" />
   </div>
 </template>

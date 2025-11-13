@@ -9,15 +9,16 @@ import { addToCart, cartList, checkout, removeFromCart } from './controllers/car
 import { transactionDetail, transactionList, transactionStatusUpdate } from './controllers/transaction.js';
 import { withdrawalCreate, withdrawalList } from './controllers/withdraw.js';
 import { hasStore, initialConfig, isAdmin } from './utils/middleware.js';
-import { storeCreate, storeDetail, storeUpdate } from './controllers/store.js';
+import { storeCreate, storeDetail, storeList, storeUpdate } from './controllers/store.js';
 import { storeProductCreate, storeProductToggle, storeProductDetail, storeProductList, storeProductUpdate } from './controllers/store-product.js';
 import { adminStoreDetail, adminStoreList } from './controllers/admin/store.js';
 import { adminWithdrawalApproveReject, adminWithdrawalList } from './controllers/admin/withdraw.js';
 import { adminTransactionDetail, adminTransactionList, adminTransactionStatusUpdate } from './controllers/admin/transaction.js';
 import { adminUserDetail, adminUserList, adminUserSuspendStatusUpdate } from './controllers/admin/user.js';
-import { adminProductUpdate, adminProductDetail, adminProductList } from './controllers/admin/product.js';
+import { adminProductDetail, adminProductFeatured, adminProductList, adminProductToggle } from './controllers/admin/product.js';
 import { cors } from 'hono/cors';
 import { storeTransactionDetail, storeTransactionList, storeTransactionStatusUpdate } from './controllers/store-transaction.js';
+import { webhookPakasir } from './controllers/webhook.js';
 
 envCheck();
 const jwt_secret = getEnv('JWT_SECRET', 'default_secret');
@@ -30,9 +31,12 @@ app.get('/config', getSiteConfig);
 app.post('/config', initialConfig, setSiteConfig);
 app.post('/authorize', authorize);
 app.post('/refresh-token', jwt({ secret: jwt_secret }), refreshToken);
+app.post('/webhooks/pakasir', webhookPakasir)
 
 app.get('/catalogues', catalogueList)
 app.get('/catalogues/:sku', catalogueDetail)
+app.get('/stores', storeList)
+app.get('/stores/:id', storeDetail)
 
 const userRoute = new Hono<{ Variables: Variables }>();
 userRoute.use('/*', jwt({ secret: jwt_secret }))
@@ -83,7 +87,8 @@ adminRoute.get('/stores/:id', adminStoreDetail)
 
 adminRoute.get('/products', adminProductList)
 adminRoute.get('/products/:id', adminProductDetail)
-adminRoute.patch('/products/:id', adminProductUpdate)
+adminRoute.post('/products/:id/toggle', adminProductToggle)
+adminRoute.post('/products/:id/featured', adminProductFeatured)
 
 adminRoute.get('/transactions', adminTransactionList)
 adminRoute.get('/transactions/:id', adminTransactionDetail)

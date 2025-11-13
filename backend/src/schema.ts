@@ -15,10 +15,11 @@ export const Store = pgTable('store', {
     id: serial('id').primaryKey(),
     user_id: integer('user_id').notNull().references(() => User.id),
     name: varchar('name').notNull().default(''),
-    description: varchar('description').notNull().default(''),
+    description: text('description').notNull().default(''),
     image_url: varchar('image_url').notNull().default(''),
     email: varchar('email').notNull().default(''),
     phone: varchar('phone').notNull().default(''),
+    sales_count: integer('sales_count').notNull().default(0),
     created_at: timestamp('created_at').defaultNow(),
 })
 
@@ -27,7 +28,7 @@ export const Product = pgTable('products', {
     store_id: integer('store_id').notNull().references(() => Store.id),
     sku: varchar('sku').notNull().default(''),
     name: varchar('name').notNull().default(''),
-    description: varchar('description').notNull().default(''),
+    description: text('description').notNull().default(''),
     price: integer('price').notNull().default(0),
     in_stock: varchar('in_stock').notNull().default(''),
     is_active: boolean('is_active').notNull().default(true),
@@ -57,6 +58,8 @@ export const Transaction = pgTable('transactions', {
     checkout_note: varchar('checkout_note').notNull().default(''),
     items: jsonb("items").$type<Record<string, any>>().notNull().default([]),
     histories: jsonb("histories").$type<Record<string, any>>().notNull().default([]),
+    sent_at: timestamp('sent_at').defaultNow(),
+    seller_response: text('seller_response').notNull().default(''),
     created_at: timestamp('created_at').defaultNow(),
     updated_at: timestamp('updated_at').defaultNow(),
 })
@@ -72,6 +75,6 @@ export const Withdrawal = pgTable('withdrawals', {
 export const Config = pgTable('configs', {
     id: serial('id').primaryKey(),
     config_key: varchar('config_key').notNull().default('').unique(),
-    value: varchar('value').notNull().default(''),
+    value: text('value').notNull().default(''),
     created_at: timestamp('created_at').defaultNow(),
 })

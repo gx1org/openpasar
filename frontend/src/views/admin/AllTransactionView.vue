@@ -2,7 +2,6 @@
 import { onMounted, ref } from 'vue';
 import SpinnerBox from '../../components/partial/SpinnerBox.vue';
 import { apiReq, formatDate, handleErrorApi, Rp } from '../../helpers/fns';
-import StatusLabel from '../../components/partial/StatusLabel.vue';
 
 const isFetching = ref(true)
 const transactions = ref([])
@@ -10,9 +9,10 @@ const form = ref({
   status: '',
   search: '',
 })
+
 const fetchData = () => {
   isFetching.value = true
-  apiReq('get', `/user/stores/transactions?status=${form.value.status}&search=${form.value.search}`).then(res => {
+  apiReq('get', `/admin/transactions?status=${form.value.status}&search=${form.value.search}`).then(res => {
     transactions.value = res.data.transactions
   })
   .catch(handleErrorApi)
@@ -28,7 +28,7 @@ onMounted(() => {
 <template>
   <div>
     <div class="d-flex">
-      <h5 class="mb-4">Penjualan Saya</h5>
+      <h5 class="mb-4">Semua Transaksi</h5>
       <div class="ms-auto">
         <RouterLink to="/account" class="small">
           &larr; Akun
@@ -48,7 +48,6 @@ onMounted(() => {
           <option value="complained">complained</option>
         </select>
       </div>
-      
       <div class="table-responsive">
         <table class="table table-bordered">
           <thead>
@@ -58,27 +57,31 @@ onMounted(() => {
               <th>Status</th>
               <th>Jumlah</th>
               <th>Tanggal</th>
+              <th>Penjual</th>
               <th>Deskripsi</th>
             </tr>
           </thead>
           <tbody>
             <tr v-for="p,i in transactions" :key="i">
               <td>
-                <RouterLink :to="`/sales/${p.id}`" class="btn btn-sm btn-primary">
+                <button @click="editBtn(p)" class="btn btn-sm btn-primary">
                   <i class="bi bi-eye"></i>
-                </RouterLink>
+                </button>
               </td>
               <td class="">
                 #{{ p.id }}
               </td>
               <td class="">
-                <StatusLabel :status="p.status" />
+                {{ p.status }}
               </td>
               <td>
                 {{ Rp(p.total_amount) }}
               </td>
               <td>
                 {{ formatDate(p.created_at) }}
+              </td>
+              <td class="small">
+                {{ p.store.name }}
               </td>
               <td class="small">
                 {{ p.description }}

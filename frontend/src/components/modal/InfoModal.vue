@@ -29,7 +29,7 @@ const misc = useMiscStore()
             </div>
           </div>
         </div>
-        <div v-if="misc.config.site_mode == 'marketplace'" class="modal-footer justify-content-center">
+        <div class="modal-footer justify-content-center">
           <p class="text-muted small text-center">
             powered by
             <a href="https://github.com/gx1org/openpasar" target="_blank" class="text-reset">

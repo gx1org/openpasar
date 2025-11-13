@@ -1,6 +1,8 @@
 <script setup>
 import { Rp } from '../../helpers/fns';
+import { useMiscStore } from '../../stores/misc';
 
+const misc = useMiscStore()
 const prop = defineProps({
   data: Object
 })
@@ -18,12 +20,30 @@ const prop = defineProps({
         </button>
         <div class="modal-body">
           <h5>{{ data.name }}</h5>
-          <p>
+          <p class="d-flex">
             <span class="fw-bold text-primary">{{ Rp(data.price) }}</span>
+            <span class="text-danger small fw-bold ms-auto" v-if="data.in_stock == 'empty'">Habis</span>
           </p>
-          <p style="white-space: pre-line;">{{ data.description }}</p>
-          <div class="border p-2 small text-muted mb-0 d-flex bg-light">
-            <span>Penjual: {{ data.store_name }}</span>
+          <div style="white-space: pre-line;" class="mb-4">{{ data.description }}</div>
+          <div v-if="misc.config.site_mode == 'official_store'" class="bg-light border p-2 card small">
+            <div class="d-flex">
+              <p class="mb-0">Butuh Bantuan?</p>            
+              <div class="ms-auto">
+                <a class="text-success small text-decoration-none" :href="'https://wa.me/'+misc.config.admin_phone" target="_blank">
+                  <i class="bi bi-whatsapp"></i>
+                  <span class="ms-0">
+                    Chat Admin
+                  </span>
+                </a>
+              </div>
+            </div>
+          </div>
+          <div v-else class="border p-2 small text-muted mb-0 d-flex bg-light">
+            <span>
+              <RouterLink :to="'/stores/'+data.store_id">{{ data.store_name }}</RouterLink>
+              <br>
+              {{ data.store_sales_count }}&times; penjualan
+            </span>
             <a :href="'https://wa.me/'+data.store_phone" target="_blank" rel="noopener noreferrer" class="text-success ms-auto text-decoration-none">
               <i class="bi bi-whatsapp"></i>
               Chat

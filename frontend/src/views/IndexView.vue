@@ -39,7 +39,7 @@ onMounted(() => {
     <div class="card mb-4">
       <div class="card-body text-center py-4">
         <h1>{{ misc.config.site_name }}</h1>
-        <p class="">{{ misc.config.site_description }}</p>
+        <p class="mb-0">{{ misc.config.site_description }}</p>
       </div>
     </div>
     <div class="d-flex">
@@ -54,7 +54,7 @@ onMounted(() => {
           <ProductItem :data="p" @clicked="showProduct(p)" />
         </div>
       </div>
-      <div v-if="products.length == 0" class="text-center p-3 border bg-white rounded">
+      <div v-if="products.length == 0" class="text-center p-3 border bg-white card">
         Tidak ada Produk Unggulan
       </div>
     </template>

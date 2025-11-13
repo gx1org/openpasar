@@ -1,10 +1,8 @@
 <script setup>
 import { computed, onMounted, ref, watch } from 'vue'
-import { useAuthStore } from '../../stores/auth';
 import { apiReq, handleErrorApi } from '../../helpers/fns'
 import SubmitButton from '../partial/SubmitButton.vue';
 
-const auth = useAuthStore()
 const prop = defineProps({
   data: Object
 })
@@ -32,11 +30,17 @@ const submitBtn = () => {
     })
 }
 
-onMounted(() => {
+const syncProp = () => {
+  form.value = JSON.parse(JSON.stringify(prop.data))
   if (prop.data?.id) {
     isNew.value = false
   }
-  form.value = {...prop.data}
+}
+watch(() => prop.data, () => {
+  syncProp()
+})
+onMounted(() => {
+  syncProp()
 })
 </script>
 <template>

@@ -2,18 +2,18 @@
 import { onMounted, ref } from 'vue';
 import SpinnerBox from '../../components/partial/SpinnerBox.vue';
 import { apiReq, formatDate, handleErrorApi, Rp } from '../../helpers/fns';
-import StatusLabel from '../../components/partial/StatusLabel.vue';
 
 const isFetching = ref(true)
-const transactions = ref([])
+const stores = ref([])
 const form = ref({
   status: '',
   search: '',
 })
+
 const fetchData = () => {
   isFetching.value = true
-  apiReq('get', `/user/stores/transactions?status=${form.value.status}&search=${form.value.search}`).then(res => {
-    transactions.value = res.data.transactions
+  apiReq('get', `/admin/stores?status=${form.value.status}&search=${form.value.search}`).then(res => {
+    stores.value = res.data.stores
   })
   .catch(handleErrorApi)
   .finally(() => {
@@ -28,7 +28,7 @@ onMounted(() => {
 <template>
   <div>
     <div class="d-flex">
-      <h5 class="mb-4">Penjualan Saya</h5>
+      <h5 class="mb-4">Semua Toko</h5>
       <div class="ms-auto">
         <RouterLink to="/account" class="small">
           &larr; Akun
@@ -47,44 +47,46 @@ onMounted(() => {
           <option value="rejected">rejected</option>
           <option value="complained">complained</option>
         </select>
+        <button class="btn btn-primary ms-auto btn-sm text-nowrap" @click="addBtn">
+          Buat Toko
+        </button>
       </div>
-      
       <div class="table-responsive">
         <table class="table table-bordered">
           <thead>
             <tr>
               <th>Aksi</th>
-              <th>ID</th>
-              <th>Status</th>
-              <th>Jumlah</th>
-              <th>Tanggal</th>
-              <th>Deskripsi</th>
+              <th>Nama</th>
+              <th>Email</th>
+              <th>Whatsapp</th>
+              <th>Sejak</th>
+              <th>Penjualan</th>
             </tr>
           </thead>
           <tbody>
-            <tr v-for="p,i in transactions" :key="i">
+            <tr v-for="p,i in stores" :key="i">
               <td>
-                <RouterLink :to="`/sales/${p.id}`" class="btn btn-sm btn-primary">
+                <button @click="editBtn(p)" class="btn btn-sm btn-primary">
                   <i class="bi bi-eye"></i>
-                </RouterLink>
+                </button>
               </td>
-              <td class="">
-                #{{ p.id }}
+              <td class="small">
+                {{ p.name }}
               </td>
-              <td class="">
-                <StatusLabel :status="p.status" />
+              <td class="small">
+                {{ p.email }}
               </td>
-              <td>
-                {{ Rp(p.total_amount) }}
+              <td class="small">
+                {{ p.phone }}
               </td>
               <td>
                 {{ formatDate(p.created_at) }}
               </td>
-              <td class="small">
-                {{ p.description }}
+              <td class="">
+                {{ p.sales_count }}
               </td>
             </tr>
-            <tr v-if="transactions.length == 0">
+            <tr v-if="stores.length == 0">
               <td colspan="100%" class="text-center">Tidak ada data</td>
             </tr>
           </tbody>

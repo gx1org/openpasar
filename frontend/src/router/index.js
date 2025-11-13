@@ -1,6 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import IndexView from '../views/IndexView.vue'
 import SearchView from '../views/SearchView.vue'
+import StoreSearchView from '../views/StoreSearchView.vue'
+import StoreDetailView from '../views/StoreDetailView.vue'
 import CartView from '../views/CartView.vue'
 import AccountView from '../views/AccountView.vue'
 import NotFoundView from '../views/NotFoundView.vue'
@@ -13,12 +15,19 @@ import WithdrawalView from '../views/WithdrawalView.vue'
 import SaleView from '../views/seller/SaleView.vue'
 import SaleDetailView from '../views/seller/SaleDetailView.vue'
 import ProductView from '../views/seller/ProductView.vue'
+import AllTransactionView from '../views/admin/AllTransactionView.vue'
+import AllProductView from '../views/admin/AllProductView.vue'
+import AllStoreView from '../views/admin/AllStoreView.vue'
+import AllUserView from '../views/admin/AllUserView.vue'
+import FeaturedProductView from '../views/admin/FeaturedProductView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     { path: '/', name: 'Index', component: IndexView, meta: {} },
     { path: '/search', name: 'Search', component: SearchView, meta: {} },
+    { path: '/stores', name: 'StoreSearch', component: StoreSearchView, meta: { } },
+    { path: '/stores/:id', name: 'StoreDetail', component: StoreDetailView, meta: { } },
     { path: '/cart', name: 'Cart', component: CartView, meta: { requireAuth: true } },
     { path: '/orders', name: 'Order', component: OrderView, meta: { requireAuth: true } },
     { path: '/orders/:id', name: 'OrderDetail', component: OrderDetailView, meta: { requireAuth: true } },
@@ -29,6 +38,11 @@ const router = createRouter({
     { path: '/sales/:id', name: 'SaleDetail', component: SaleDetailView, meta: { requireAuth: true } },
     { path: '/products', name: 'Product', component: ProductView, meta: { requireAuth: true } },
 
+    { path: '/admin/all-transactions', name: 'AllTransaction', component: AllTransactionView, meta: { requireAuth: true, requireAdmin: true } },
+    { path: '/admin/all-products', name: 'AllProduct', component: AllProductView, meta: { requireAuth: true, requireAdmin: true } },
+    { path: '/admin/all-stores', name: 'AllStore', component: AllStoreView, meta: { requireAuth: true, requireAdmin: true } },
+    { path: '/admin/all-users', name: 'AllUser', component: AllUserView, meta: { requireAuth: true, requireAdmin: true } },
+    { path: '/admin/featured-products', name: 'FeaturedProduct', component: FeaturedProductView, meta: { requireAuth: true, requireAdmin: true } },
     { path: '/admin/config', name: 'Config', component: ConfigView, meta: { requireAuth: true, requireAdmin: true } },
 
     { path: '/:pathMatch(.*)*', name: 'NotFound', component: NotFoundView  }
