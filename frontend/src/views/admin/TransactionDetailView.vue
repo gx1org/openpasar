@@ -5,7 +5,6 @@ import SpinnerBox from '../../components/partial/SpinnerBox.vue';
 import StatusLabel from '../../components/partial/StatusLabel.vue';
 import { useRoute } from 'vue-router';
 import ProductShow from '../../components/modal/ProductShow.vue';
-import {useMiscStore} from '../../stores/misc';
 import LinkifiedText from '../../components/partial/LinkifiedText.vue';
 
 const route = useRoute()

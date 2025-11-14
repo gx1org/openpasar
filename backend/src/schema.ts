@@ -68,6 +68,7 @@ export const Withdrawal = pgTable('withdrawals', {
     id: serial('id').primaryKey(),
     user_id: integer('user_id').notNull().references(() => User.id),
     amount: integer('amount').notNull().default(0),
+    receiver: varchar('receiver').notNull().default(''),
     status: varchar('status').notNull().default('pending'),
     created_at: timestamp('created_at').defaultNow(),
 })

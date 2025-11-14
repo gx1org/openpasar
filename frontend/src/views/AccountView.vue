@@ -119,6 +119,12 @@ const logoutBtn = () => {
         </div>
       </div>
       <div class="list-group mb-4">
+        <RouterLink to="/admin/all-withdrawals" class="list-group-item d-flex">
+          <span>Semua Penarikan</span>
+          <div class="ms-auto">
+            <i class="bi bi-chevron-right"></i>
+          </div>
+        </RouterLink>
         <RouterLink to="/admin/all-transactions" class="list-group-item d-flex">
           <span>Semua Transaksi</span>
           <div class="ms-auto">

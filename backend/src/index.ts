@@ -96,7 +96,7 @@ adminRoute.get('/transactions/:id', adminTransactionDetail)
 adminRoute.patch('/transactions/:id/status', adminTransactionStatusUpdate)
 
 adminRoute.get('/withdrawals', adminWithdrawalList)
-adminRoute.post('/withdrawals/:id/action', adminWithdrawalApproveReject)
+adminRoute.patch('/withdrawals/:id/status', adminWithdrawalApproveReject)
 
 app.route('/user', userRoute)
 app.route('/admin', adminRoute)

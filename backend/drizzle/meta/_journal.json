@@ -148,6 +148,13 @@
       "when": 1763092557823,
       "tag": "0020_wide_hobgoblin",
       "breakpoints": true
+    },
+    {
+      "idx": 21,
+      "version": "7",
+      "when": 1763154551229,
+      "tag": "0021_volatile_thing",
+      "breakpoints": true
     }
   ]
 }
