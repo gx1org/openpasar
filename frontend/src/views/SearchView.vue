@@ -3,7 +3,7 @@ import { onMounted, onUnmounted, ref, watch } from 'vue';
 import { useRoute, useRouter} from 'vue-router'
 import { apiReq, handleErrorApi } from '../helpers/fns';
 import SpinnerBox from '../components/partial/SpinnerBox.vue';
-import ProductView from '../components/modal/ProductView.vue';
+import ProductShow from '../components/modal/ProductShow.vue';
 import ProductItem from '../components/partial/ProductItem.vue';
 
 const router = useRouter()
@@ -58,7 +58,7 @@ const showProduct = (p) => {
   const qs = new URLSearchParams(location.search)
   qs.set('show', p.sku)
   router.push(route.path+'?'+qs.toString())
-  document.getElementById('ProductView-btn').click()
+  document.getElementById('ProductShow-btn').click()
 }
 
 const sorting = ref('latest')
@@ -124,7 +124,7 @@ onUnmounted(() => {
     </div>
     <SpinnerBox v-if="isFetching" />
     <template v-else>
-      <div v-if="products.length == 0" class="text-center p-3 border bg-white rounded">
+      <div v-if="products.length == 0" class="text-center p-3 card">
         Yahh, tidak ada produk yang sesuai :)
       </div>
       <div v-else class="row g-2">
@@ -133,7 +133,7 @@ onUnmounted(() => {
         </div>
       </div>
     </template>
-    <button id="ProductView-btn" type="button" class="d-none" data-bs-toggle="modal" data-bs-target="#ProductView"></button>
-    <ProductView :data="productShowing" />
+    <button id="ProductShow-btn" type="button" class="d-none" data-bs-toggle="modal" data-bs-target="#ProductShow"></button>
+    <ProductShow :data="productShowing" />
   </div>
 </template>

@@ -34,7 +34,7 @@ export const Product = pgTable('products', {
     is_active: boolean('is_active').notNull().default(true),
     sold_count: integer('sold_count').notNull().default(0),
     featured: integer('featured').notNull().default(0),
-    image_url: varchar('image_url').notNull().default(''),
+    image_url: text('image_url').notNull().default(''),
     created_at: timestamp('created_at').defaultNow(),
     updated_at: timestamp('updated_at').defaultNow(),
 })
@@ -57,9 +57,9 @@ export const Transaction = pgTable('transactions', {
     description: varchar('description').notNull().default(''),
     checkout_note: varchar('checkout_note').notNull().default(''),
     items: jsonb("items").$type<Record<string, any>>().notNull().default([]),
-    histories: jsonb("histories").$type<Record<string, any>>().notNull().default([]),
     sent_at: timestamp('sent_at').defaultNow(),
     seller_response: text('seller_response').notNull().default(''),
+    admin_response: text('admin_response').notNull().default(''),
     created_at: timestamp('created_at').defaultNow(),
     updated_at: timestamp('updated_at').defaultNow(),
 })

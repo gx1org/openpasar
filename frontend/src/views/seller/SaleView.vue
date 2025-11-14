@@ -55,9 +55,9 @@ onMounted(() => {
             <tr>
               <th>Aksi</th>
               <th>ID</th>
+              <th>Tanggal</th>
               <th>Status</th>
               <th>Jumlah</th>
-              <th>Tanggal</th>
               <th>Deskripsi</th>
             </tr>
           </thead>
@@ -71,14 +71,14 @@ onMounted(() => {
               <td class="">
                 #{{ p.id }}
               </td>
+              <td>
+                {{ formatDate(p.created_at) }}
+              </td>
               <td class="">
                 <StatusLabel :status="p.status" />
               </td>
               <td>
                 {{ Rp(p.total_amount) }}
-              </td>
-              <td>
-                {{ formatDate(p.created_at) }}
               </td>
               <td class="small">
                 {{ p.description }}

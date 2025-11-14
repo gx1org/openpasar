@@ -2,6 +2,7 @@
 import { onMounted, ref } from 'vue';
 import SpinnerBox from '../../components/partial/SpinnerBox.vue';
 import { apiReq, formatDate, handleErrorApi, Rp } from '../../helpers/fns';
+import StatusLabel from '../../components/partial/StatusLabel.vue';
 
 const isFetching = ref(true)
 const transactions = ref([])
@@ -54,9 +55,9 @@ onMounted(() => {
             <tr>
               <th>Aksi</th>
               <th>ID</th>
+              <th>Tanggal</th>
               <th>Status</th>
               <th>Jumlah</th>
-              <th>Tanggal</th>
               <th>Penjual</th>
               <th>Deskripsi</th>
             </tr>
@@ -64,21 +65,21 @@ onMounted(() => {
           <tbody>
             <tr v-for="p,i in transactions" :key="i">
               <td>
-                <button @click="editBtn(p)" class="btn btn-sm btn-primary">
+                <RouterLink :to="`/admin/transactions/${p.id}`" class="btn btn-sm btn-primary">
                   <i class="bi bi-eye"></i>
-                </button>
+                </RouterLink>
               </td>
               <td class="">
                 #{{ p.id }}
               </td>
+              <td>
+                {{ formatDate(p.created_at) }}
+              </td>
               <td class="">
-                {{ p.status }}
+                <StatusLabel :status="p.status" />
               </td>
               <td>
                 {{ Rp(p.total_amount) }}
-              </td>
-              <td>
-                {{ formatDate(p.created_at) }}
               </td>
               <td class="small">
                 {{ p.store.name }}

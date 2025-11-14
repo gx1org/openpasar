@@ -70,16 +70,18 @@ onMounted(() => {
     </div>
     <SpinnerBox v-if="isFetching" />
     <template v-else>
-      <div v-if="stores.length == 0" class="text-center p-3 border bg-white rounded">
-        Yahh, tidak ada produk yang sesuai :)
+      <div v-if="stores.length == 0" class="text-center p-3 card">
+        Yahh, tidak ada toko yang sesuai :)
       </div>
       <div v-else class="row g-2">
         <RouterLink :to="`/stores/${p.id}`" v-for="p,i in stores" :key="i" class="col-sm-6 text-reset text-decoration-none">
           <div class="card">
-            <div class="card-body">
+            <div class="card-body p-2">
               <p class="mb-1 fw-bold">{{ p.name }}</p>
-              <p class="mb-0 small">Sejak {{ formatDate(p.created_at) }}</p>
-              <p class="mb-0 small">{{ p.sales_count }}&times; penjualan</p>
+              <div class="d-flex">
+                <p class="mb-0 small">Sejak {{ formatDate(p.created_at) }}</p>
+                <p class="mb-0 small ms-auto">{{ p.sales_count }}&times; penjualan</p>
+              </div>
             </div>
           </div>
         </RouterLink>

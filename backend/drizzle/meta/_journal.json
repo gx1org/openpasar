@@ -134,6 +134,13 @@
       "when": 1763007734138,
       "tag": "0018_broken_silvermane",
       "breakpoints": true
+    },
+    {
+      "idx": 19,
+      "version": "7",
+      "when": 1763064348645,
+      "tag": "0019_noisy_arclight",
+      "breakpoints": true
     }
   ]
 }

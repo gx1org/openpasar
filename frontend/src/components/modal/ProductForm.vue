@@ -1,6 +1,6 @@
 <script setup>
 import { computed, onMounted, ref, watch } from 'vue'
-import { apiReq, handleErrorApi } from '../../helpers/fns'
+import { apiReq, handleErrorApi, img } from '../../helpers/fns'
 import SubmitButton from '../partial/SubmitButton.vue';
 
 const prop = defineProps({
@@ -8,6 +8,7 @@ const prop = defineProps({
 })
 const emit = defineEmits(['updated'])
 const form = ref({})
+const images = ref([])
 const closeBtn = ref(null)
 const isNew = ref(true)
 
@@ -18,6 +19,8 @@ const isValidForm = computed(() => {
 
 const isSending = ref(false)
 const submitBtn = () => {
+  images.value = images.value.filter(Boolean)
+  form.value.image_url = images.value.join(',')
   isSending.value = true
   apiReq(isNew.value ? 'post' : 'put', `/user/stores/products${isNew.value ? '' : `/${prop.data.id}`}`, form.value)
     .then(() => {
@@ -30,8 +33,14 @@ const submitBtn = () => {
     })
 }
 
+const handleImageChange = (e, i) => {
+  images.value[i] = e.target.value
+  images.value = images.value.filter(Boolean)
+}
+
 const syncProp = () => {
   form.value = JSON.parse(JSON.stringify(prop.data))
+  images.value = form.value.image_url?.split(',') || []
   if (prop.data?.id) {
     isNew.value = false
   }
@@ -74,14 +83,23 @@ onMounted(() => {
           </div>
           <div class="mb-3">
             <div class="d-flex">
-              <label for="" class="form-label">Gambar</label>
+              <label for="" class="form-label">Foto Produk</label>
               <a href="https://upld.zone.id" target="_blank" class="small ms-auto">Upld &nearr;</a>
             </div>
-            <input type="text" class="form-control" v-model="form.image_url">
+            <div v-for="image,i in images" :key="img" class="d-flex mb-2">
+              <a :href="image" target="_blank" rel="noopener noreferrer">
+                <img :src="(image)" alt="" class="border me-2" width="50" height="50">
+              </a>
+              <input type="text" class="form-control" :value="image" @change="handleImageChange($event, i)">
+              <button class="btn btn-light border text-danger ms-2" @click="images.splice(i, 1)">&times;</button>
+            </div>
+            <div>
+              <button class="btn btn-outline-primary btn-sm" @click="images.push('')">Tambah Foto</button>
+            </div>
           </div>
           <div class="mb-3">
             <label for="" class="form-label">Deskripsi</label>
-            <textarea class="form-control" v-model="form.description"></textarea>
+            <textarea class="form-control" v-model="form.description" rows="7"></textarea>
           </div>
           <div>
             <SubmitButton :disabled="!isValidForm" :sending="isSending" @click="submitBtn" class="btn btn-primary w-100">

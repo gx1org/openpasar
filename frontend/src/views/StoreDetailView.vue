@@ -3,8 +3,9 @@ import { onMounted, onUnmounted, ref, watch } from 'vue';
 import { useRoute, useRouter} from 'vue-router'
 import { apiReq, handleErrorApi, formatDate } from '../helpers/fns';
 import SpinnerBox from '../components/partial/SpinnerBox.vue';
-import ProductView from '../components/modal/ProductView.vue';
+import ProductShow from '../components/modal/ProductShow.vue';
 import ProductItem from '../components/partial/ProductItem.vue';
+import LinkifiedText from '../components/partial/LinkifiedText.vue';
 
 const router = useRouter()
 const route = useRoute()
@@ -67,7 +68,7 @@ const showProduct = (p) => {
   const qs = new URLSearchParams(location.search)
   qs.set('show', p.sku)
   router.push(route.path+'?'+qs.toString())
-  document.getElementById('ProductView-btn').click()
+  document.getElementById('ProductShow-btn').click()
 }
 
 const sorting = ref('latest')
@@ -121,16 +122,16 @@ onUnmounted(() => {
     </div>
     <SpinnerBox v-if="isFetching" />
     <template v-else>
-      <div class="bg-white p-2 border rounded mb-3">
+      <div class="p-2 card mb-3">
         <div class="d-flex mb-3">
           <div>Sejak {{ formatDate(store.created_at) }}</div>
           <div class="ms-auto">{{ store.sales_count }}&times; penjualan</div>
         </div>
-        <div class="small" style="white-space: pre-line;">
-          {{ store.description }}
+        <div class="small">
+          <LinkifiedText :text="store.description" />
         </div>
       </div>
-      <div v-if="products.length == 0" class="text-center p-3 border bg-white rounded">
+      <div v-if="products.length == 0" class="text-center p-3 card">
         Yahh, tidak ada produk :)
       </div>
       <div v-else class="row g-2">
@@ -139,7 +140,7 @@ onUnmounted(() => {
         </div>
       </div>
     </template>
-    <button id="ProductView-btn" type="button" class="d-none" data-bs-toggle="modal" data-bs-target="#ProductView"></button>
-    <ProductView :data="productShowing" />
+    <button id="ProductShow-btn" type="button" class="d-none" data-bs-toggle="modal" data-bs-target="#ProductShow"></button>
+    <ProductShow :data="productShowing" />
   </div>
 </template>

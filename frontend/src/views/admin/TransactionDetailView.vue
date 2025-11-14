@@ -14,7 +14,7 @@ const order = ref({})
 const isFetching = ref(true)
 
 const fetchData = async () => {
-  apiReq('get', `/user/stores/transactions/${route.params.id}`).then(res => {
+  apiReq('get', `/admin/transactions/${route.params.id}`).then(res => {
     order.value = res.data.transaction
   })
   .catch(handleErrorApi)
@@ -39,7 +39,7 @@ const isSending = ref(false)
 const actionBtn = (status) => {
   if (!confirm('Anda yakin?')) return
   isSending.value = true
-  apiReq('patch', `/user/stores/transactions/${route.params.id}/status`, { status, note: note.value })
+  apiReq('patch', `/admin/transactions/${route.params.id}/status`, { status, note: note.value })
     .then(() => {
       fetchData()
     }) 
@@ -57,10 +57,10 @@ onMounted(() => {
 <template>
   <div>
     <div class="d-flex" v-if="!isFetching">
-      <h5 class="mb-4">Penjualan #{{ order.id }}</h5>
+      <h5 class="mb-4">Transaksi #{{ order.id }}</h5>
       <div class="ms-auto">
-        <RouterLink to="/sales" class="small">
-          &larr; Penjualan
+        <RouterLink to="/admin/transactions" class="small">
+          &larr; Transaksi
         </RouterLink>
       </div>
     </div>
@@ -101,6 +101,14 @@ onMounted(() => {
             </div>
             <div class="w-75">
               {{ (order.buyer.name) || '-' }}
+            </div>
+          </li>
+          <li class="list-group-item d-flex">
+            <div class="text-muted w-25">
+              Pembeli
+            </div>
+            <div class="w-75">
+              {{ (order.store_name) || '-' }}
             </div>
           </li>
           <li class="list-group-item">
@@ -164,14 +172,14 @@ onMounted(() => {
               Pesanan telah selesai
             </span>
           </li>
-          <li v-if="order.status == 'in_process'" class="list-group-item">
+          <li class="list-group-item">
             <textarea class="form-control mb-2" rows="3" placeholder="Keterangan" v-model="note"></textarea>
             <div class="d-flex">
-              <button @click="actionBtn('rejected')" :disabled="isSending" class="btn btn-light border text-danger w-100">
-                Tolak
+              <button @click="actionBtn('canceled')" :disabled="isSending" class="btn btn-light border text-danger w-100">
+                Batalkan
               </button>
-              <button @click="actionBtn('sent')" :disabled="isSending" class="btn btn-primary w-100 ms-2">
-                Kirim
+              <button @click="actionBtn('completed')" :disabled="isSending" class="btn btn-primary w-100 ms-2">
+                Selesai
               </button>
             </div>
           </li>
@@ -194,9 +202,9 @@ onMounted(() => {
             </a>
           </li>
           <li class="list-group-item">
-            <a :href="`https://wa.me/`+misc.config.admin_phone" class="text-decoration-none text-success">
+            <a :href="`https://wa.me/`+order.store_phone" class="text-decoration-none text-success">
               <i class="bi bi-whatsapp"></i>
-              Lapor Admin
+              Hubungi Penjual
             </a>
           </li>
         </ul>

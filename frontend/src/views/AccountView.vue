@@ -2,6 +2,7 @@
 import EditPin from '../components/modal/EditPin.vue';
 import EditProfile from '../components/modal/EditProfile.vue';
 import EditStoreProfile from '../components/modal/EditStoreProfile.vue';
+import SellerRule from '../components/modal/SellerRule.vue';
 import { apiReq, Rp } from '../helpers/fns';
 import { useAuthStore } from '../stores/auth';
 import { useMiscStore } from '../stores/misc';
@@ -89,6 +90,12 @@ const logoutBtn = () => {
               <i class="bi bi-chevron-right"></i>
             </div>
           </a>
+          <a class="list-group-item d-flex" href="javascript:;" data-bs-toggle="modal" data-bs-target="#SellerRule">
+            <span>Aturan dan Fee</span>
+            <div class="ms-auto">
+              <i class="bi bi-chevron-right"></i>
+            </div>
+          </a>
         </div>
       </div>
       <div v-else  class="card mb-4">
@@ -158,5 +165,6 @@ const logoutBtn = () => {
     <EditProfile />
     <EditPin />
     <EditStoreProfile />
+    <SellerRule />
   </div>
 </template>

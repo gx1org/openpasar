@@ -42,7 +42,6 @@ export const storeTransactionDetail = async (c: Context): Promise<HandlerRespons
             phone: User.phone,
         },
         items: Transaction.items,
-        histories: Transaction.histories,
         store_name: Store.name,
         store_phone: Store.phone,
         store_sales_count: Store.sales_count,
@@ -61,7 +60,6 @@ export const storeTransactionDetail = async (c: Context): Promise<HandlerRespons
         return c.json({ message: "Transaction not found" }, 404);
     }
 
-    transaction['store_name'] = store.name
     return c.json({ transaction });
 }
 

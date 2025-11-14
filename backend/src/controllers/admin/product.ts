@@ -35,6 +35,7 @@ export const adminProductList = async (c: Context): Promise<HandlerResponse<any>
         .from(Product)
         .innerJoin(Store, eq(Store.id, Product.store_id))
         .where(and(
+            eq(Product.is_active, isActive),
             search === '' ? undefined :
             or(
                 ilike(Product.name, `%${search}%`),

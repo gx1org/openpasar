@@ -1,18 +1,16 @@
 <script setup>
 import { computed, onMounted, ref, watch } from 'vue'
 import { useAuthStore } from '../../stores/auth';
-import { useMiscStore } from '../../stores/misc';
 import { apiReq, handleErrorApi } from '../../helpers/fns'
 import SubmitButton from '../partial/SubmitButton.vue';
 
 const auth = useAuthStore()
 const emit = defineEmits(['updated'])
-const misc = useMiscStore()
 const form = ref({})
 const closeBtn = ref(null)
 
 const isValidForm = computed(() => {
-  return form.value.name && form.value.email && form.value.phone
+  return form.value.name && form.value.phone
 })
 
 const isSending = ref(false)
@@ -20,9 +18,6 @@ const updateBtn = () => {
   isSending.value = true
   apiReq('put', `/user/profile`, form.value)
     .then(res => {
-      if (auth.user.email == misc.config.admin_email) {
-        misc.config.admin_email = res.data.user.email
-      }
       auth.user = res.data.user
       emit('updated')
       closeBtn.value.click()
@@ -51,12 +46,8 @@ onMounted(() => {
             <input type="text" class="form-control" v-model="form.name">
           </div>
           <div class="mb-3">
-            <label for="" class="form-label">Email</label>
-            <input type="email" class="form-control" v-model="form.email">
-          </div>
-          <div class="mb-3">
             <label for="" class="form-label">No. Whatsapp</label>
-            <input type="email" class="form-control" v-model="form.phone">
+            <input type="text" class="form-control" v-model="form.phone">
           </div>
           <div>
             <SubmitButton :disabled="!isValidForm" :sending="isSending" @click="updateBtn" class="btn btn-primary w-100">

@@ -1,10 +1,10 @@
 <script setup>
 import { computed, onMounted, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import { apiReq, handleErrorApi, Rp } from '../helpers/fns';
+import { apiReq, handleErrorApi, img, Rp } from '../helpers/fns';
 import SpinnerBox from '../components/partial/SpinnerBox.vue';
 import SubmitButton from '../components/partial/SubmitButton.vue';
-import ProductView from '../components/modal/ProductView.vue';
+import ProductShow from '../components/modal/ProductShow.vue';
 
 const route = useRoute()
 const router = useRouter()
@@ -74,7 +74,7 @@ const productShowing = ref({})
 const showProduct = (p) => {
   event.preventDefault()
   productShowing.value = p
-  document.getElementById('ProductView-btn').click()
+  document.getElementById('ProductShow-btn').click()
 }
 
 const isSending = ref(false)
@@ -107,7 +107,7 @@ onMounted(() => {
     <h5 class="mb-4">Keranjang</h5>
     <SpinnerBox v-if="isFetching" />
     <template v-else>
-      <div v-if="carts.length == 0" class="text-center p-3 border bg-white rounded">
+      <div v-if="carts.length == 0" class="text-center p-3 card">
         Yahh, keranjang masih kosong :)
       </div>
       <div class="card mb-4" v-for="g,i in computedCarts" :key="i">
@@ -145,7 +145,7 @@ onMounted(() => {
                 </div>
               </div>
               <div class="ms-auto">
-                <img :src="c.image_url" alt="img" class="border" style="width: 50px;aspect-ratio: 1/1;">
+                <img :src="img(c.image_url)" alt="img" class="border square" width="50">
               </div>
             </div>
           </li>
@@ -158,7 +158,7 @@ onMounted(() => {
         </div>
       </div>
     </template>
-    <button id="ProductView-btn" type="button" class="d-none" data-bs-toggle="modal" data-bs-target="#ProductView"></button>
-    <ProductView :data="productShowing" />
+    <button id="ProductShow-btn" type="button" class="d-none" data-bs-toggle="modal" data-bs-target="#ProductShow"></button>
+    <ProductShow :data="productShowing" />
   </div>
 </template>

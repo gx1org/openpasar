@@ -1,7 +1,7 @@
 <script setup>
 import { onMounted, ref } from 'vue';
 import SpinnerBox from '../../components/partial/SpinnerBox.vue';
-import { apiReq, formatDate, handleErrorApi, Rp } from '../../helpers/fns';
+import { apiReq, formatDate, handleErrorApi, img, Rp } from '../../helpers/fns';
 import ProductForm from '../../components/modal/ProductForm.vue';
 
 const isFetching = ref(true)
@@ -96,7 +96,7 @@ onMounted(() => {
                 {{ p.sku }}
               </td>
               <td class="d-flex">
-                <img :src="p.image_url" alt="img" width="32">
+                <img :src="img(p.image_url)" alt="img" width="32">
                 <p class="small mb-0 ms-2">
                   {{ p.name }}
                 </p>

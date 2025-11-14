@@ -1,11 +1,12 @@
 <script setup>
 import { onMounted, ref } from 'vue';
-import { apiReq, formatDateTime, handleErrorApi, Rp } from '../helpers/fns';
+import { apiReq, formatDateTime, handleErrorApi, img, Rp } from '../helpers/fns';
 import SpinnerBox from '../components/partial/SpinnerBox.vue';
 import { useRoute } from 'vue-router';
-import ProductView from '../components/modal/ProductView.vue';
+import ProductShow from '../components/modal/ProductShow.vue';
 import { useMiscStore } from '../stores/misc';
 import StatusLabel from '../components/partial/StatusLabel.vue';
+import LinkifiedText from '../components/partial/LinkifiedText.vue';
 
 const misc = useMiscStore()
 const route = useRoute()
@@ -30,8 +31,12 @@ const fetchData = async () => {
 const productShowing = ref({})
 const showProduct = (p) => {
   event.preventDefault()
+  p.store_name = order.value.store_name
+  p.store_phone = order.value.store_phone
+  p.store_id = order.value.store_id
+  p.store_sales_count = order.value.store_sales_count
   productShowing.value = p
-  document.getElementById('ProductView-btn').click()
+  document.getElementById('ProductShow-btn').click()
 }
 
 const isSending = ref(false)
@@ -107,7 +112,7 @@ onMounted(() => {
               Catatan
             </div>
             <div class="w-75">
-              {{ (order.checkout_note) || '-' }}
+              <LinkifiedText :text="order.checkout_note || '-'" />
             </div>
           </li>
         </ul>
@@ -129,7 +134,7 @@ onMounted(() => {
                 </span>
               </div>
               <div class="ms-auto">
-                <img :src="c.image_url" alt="img" class="border" style="width: 50px;aspect-ratio: 1/1;">
+                <img :src="img(c.image_url)" alt="img" class="border square" width="50">
               </div>
             </div>
           </li>
@@ -139,8 +144,8 @@ onMounted(() => {
         <div class="card-header h6">
           Tanggapan Penjual
         </div>
-        <div class="card-body" style="white-space: pre-line;">
-          {{ order.seller_response }}
+        <div class="card-body">
+          <LinkifiedText :text="order.seller_response || '-'" />
         </div>
       </div>
       <div class="card mb-4">
@@ -149,18 +154,23 @@ onMounted(() => {
         </div>
         <ul class="list-group list-group-flush">
           <li v-if="order.status == 'canceled'" class="list-group-item">
-            <span class="text-danger">
-              Pesanan telah dibatalkan
+            <span class="text-muted">
+              Pesanan telah dibatalkan.
+            </span>
+          </li>
+          <li v-if="order.status == 'rejected'" class="list-group-item">
+            <span class="text-dark">
+              Pesanan telah ditolak penjual.
             </span>
           </li>
           <li v-if="order.status == 'in_process'" class="list-group-item">
             <span class="text-warning">
-              Pesanan sedang diproses penjual
+              Pesanan sedang diproses penjual.
             </span>
           </li>
           <li v-if="order.status == 'complained'" class="list-group-item">
             <span class="text-danger">
-              Pesanan dikomplain. Hubungi admin jika diperlukan
+              Pesanan dikomplain. Hubungi admin jika diperlukan.
             </span>
           </li>
           <li v-if="order.status == 'completed'" class="list-group-item">
@@ -220,7 +230,7 @@ onMounted(() => {
         </ul>
       </div>
     </template>
-    <button id="ProductView-btn" type="button" class="d-none" data-bs-toggle="modal" data-bs-target="#ProductView"></button>
-    <ProductView :data="productShowing" />
+    <button id="ProductShow-btn" type="button" class="d-none" data-bs-toggle="modal" data-bs-target="#ProductShow"></button>
+    <ProductShow :data="productShowing" />
   </div>
 </template>

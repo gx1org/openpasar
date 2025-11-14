@@ -16,6 +16,7 @@ import SaleView from '../views/seller/SaleView.vue'
 import SaleDetailView from '../views/seller/SaleDetailView.vue'
 import ProductView from '../views/seller/ProductView.vue'
 import AllTransactionView from '../views/admin/AllTransactionView.vue'
+import TransactionDetailView from '../views/admin/TransactionDetailView.vue'
 import AllProductView from '../views/admin/AllProductView.vue'
 import AllStoreView from '../views/admin/AllStoreView.vue'
 import AllUserView from '../views/admin/AllUserView.vue'
@@ -39,6 +40,7 @@ const router = createRouter({
     { path: '/products', name: 'Product', component: ProductView, meta: { requireAuth: true } },
 
     { path: '/admin/all-transactions', name: 'AllTransaction', component: AllTransactionView, meta: { requireAuth: true, requireAdmin: true } },
+    { path: '/admin/transactions/:id', name: 'TransactionDetail', component: TransactionDetailView, meta: { requireAuth: true, requireAdmin: true } },
     { path: '/admin/all-products', name: 'AllProduct', component: AllProductView, meta: { requireAuth: true, requireAdmin: true } },
     { path: '/admin/all-stores', name: 'AllStore', component: AllStoreView, meta: { requireAuth: true, requireAdmin: true } },
     { path: '/admin/all-users', name: 'AllUser', component: AllUserView, meta: { requireAuth: true, requireAdmin: true } },

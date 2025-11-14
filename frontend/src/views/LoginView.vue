@@ -12,8 +12,10 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="py-5 text-center px-3 border rounded bg-white">
-    <h6 class="mb-3">Login untuk melanjutkan</h6>
-    <a :href="url" class="btn btn-primary">Login Sekarang</a>
+  <div class="text-center card my-4">
+    <h6 class="card-header">Login untuk melanjutkan</h6>
+    <div class="card-body">
+      <a :href="url" class="btn btn-primary">Login Sekarang</a>
+    </div>
   </div>
 </template>

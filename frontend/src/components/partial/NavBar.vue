@@ -1,14 +1,16 @@
 <script setup>
-import { useRouter } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import { useMiscStore } from '../../stores/misc';
 import { img } from '../../helpers/fns';
 import { onMounted } from 'vue';
 
+const route = useRoute()
 const router = useRouter()
 const misc = useMiscStore()
 
 const handleSearch = (e) => {
   const v = e.target.value
+  if (!v && route.name != 'Search') return
   router.push(`/search?q=${v}`)
 }
 onMounted(() => {

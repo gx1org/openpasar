@@ -33,10 +33,10 @@ onMounted(() => {
     </div>
     <SpinnerBox v-if="isFetching" />
     <template v-else>
-      <div v-if="withdrawals.length == 0" class="text-center p-3 border bg-white rounded">
+      <div v-if="withdrawals.length == 0" class="text-center p-3 card">
         Belum ada penarikan :)
       </div>
-      <div v-for="d,i in withdrawals" :key="i" class="mb-3 border bg-white rounded">
+      <div v-for="d,i in withdrawals" :key="i" class="mb-3 card">
         <RouterLink :to="`/withdrawals/${d.id}`" class="text-decoration-none text-reset">
           <div class="p-3">
             <div class="d-flex gap-2">

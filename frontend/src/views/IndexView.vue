@@ -3,13 +3,14 @@ import { onMounted, ref } from 'vue';
 import { useMiscStore } from '../stores/misc';
 import { apiReq, handleErrorApi } from '../helpers/fns';
 import SpinnerBox from '../components/partial/SpinnerBox.vue';
-import ProductView from '../components/modal/ProductView.vue';
+import ProductShow from '../components/modal/ProductShow.vue';
 import ProductItem from '../components/partial/ProductItem.vue';
 
 const misc = useMiscStore()
 
 const products = ref([])
 const isFetching = ref(true)
+
 const fetchData = () => {
   isFetching.value = true
   apiReq('get', '/catalogues?limit=6&sort=featured')
@@ -26,7 +27,7 @@ const productShowing = ref({})
 const showProduct = (p) => {
   event.preventDefault()
   productShowing.value = p
-  document.getElementById('ProductView-btn').click()
+  document.getElementById('ProductShow-btn').click()
 }
 
 onMounted(() => {
@@ -58,7 +59,7 @@ onMounted(() => {
         Tidak ada Produk Unggulan
       </div>
     </template>
-    <button id="ProductView-btn" type="button" class="d-none" data-bs-toggle="modal" data-bs-target="#ProductView"></button>
-    <ProductView :data="productShowing" />
+    <button id="ProductShow-btn" type="button" class="d-none" data-bs-toggle="modal" data-bs-target="#ProductShow"></button>
+    <ProductShow :data="productShowing" />
   </div>
 </template>

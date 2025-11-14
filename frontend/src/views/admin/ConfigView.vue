@@ -1,6 +1,6 @@
 <script setup>
 import { computed, onMounted, ref } from 'vue';
-import { apiReq, handleErrorApi } from '../../helpers/fns';
+import { apiReq, createPermalink, handleErrorApi } from '../../helpers/fns';
 import SubmitButton from '../../components/partial/SubmitButton.vue';
 import { useMiscStore } from '../../stores/misc';
 import SpinnerBox from '../../components/partial/SpinnerBox.vue';
@@ -21,7 +21,8 @@ const defaultForm = {
   pakasir_api_key: '',
   seller_fee: 5,
   content_info: '',
-  content_seller_rules: ''
+  content_seller_rules: '',
+  cronjob_secret: ''
 }
 
 const form = ref({})
@@ -47,6 +48,8 @@ const isValidForm = computed(() => {
     && form.value.admin_phone
     && form.value.content_info
     && form.value.content_seller_rules
+    && form.value.cronjob_secret
+    && form.value.seller_fee
   )
 })
 
@@ -72,6 +75,10 @@ const saveBtn = async () => {
     .finally(() => {
       isSending.value = false
     })
+}
+
+const handleChangeSecret = () => {
+  form.value.cronjob_secret = createPermalink(form.value.cronjob_secret)
 }
 
 onMounted(() => {
@@ -183,6 +190,10 @@ onMounted(() => {
         <div class="mb-3">
           <label for="" class="form-label">Pakasir Api Key</label>
           <input type="text" class="form-control" v-model="form.pakasir_api_key">
+        </div>
+        <div class="mb-3">
+          <label for="" class="form-label">Cronjob Secret</label>
+          <input type="text" class="form-control" v-model="form.cronjob_secret" @change="handleChangeSecret">
         </div>
       </div>
       <div class="p-3 border card bg-white mb-4">

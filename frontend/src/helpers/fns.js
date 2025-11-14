@@ -5,26 +5,21 @@ const pad = (n) => n.toString().padStart(2, '0');
 
 export const formatDate = (time) => {
   if (!time) return '';
-  if (!(time instanceof Date)) {
-    time = new Date(time)
-  }
-  const year = time.getFullYear();
-  const month = pad(time.getMonth() + 1);
-  const day = pad(time.getDate());
-  return `${year}-${month}-${day}`;
+  return new Date(time).toLocaleDateString('id-ID', {
+    dateStyle: 'medium'
+  });
 }
 
 export const formatDateTime = (time) => {
   if (!time) return '';
-  if (!(time instanceof Date)) {
-    time = new Date(time)
-  }
-  const year = time.getFullYear();
-  const month = pad(time.getMonth() + 1);
-  const day = pad(time.getDate());
-  const hours = pad(time.getHours());
-  const minutes = pad(time.getMinutes());
-  return `${year}-${month}-${day} ${hours}:${minutes}`;
+  const datePart = new Date(time).toLocaleDateString('id-ID', {
+    dateStyle: 'medium',
+  });
+  const timePart = new Date(time).toLocaleTimeString('id-ID', {
+    hour: '2-digit',
+    minute: '2-digit'
+  })
+  return `${datePart} ${timePart}`
 }
 
 export const handleErrorApi = (err) => {
@@ -83,46 +78,8 @@ export function Rp(int) {
 }
 
 export function img(url) {
-  return url ?? '/noimage.png'
-}
-
-export function processIcon(e) {
-  if (!e.files[0]) return;
-
-  window.imageLoaded = ''
-  var file = e.files[0]
-  var reader = new FileReader();
-    reader.readAsArrayBuffer(file);
-    reader.onload = function (event) {
-        // blob stuff
-        var blob = new Blob([event.target.result]); // create blob...
-        window.URL = window.URL || window.webkitURL;
-        var blobURL = window.URL.createObjectURL(blob); // and get it's URL
-    
-        // helper Image object
-        var image = new Image();
-        image.src = blobURL;
-        image.onload = function() {
-            // have to wait till it's loaded
-            var resized = resizeIcon(image); // send it to canvas
-            window.imageLoaded = resized
-            const event = new Event('image:loaded');
-            window.dispatchEvent(event)
-        }
-    };
-}
-
-function resizeIcon(img) {
-  var canvas = document.createElement('canvas');
-  canvas.width = 128
-  canvas.height = 128
-  var iw = canvas.width
-  var pw = (iw / img.width)
-  var ih = img.height * pw
-  var ch = canvas.height
-  var dy = - ((ih/2) - (ch/2))
-
-  const ctx = canvas.getContext('2d')
-  ctx.drawImage(img, 0, dy, iw, ih)
-  return canvas.toDataURL("image/png", 1)
+  if (url.toString().includes(',')) {
+    url = url.split(',')[0]
+  }
+  return url || '/noimage.png'
 }
