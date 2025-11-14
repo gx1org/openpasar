@@ -141,6 +141,13 @@
       "when": 1763064348645,
       "tag": "0019_noisy_arclight",
       "breakpoints": true
+    },
+    {
+      "idx": 20,
+      "version": "7",
+      "when": 1763092557823,
+      "tag": "0020_wide_hobgoblin",
+      "breakpoints": true
     }
   ]
 }

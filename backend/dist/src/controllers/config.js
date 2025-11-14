@@ -1,8 +1,5 @@
-import type { Context } from "hono";
 import { configCache, configKeys, getAllConfigs, getConfig, setConfig } from "../config.js";
-import type { HandlerResponse } from "hono/types";
-
-export const getSiteConfig = async (c: Context): Promise<HandlerResponse<any>> => {
+export const getSiteConfig = async (c) => {
     const config = {
         installed: await getConfig('installed'),
         site_name: await getConfig('site_name'),
@@ -17,33 +14,25 @@ export const getSiteConfig = async (c: Context): Promise<HandlerResponse<any>> =
         content_info: await getConfig('content_info'),
         content_seller_rules: await getConfig('content_seller_rules'),
         seller_fee: await getConfig('seller_fee'),
-    }
+    };
     return c.json({ config });
-}
-
-export const getSiteConfigAll = async (c: Context): Promise<HandlerResponse<any>> => {
-    const configs = await getAllConfigs()
+};
+export const getSiteConfigAll = async (c) => {
+    const configs = await getAllConfigs();
     return c.json({ configs });
-}
-
-export const setSiteConfig = async (c: Context): Promise<HandlerResponse<any>> => {
+};
+export const setSiteConfig = async (c) => {
     const body = await c.req.json();
-    const configs = await getAllConfigs()
+    const configs = await getAllConfigs();
     for (const c of configKeys) {
         if (body[c] === undefined || body[c] === configs[c]) {
-            continue
+            continue;
         }
-        await setConfig(c, body[c])
+        await setConfig(c, body[c]);
     }
-    
-    configCache.loaded = 'no'
+    configCache.loaded = 'no';
     if (configs['installed'] !== 'yes') {
-        await setConfig('installed', 'yes')
+        await setConfig('installed', 'yes');
     }
-    return getSiteConfig(c)
-}
-
-export const clearSiteConfigCache = async (c: Context): Promise<HandlerResponse<any>> => {
-    configCache.loaded = 'no'
-    return c.json({ message: 'Config cache cleared' })
-}
+    return getSiteConfig(c);
+};

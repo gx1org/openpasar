@@ -4,7 +4,7 @@
   "scripts": {
     "dev": "tsx watch src/serve.ts",
     "build": "tsc",
-    "start": "node dist/index.js",
+    "start": "node dist/src/serve.js",
     "db:migrate": "drizzle-kit generate && drizzle-kit push"
   },
   "dependencies": {
