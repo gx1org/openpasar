@@ -1,5 +1,5 @@
 import { defineNuxtRouteMiddleware, navigateTo } from '#app'
-// import { useAuthStore } from '../stores/auth'
+import { useAuthStore } from '../stores/auth'
 
 export default defineNuxtRouteMiddleware(async (to) => {
   if (!process.client) {
@@ -19,7 +19,6 @@ export default defineNuxtRouteMiddleware(async (to) => {
     query.delete('auth_code')
     return navigateTo(to.path + '?' + query.toString())
   }
-
 
   // Refresh token jika perlu
   if (auth.isLoading && auth.accessToken) {

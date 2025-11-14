@@ -22,25 +22,26 @@ export const formatDateTime = (time) => {
 }
 
 export const handleErrorApi = (err) => {
+  const isClient = process.client
   const store = useAuthStore()
   if (!err.response) {
-    // alert('Client error')
+    isClient && alert('Client error')
     console.error(err);
     return
   }
 
   if ([401].includes(err.response.status)) {
     store.setLogout()
-    // alert(err.response.data.message || err.response.data)
+    isClient && alert(err.response.data.message || err.response.data)
     return
   }
 
   if (!err.response.data) {
-    // alert('Internal server error')
+    isClient && alert('Internal server error')
     console.error(err);
   } else {
-    console.log(err.response.data);
-    // alert(err.response.data.message || err.response.data)
+    console.error(err.response.data);
+    isClient && alert(err.response.data.message || err.response.data)
   }
 }
 
@@ -82,4 +83,27 @@ export function img(url) {
     url = url.split(',')[0]
   }
   return url || '/noimage.png'
+}
+
+export const setTheme = () => {
+  const misc = useMiscStore()
+  let linkCss = 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css'
+  if (misc.config.site_theme != 'default') {
+    const theme = misc.config.site_theme
+    linkCss = 'https://cdnjs.cloudflare.com/ajax/libs/bootswatch/5.3.8/'+theme+'/bootstrap.min.css'
+  }
+
+  useHead({
+    link: [
+      {
+        rel: "stylesheet",
+        href: linkCss,
+      },
+      {
+        rel: "icon",
+        type: "image/png",
+        href: img(misc.config.site_icon)
+      }
+    ],
+  })
 }

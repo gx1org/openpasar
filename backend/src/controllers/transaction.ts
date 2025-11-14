@@ -1,8 +1,8 @@
 import type { Context } from "hono";
 import type { HandlerResponse } from "hono/types";
 import { db } from "../db.js";
-import { Store, Transaction } from "../schema.js";
-import { and, desc, eq, ilike, or } from "drizzle-orm";
+import { Store, Transaction, User } from "../schema.js";
+import { and, desc, eq, ilike, or, sql } from "drizzle-orm";
 
 export const transactionList = async (c: Context): Promise<HandlerResponse<any>> => {
     const userId = c.get('jwtPayload')?.id;
@@ -87,5 +87,17 @@ export const transactionStatusUpdate = async (c: Context): Promise<HandlerRespon
     const updated = await db.update(Transaction)
         .set({ status })
         .where(eq(Transaction.id, Number(id)));
+    if (status === 'completed') {
+        const [store] = await db.select().from(Store)
+            .where(eq(Store.id, transaction.store_id))
+            .limit(1);
+        await db.update(Store)
+            .set({ sales_count: sql`${Store.sales_count} + 1` })
+            .where(eq(Store.id, transaction.store_id));
+
+        await db.update(User)
+            .set({ balance: sql`${User.balance} + ${transaction.total_amount}` })
+            .where(eq(User.id, store.user_id));
+    }
     return c.json({ updated });
 }

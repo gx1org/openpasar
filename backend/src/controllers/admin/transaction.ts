@@ -2,7 +2,7 @@ import type { Context } from "hono";
 import type { HandlerResponse } from "hono/types";
 import { db } from "../../db.js";
 import { Store, Transaction, User } from "../../schema.js";
-import { and, desc, eq, ilike, inArray, or } from "drizzle-orm";
+import { and, desc, eq, ilike, inArray, or, sql } from "drizzle-orm";
 
 export const adminTransactionList = async (c: Context): Promise<HandlerResponse<any>> => {
     const search = c.req.query('search') || '';
@@ -79,9 +79,15 @@ export const adminTransactionStatusUpdate = async (c: Context): Promise<HandlerR
     if (!transaction) {
         return c.json({ message: "Transaction not found" }, 404);
     }
-
     if (!note) {
         return c.json({ message: "Note is required" }, 400);
+    }
+    if (!['completed', 'canceled'].includes(status)) {
+        return c.json({ message: "Invalid status" }, 400);
+    }
+    const updatable = ['in_process', 'sent', 'complained'];
+    if (!updatable.includes(transaction.status)) {
+        return c.json({ message: "Transaction status is not updatable" }, 400);
     }
 
     const updated = await db.update(Transaction)
@@ -90,5 +96,23 @@ export const adminTransactionStatusUpdate = async (c: Context): Promise<HandlerR
             admin_response: note
         })
         .where(eq(Transaction.id, Number(id)));
+    if (status === 'completed') {
+        const [store] = await db.select().from(Store)
+            .where(eq(Store.id, transaction.store_id))
+            .limit(1);
+        await db.update(Store)
+            .set({ sales_count: sql`${Store.sales_count} + 1` })
+            .where(eq(Store.id, transaction.store_id));
+
+        await db.update(User)
+            .set({ balance: sql`${User.balance} + ${transaction.total_amount}` })
+            .where(eq(User.id, store.user_id));
+    }
+    if (status === 'canceled') {
+        await db.update(User)
+            .set({ balance: sql`${User.balance} + ${transaction.total_amount}` })
+            .where(eq(User.id, transaction.buyer_id));
+    }
+
     return c.json({ updated });
 }

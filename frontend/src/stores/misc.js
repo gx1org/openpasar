@@ -1,19 +1,28 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
-import { apiReq, handleErrorApi, img } from "../utils/fns";
 
 export const useMiscStore = defineStore('misc', () => {
   const installed = ref(false)
   const loaded = ref(false)
   const config = ref({})
   const getConfig = async () => {
-    const ok = await apiReq('get', 'config').then(res => {
-      setConfig(res.data.config)
-      return true
+    const apiUrl = useRuntimeConfig().public.apiUrl
+    const res = await fetch(apiUrl+'/api/config').then(res => {
+      if (res.ok) {
+        return res.json()
+      }
     })
-    .catch(handleErrorApi)
+    .catch(e => {
+      console.error(e)
+      return false
+    })
 
-    return ok
+    if (res) {
+      setConfig(res.config)
+      return true
+    }
+
+    return false
   }
 
   const setConfig = (c) => {

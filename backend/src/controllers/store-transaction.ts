@@ -2,7 +2,7 @@ import type { Context } from "hono";
 import type { HandlerResponse } from "hono/types";
 import { db } from "../db.js";
 import { Store, Transaction, User } from "../schema.js";
-import { and, desc, eq, ilike, inArray, notInArray, or } from "drizzle-orm";
+import { and, desc, eq, ilike, inArray, notInArray, or, sql } from "drizzle-orm";
 
 export const storeTransactionList = async (c: Context): Promise<HandlerResponse<any>> => {
     const store = c.get('store');
@@ -97,5 +97,10 @@ export const storeTransactionStatusUpdate = async (c: Context): Promise<HandlerR
             seller_response: note
         })
         .where(eq(Transaction.id, Number(id)));
+    if (status === 'rejected') {
+        await db.update(User)
+            .set({ balance: sql`${User.balance} + ${transaction.total_amount}` })
+            .where(eq(User.id, transaction.buyer_id));
+    }
     return c.json({ updated });
 }

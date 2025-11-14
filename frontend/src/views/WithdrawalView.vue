@@ -2,7 +2,9 @@
 import { onMounted, ref } from 'vue';
 import SpinnerBox from '../components/partial/SpinnerBox.vue';
 import { apiReq, formatDate, handleErrorApi, Rp } from '../utils/fns';
+import { useAuthStore } from '../stores/auth';
 
+const auth = useAuthStore()
 const isFetching = ref(true)
 const withdrawals = ref([])
 
@@ -33,39 +35,18 @@ onMounted(() => {
     </div>
     <SpinnerBox v-if="isFetching" />
     <template v-else>
+      <div class="d-flex mb-4">
+        <div class="input-group input-group-sm ms-auto me-2">
+          <span class="input-group-text bg-white">Saldo</span>
+          <span class="input-group-text bg-white">{{ Rp(auth.user.balance) }}</span>
+        </div>
+        <button class="btn btn-primary btn-sm text-nowrap">Tarik Saldo</button>
+      </div>
       <div v-if="withdrawals.length == 0" class="text-center p-3 card">
         Belum ada penarikan :)
       </div>
       <div v-for="d,i in withdrawals" :key="i" class="mb-3 card">
-        <RouterLink :to="`/withdrawals/${d.id}`" class="text-decoration-none text-reset">
-          <div class="p-3">
-            <div class="d-flex gap-2">
-              <div class="flex-fill">
-                <div class="d-flex align-items-center">
-                  <div class="flex-fill">
-                    <div class="fw-bold mb-2">
-                      #{{ d.id }}
-                    </div>
-                    <div class="text-muted small">
-                      {{ formatDate(d.created_at) }}
-                    </div>
-                  </div>
-                  <div class="text-end">
-                    <div class="mb-2">
-                      {{ d.status }}
-                    </div>
-                    <div class="text-muted small">
-                      {{ Rp(d.amount) }}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="small">
-              {{ d.description }}
-            </div>
-          </div>
-        </RouterLink>
+
       </div>
     </template>
   </div>

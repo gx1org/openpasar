@@ -4,7 +4,7 @@ import FooterBar from './components/partial/FooterBar.vue';
 import { useMiscStore } from './stores/misc';
 import ConfigView from './views/admin/ConfigView.vue';
 import InfoModal from './components/modal/InfoModal.vue';
-import { setTheme } from './utils/utils';
+import { setTheme } from './utils/fns';
 
 const misc = useMiscStore()
 setTheme()

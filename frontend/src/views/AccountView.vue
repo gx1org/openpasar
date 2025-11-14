@@ -41,7 +41,7 @@ const logoutBtn = () => {
           </div>
         </a>
         <RouterLink to="/withdrawals" class="list-group-item d-flex">
-          <span>Penarikan Saldo ({{ Rp(auth.user.balance) }})</span>
+          <span>Penarikan Saldo</span>
           <div class="ms-auto">
             <i class="bi bi-chevron-right"></i>
           </div>
