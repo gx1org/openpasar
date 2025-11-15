@@ -1,9 +1,10 @@
 import type { Context } from "hono";
 import type { HandlerResponse } from "hono/types";
-import { Transaction } from "../schema.js";
+import { Store, Transaction } from "../schema.js";
 import { db } from "../db.js";
 import { eq } from "drizzle-orm";
 import { getConfig } from "../config.js";
+import { sendEmail } from "../utils/email.js";
 
 export const webhookPakasir = async (c: Context): Promise<HandlerResponse<any>> => {
     const { order_id } = await c.req.json();
@@ -25,6 +26,15 @@ export const webhookPakasir = async (c: Context): Promise<HandlerResponse<any>> 
     }
 
     await db.update(Transaction).set({ status: 'in_process' }).where(eq(Transaction.id, order_id));
+    const [store] = await db.select().from(Store).where(eq(Store.id, transaction.store_id)).limit(1);
+    sendEmail(
+        store.email,
+        "Ada pesanan baru di " + store.name,
+        `Hai ${store.name},
+
+Ada pesanan masuk dengan nominal ${transaction.total_amount}. Silahkan login ke dashboard untuk melihat detail pesanan.
+`
+    )
     return c.json({ message: "Success" });
 }
 

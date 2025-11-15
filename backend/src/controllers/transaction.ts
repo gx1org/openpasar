@@ -3,6 +3,8 @@ import type { HandlerResponse } from "hono/types";
 import { db } from "../db.js";
 import { Store, Transaction, User } from "../schema.js";
 import { and, desc, eq, ilike, or, sql } from "drizzle-orm";
+import { sendEmail } from "../utils/email.js";
+import { getConfig } from "../config.js";
 
 export const transactionList = async (c: Context): Promise<HandlerResponse<any>> => {
     const userId = c.get('jwtPayload')?.id;
@@ -87,17 +89,40 @@ export const transactionStatusUpdate = async (c: Context): Promise<HandlerRespon
     const updated = await db.update(Transaction)
         .set({ status })
         .where(eq(Transaction.id, Number(id)));
+    const [store] = await db.select().from(Store)
+        .where(eq(Store.id, transaction.store_id))
+        .limit(1);
+    if (status === 'complained') {
+        sendEmail(
+            store.email,
+            `Pesanan #${transaction.id} dikomplain pembeli`,
+            `Hai ${store.name},
+        
+Pesanan #${transaction.id} dikomplain pembeli. Silahkan login ke dashboard untuk melihat detail pesanan.`)
+    }
     if (status === 'completed') {
-        const [store] = await db.select().from(Store)
-            .where(eq(Store.id, transaction.store_id))
-            .limit(1);
+        const sellerFee = await getConfig('seller_fee');
+        const fee = Math.round((Number(transaction.total_amount) * Number(sellerFee)) / 100);
+        const income = Math.round(Number(transaction.total_amount) - fee);
+
         await db.update(Store)
             .set({ sales_count: sql`${Store.sales_count} + 1` })
             .where(eq(Store.id, transaction.store_id));
 
         await db.update(User)
-            .set({ balance: sql`${User.balance} + ${transaction.total_amount}` })
+            .set({ balance: sql`${User.balance} + ${income}` })
             .where(eq(User.id, store.user_id));
+
+        sendEmail(
+            store.email,
+            `Pesanan #${transaction.id} diselesaikan pembeli`,
+            `Hai ${store.name},
+        
+Pesanan #${transaction.id} diselesaikan pembeli.
+
+Saldo Anda telah bertambah Rp ${income} (Rp ${transaction.total_amount} - Rp ${fee}).
+
+Silahkan login ke dashboard untuk melihat detail pesanan.`)
     }
     return c.json({ updated });
 }

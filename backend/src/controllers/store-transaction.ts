@@ -3,6 +3,7 @@ import type { HandlerResponse } from "hono/types";
 import { db } from "../db.js";
 import { Store, Transaction, User } from "../schema.js";
 import { and, desc, eq, ilike, inArray, notInArray, or, sql } from "drizzle-orm";
+import { sendEmail } from "../utils/email.js";
 
 export const storeTransactionList = async (c: Context): Promise<HandlerResponse<any>> => {
     const store = c.get('store');
@@ -101,6 +102,21 @@ export const storeTransactionStatusUpdate = async (c: Context): Promise<HandlerR
         await db.update(User)
             .set({ balance: sql`${User.balance} + ${transaction.total_amount}` })
             .where(eq(User.id, transaction.buyer_id));
+
+        const [user] = await db.select().from(User)
+            .where(eq(User.id, transaction.buyer_id))
+            .limit(1);
+        
+        sendEmail(
+            user.email,
+            `Pesanan #${transaction.id} ditolak`,
+            `Hai ${user.name},
+
+Pesanan #${transaction.id} ditolak oleh penjual.
+
+Nominal transaksi telah di-refund ke saldo Anda (Rp ${transaction.total_amount}).
+
+Silahkan login ke dashboard untuk melihat detail pesanan.`)
     }
     return c.json({ updated });
 }
