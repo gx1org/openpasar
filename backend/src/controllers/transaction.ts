@@ -43,7 +43,6 @@ export const transactionDetail = async (c: Context): Promise<HandlerResponse<any
         seller_response: Transaction.seller_response,
         description: Transaction.description,
         items: Transaction.items,
-        histories: Transaction.histories,
     })
         .from(Transaction)
         .innerJoin(Store, eq(Transaction.store_id, Store.id))
