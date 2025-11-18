@@ -20,6 +20,7 @@ import { cors } from 'hono/cors';
 import { storeTransactionDetail, storeTransactionList, storeTransactionStatusUpdate } from './controllers/store-transaction.js';
 import { webhookPakasir } from './controllers/webhook.js';
 import { runMigration } from './db.js';
+import { runAutomation } from './controllers/automation.js';
 
 envCheck();
 const jwt_secret = getEnv('JWT_SECRET', 'default_secret');
@@ -34,6 +35,8 @@ app.post('/config', initialConfig, setSiteConfig);
 app.post('/authorize', authorize);
 app.post('/refresh-token', jwt({ secret: jwt_secret }), refreshToken);
 app.post('/webhooks/pakasir', webhookPakasir)
+app.get('/migrate', runMigration);
+app.get('/automate', runAutomation)
 
 app.get('/catalogues', catalogueList)
 app.get('/catalogues/:sku', catalogueDetail)
@@ -101,7 +104,5 @@ adminRoute.patch('/withdrawals/:id/status', adminWithdrawalApproveReject)
 
 app.route('/user', userRoute)
 app.route('/admin', adminRoute)
-
-await runMigration();
 
 export default app;
