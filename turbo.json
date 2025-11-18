@@ -1,9 +1,12 @@
 {
-  "$schema": "https://turbo.build/schema.json",
+  "$schema": "https://turborepo.com/schema.json",
+  "ui": "tui",
   "tasks": {
     "build": {
+      "env": ["VERCEL", "API_URL", "DATABASE_URL", "JWT_SECRET"],
       "dependsOn": ["^build"],
-      "outputs": [".output/**", "dist/**"]
+      "inputs": ["$TURBO_DEFAULT$", ".env*"],
+      "outputs": ["dist/**", ".nuxt/**", "!.nuxt/cache/**", ".vercel/output/**"]
     },
     "dev": {
       "cache": false,

@@ -4,9 +4,15 @@ import { ref } from "vue";
 export const useMiscStore = defineStore('misc', () => {
   const installed = ref(false)
   const loaded = ref(false)
+  const error = ref('')
   const config = ref({})
   const getConfig = async () => {
     const apiUrl = useRuntimeConfig().public.apiUrl
+    if (!apiUrl) {
+      error.value = 'Missing ENV variable: API_URL'
+      return false
+    }
+
     const res = await fetch(apiUrl+'/api/config').then(res => {
       if (res.ok) {
         return res.json()
@@ -14,6 +20,7 @@ export const useMiscStore = defineStore('misc', () => {
     })
     .catch(e => {
       console.error(e)
+      error.value = `Cannot fetch data from API server (${apiUrl})`
       return false
     })
 
@@ -34,6 +41,7 @@ export const useMiscStore = defineStore('misc', () => {
   return {
     installed,
     loaded,
+    error,
     config,
     getConfig,
     setConfig,

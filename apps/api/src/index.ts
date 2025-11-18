@@ -21,27 +21,30 @@ import { storeTransactionDetail, storeTransactionList, storeTransactionStatusUpd
 import { webhookPakasir } from './controllers/webhook.js';
 import { runMigration } from './db.js';
 import { runAutomation } from './controllers/automation.js';
+import { healthCheck } from './controllers/index.js';
 
 envCheck();
 const jwt_secret = getEnv('JWT_SECRET', 'default_secret');
 
 type Variables = JwtVariables
-const app = new Hono<{ Variables: Variables }>().basePath('/api');
+const app = new Hono<{ Variables: Variables }>();
 app.use('/*', cors({ origin: '*' }))
+app.get('/', healthCheck)
 
-app.get('/config', getSiteConfig);
-app.get('/config/clear', clearSiteConfigCache);
-app.post('/config', initialConfig, setSiteConfig);
-app.post('/authorize', authorize);
-app.post('/refresh-token', jwt({ secret: jwt_secret }), refreshToken);
-app.post('/webhooks/pakasir', webhookPakasir)
-app.get('/migrate', runMigration);
-app.get('/automate', runAutomation)
+const api = new Hono<{ Variables: Variables }>();
 
-app.get('/catalogues', catalogueList)
-app.get('/catalogues/:sku', catalogueDetail)
-app.get('/stores', storeList)
-app.get('/stores/:id', storeDetail)
+api.get('/config', getSiteConfig);
+api.get('/config/clear', clearSiteConfigCache);
+api.post('/config', initialConfig, setSiteConfig);
+api.post('/authorize', authorize);
+api.post('/refresh-token', jwt({ secret: jwt_secret }), refreshToken);
+api.post('/webhooks/pakasir', webhookPakasir)
+api.get('/automate', runAutomation)
+
+api.get('/catalogues', catalogueList)
+api.get('/catalogues/:sku', catalogueDetail)
+api.get('/stores', storeList)
+api.get('/stores/:id', storeDetail)
 
 const userRoute = new Hono<{ Variables: Variables }>();
 userRoute.use('/*', jwt({ secret: jwt_secret }))
@@ -102,7 +105,8 @@ adminRoute.patch('/transactions/:id/status', adminTransactionStatusUpdate)
 adminRoute.get('/withdrawals', adminWithdrawalList)
 adminRoute.patch('/withdrawals/:id/status', adminWithdrawalApproveReject)
 
-app.route('/user', userRoute)
-app.route('/admin', adminRoute)
+app.route('/api', api)
+app.route('/api/user', userRoute)
+app.route('/api/admin', adminRoute)
 
 export default app;

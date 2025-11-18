@@ -6,7 +6,7 @@ export default defineNuxtConfig({
   modules: ['@pinia/nuxt'],
   runtimeConfig: {
     public: {
-      apiUrl: process.env.VERCEL ? '' : 'http://localhost:7100',
+      apiUrl: process.env.API_URL,
     }
   },
   css: [

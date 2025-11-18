@@ -88,7 +88,6 @@ export function img(url) {
 export const setTheme = () => {
   const misc = useMiscStore()
   let linkCss = 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css'
-  console.log('cfg:', misc.config);
   
   if (misc.config?.site_theme && misc.config?.site_theme != 'default') {
     const theme = misc.config.site_theme

@@ -12,9 +12,9 @@ export const db = drizzle(sql)
 export async function runMigration() {
   try {
     console.log('Running migrations...');
-    scanCWD()
+    const drizzlePath = scanCWD()
     await migrate(db, {
-      migrationsFolder: process.cwd() + "/drizzle"
+      migrationsFolder: drizzlePath
     });
     console.log('Migrations completed successfully.');
   } catch (error) {
@@ -23,9 +23,15 @@ export async function runMigration() {
   }
 }
 
-function scanCWD() {
-  console.log("CWD:", process.cwd());
-
+function scanCWD(): string {
   const files = fs.readdirSync(process.cwd());
-  console.log("Files in CWD:", files);
+  if (files.includes("drizzle")) {
+    return path.join(process.cwd(), "drizzle");
+  }
+
+  if (files.includes('api')) {
+    return path.join(process.cwd(), 'api', 'drizzle');
+  }
+
+  return path.join(process.cwd(), 'drizzle');
 }
