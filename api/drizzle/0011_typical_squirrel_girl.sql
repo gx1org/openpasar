@@ -1,1 +1,0 @@
-ALTER TABLE "users" RENAME COLUMN "pin_md5" TO "hashed_pin";

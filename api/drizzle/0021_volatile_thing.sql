@@ -1,1 +1,0 @@
-ALTER TABLE "withdrawals" ADD COLUMN "receiver" varchar DEFAULT '' NOT NULL;

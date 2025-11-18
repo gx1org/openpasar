@@ -1,1 +1,0 @@
-ALTER TABLE "users" ADD COLUMN "pin_md5" varchar DEFAULT '' NOT NULL;

@@ -1,1 +1,0 @@
-ALTER TABLE "products" ADD COLUMN "extra_images" text DEFAULT '' NOT NULL;

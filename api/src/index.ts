@@ -19,6 +19,7 @@ import { adminProductDetail, adminProductFeatured, adminProductList, adminProduc
 import { cors } from 'hono/cors';
 import { storeTransactionDetail, storeTransactionList, storeTransactionStatusUpdate } from './controllers/store-transaction.js';
 import { webhookPakasir } from './controllers/webhook.js';
+import { runMigration } from './db.js';
 
 envCheck();
 const jwt_secret = getEnv('JWT_SECRET', 'default_secret');
@@ -100,5 +101,7 @@ adminRoute.patch('/withdrawals/:id/status', adminWithdrawalApproveReject)
 
 app.route('/user', userRoute)
 app.route('/admin', adminRoute)
+
+await runMigration();
 
 export default app;
