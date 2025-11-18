@@ -19,7 +19,7 @@ const fetchData = () => {
   const sort = qs.get('sort') || 'latest'
   const show = qs.get('show')
 
-  apiReq('get', `/catalogues?q=${q}&page=${page.value}&sort=${sort}`)
+  apiReq('get', `/catalogues?search=${q}&page=${page.value}&sort=${sort}`)
   .then(res => {
     products.value = res.data.products
     if (show) {

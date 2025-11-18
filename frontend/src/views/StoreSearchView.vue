@@ -15,7 +15,7 @@ const fetchData = () => {
   const qs = new URLSearchParams(location.search)
   const sq = qs.get('sq') || ''
   const sort = qs.get('sort') || 'latest'
-  apiReq('get', `/stores?q=${sq}&page=${page.value}&sort=${sort}`)
+  apiReq('get', `/stores?search=${sq}&page=${page.value}&sort=${sort}`)
   .then(res => {
     stores.value = res.data.stores
   })

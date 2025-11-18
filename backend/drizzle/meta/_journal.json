@@ -155,6 +155,20 @@
       "when": 1763154551229,
       "tag": "0021_volatile_thing",
       "breakpoints": true
+    },
+    {
+      "idx": 22,
+      "version": "7",
+      "when": 1763416066754,
+      "tag": "0022_majestic_zuras",
+      "breakpoints": true
+    },
+    {
+      "idx": 23,
+      "version": "7",
+      "when": 1763417697854,
+      "tag": "0023_tricky_lorna_dane",
+      "breakpoints": true
     }
   ]
 }

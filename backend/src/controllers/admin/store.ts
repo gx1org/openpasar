@@ -5,16 +5,20 @@ import { db } from "../../db.js";
 import { eq } from "drizzle-orm";
 
 export const adminStoreList = async (c: Context): Promise<HandlerResponse<any>> => {
-    const stores = await db.select().from(Store);
-    return c.json({ stores });
+  const stores = await db.select().from(Store);
+  return c.json({ stores });
 }
 
 export const adminStoreDetail = async (c: Context): Promise<HandlerResponse<any>> => {
-    const { id } = c.req.param();
-    const stores = await db.select().from(Store).where(eq(Store.id, Number(id)));
-    if (stores.length === 0) {
-        return c.json({ message: "Store not found" }, 404);
-    }
-    const store = stores[0];
-    return c.json({ store });
+  const id = Number(c.req.param('id'));
+  if (isNaN(id)) {
+    return c.json({ message: "Toko tidak ditemukan" }, 404);
+  }
+
+  const [store] = await db.select().from(Store).where(eq(Store.id, id)).limit(1);
+  if (!store) {
+    return c.json({ message: "Toko tidak ditemukan" }, 404);
+  }
+
+  return c.json({ store });
 }

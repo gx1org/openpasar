@@ -11,7 +11,7 @@ setTheme()
 </script>
 
 <template>
-  <div class="container">
+  <div v-if="misc.loaded" class="container">
     <main v-if="!misc.installed" class="bg-light px-3 d-flex flex-column overflow-y-auto mb-0 py-4">
       <ConfigView />
     </main>
@@ -23,5 +23,8 @@ setTheme()
       <FooterBar />
       <InfoModal />
     </template>
+  </div>
+  <div v-else>
+    Cannot fetch data from API
   </div>
 </template>

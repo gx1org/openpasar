@@ -8,6 +8,13 @@ import { sendEmail } from "../utils/email.js";
 import { getConfig } from "../config.js";
 
 export const runAutomation = async (c: Context): Promise<HandlerResponse<any>> => {
+  const cronjobSecret = await getConfig('cronjob_secret')
+  if (cronjobSecret != c.req.query('secret')) {
+    return c.json({ message: "Unauthorized" }, 401);
+  }
+
+  console.log(`Automation running...`);
+
   cancelUnpaidTransaction()
   completeSentTransaction()
   return c.json({ message: "Success" });
@@ -60,7 +67,7 @@ const completeSentTransaction = async (): Promise<void> => {
       txn.store_email,
       `Pesanan #${txn.id} diselesaikan system`,
       `Hai ${txn.store_name},
-                
+              
 Pesanan #${txn.id} diselesaikan oleh system.
 
 Saldo Anda telah bertambah Rp ${income} (Rp ${txn.total_amount} - Rp ${fee}).
@@ -71,7 +78,7 @@ Silahkan login ke dashboard untuk melihat detail pesanan.`)
       txn.user_email,
       `Pesanan #${txn.id} diselesaikan system`,
       `Hai ${txn.user_name},
-                
+              
 Pesanan #${txn.id} diselesaikan oleh system.
 
 Silahkan login ke dashboard untuk melihat detail pesanan.`)

@@ -16,17 +16,17 @@ const getTransporter = async () => {
   const pass = await getConfig('smtp_password');
 
   const transporter = nodemailer.createTransport({
-    host,
-    port: Number(port),
-    auth: {
-      user,
-      pass,
-    },
+  host,
+  port: Number(port),
+  auth: {
+    user,
+    pass,
+  },
   } as SMTPTransport.Options);
 
   // optional: verify connection on first creation (helps surface config errors early)
   transporter.verify().catch((err:any) => {
-    console.warn('SMTP verify failed (this may be normal on cold start):', err.message || err);
+  console.warn('SMTP verify failed (this may be normal on cold start):', err.message || err);
   });
 
   global.__smtpTransporter = transporter;
@@ -36,14 +36,14 @@ const getTransporter = async () => {
 export const sendEmail = async (to: string, subject: string, text: string) => {
   const from = await getConfig('smtp_from');
   try {
-    const transporter = await getTransporter();    
-    await transporter.sendMail({
-      from,
-      to,
-      subject,
-      text,
-    });
+  const transporter = await getTransporter();    
+  await transporter.sendMail({
+    from,
+    to,
+    subject,
+    text,
+  });
   } catch (err) {
-    console.log('Failed to send email:', err);
+  console.log('Failed to send email:', err);
   }
 };

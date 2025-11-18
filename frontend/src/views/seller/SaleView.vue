@@ -68,16 +68,16 @@ onMounted(() => {
                   <i class="bi bi-eye"></i>
                 </RouterLink>
               </td>
-              <td class="">
+              <td class="small">
                 #{{ p.id }}
               </td>
-              <td>
+              <td class="small">
                 {{ formatDate(p.created_at) }}
               </td>
-              <td class="">
+              <td class="small">
                 <StatusLabel :status="p.status" />
               </td>
-              <td>
+              <td class="small">
                 {{ Rp(p.total_amount) }}
               </td>
               <td class="small">

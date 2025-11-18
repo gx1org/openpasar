@@ -9,19 +9,19 @@ if (!process.env.VERCEL && !process.env.CF_PAGES) {
 export const getEnv = (key: string, fallback?: string): string => {
   const value = process.env[key]
   if (!value && fallback === undefined) {
-    throw new Error(`Missing environment variable: ${key}`)
+  throw new Error(`Missing environment variable: ${key}`)
   }
   return value ?? fallback as string
 }
 
 export const envCheck = () => {
   const requiredVars = [
-    'DATABASE_URL',
-    'JWT_SECRET',
+  'DATABASE_URL',
+  'JWT_SECRET',
   ]
   requiredVars.forEach((key) => {
-    if (!getEnv(key)) {
-      throw new Error(`Missing environment variable: ${key}`)
-    }
+  if (!getEnv(key)) {
+    throw new Error(`Missing environment variable: ${key}`)
+  }
   })
 }

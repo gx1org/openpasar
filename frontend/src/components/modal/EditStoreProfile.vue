@@ -55,7 +55,7 @@ onMounted(() => {
           </div>
           <div class="mb-3">
             <label for="" class="form-label">Deskripsi Toko</label>
-            <textarea class="form-control" v-model="form.description"></textarea>
+            <textarea class="form-control" v-model="form.description" rows="7"></textarea>
           </div>
           <div>
             <SubmitButton :disabled="!isValidForm" :sending="isSending" @click="updateBtn" class="btn btn-primary w-100">

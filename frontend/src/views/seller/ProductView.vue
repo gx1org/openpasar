@@ -97,10 +97,10 @@ onMounted(() => {
                   {{ p.name }}
                 </p>
               </td>
-              <td>
+              <td class="small">
                 {{ p.in_stock == 'one' ? 'Satu' : p.in_stock == 'many' ? 'Banyak' : 'Kosong' }}
               </td>
-              <td>
+              <td class="small">
                 {{ Rp(p.price) }}
               </td>
             </tr>
