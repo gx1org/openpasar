@@ -44,6 +44,7 @@ export const useAuthStore = defineStore('auth', () => {
     user.value = {}
     accessToken.value = ''
     role.value = ''
+    localStorage.removeItem('token')
   }
 
 

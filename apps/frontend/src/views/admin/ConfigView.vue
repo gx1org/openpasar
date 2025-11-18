@@ -231,7 +231,7 @@ onMounted(() => {
         </div>
       </div>
     </div>
-    <div class="d-flex gap-2">
+    <div v-if="!isFetching" class="d-flex gap-2">
       <SubmitButton @click="saveBtn" class="btn btn-primary w-100" :sending="isSending" :disabled="!isValidForm">
         Submit
       </SubmitButton>

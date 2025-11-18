@@ -1,5 +1,5 @@
 {
-  "name": "openpasar-be",
+  "name": "openpasar-api",
   "type": "module",
   "scripts": {
     "dev": "tsx watch src/serve.ts",

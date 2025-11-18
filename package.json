@@ -1,0 +1,8 @@
+{
+  "name": "openpasar",
+  "private": true,
+  "packageManager": "pnpm@10.17.1",
+  "devDependencies": {
+    "turbo": "latest"
+  }
+}
