@@ -1,7 +1,7 @@
 <script setup>
 import { onMounted, onUnmounted, ref, watch } from 'vue';
 import { useRoute, useRouter} from 'vue-router'
-import { apiReq, handleErrorApi } from '../helpers/fns';
+import { apiReq, handleErrorApi } from '../utils/fns';
 import SpinnerBox from '../components/partial/SpinnerBox.vue';
 import ProductShow from '../components/modal/ProductShow.vue';
 import ProductItem from '../components/partial/ProductItem.vue';
@@ -19,7 +19,7 @@ const fetchData = () => {
   const sort = qs.get('sort') || 'latest'
   const show = qs.get('show')
 
-  apiReq('get', `/catalogues?q=${q}&page=${page.value}&sort=${sort}`)
+  apiReq('get', `/catalogues?search=${q}&page=${page.value}&sort=${sort}`)
   .then(res => {
     products.value = res.data.products
     if (show) {
@@ -82,7 +82,7 @@ const removeShowQuery = () => {
 
 onMounted(() => {
   fetchData()
-  const myModalEl = document.getElementById('ProductView')
+  const myModalEl = document.getElementById('ProductShow')
   if (myModalEl) {
     myModalEl.addEventListener('hidden.bs.modal', () => {
       removeShowQuery()
@@ -90,7 +90,7 @@ onMounted(() => {
   }
 })
 onUnmounted(() => {
-  const myModalEl = document.getElementById('ProductView')
+  const myModalEl = document.getElementById('ProductShow')
   if (myModalEl) {
     myModalEl.removeEventListener('hidden.bs.modal', () => {
       removeShowQuery()

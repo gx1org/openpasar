@@ -1,6 +1,6 @@
 <script setup>
 import { computed, onMounted, ref } from 'vue';
-import { apiReq, createPermalink, handleErrorApi } from '../../helpers/fns';
+import { apiReq, createPermalink, handleErrorApi } from '../../utils/fns';
 import SubmitButton from '../../components/partial/SubmitButton.vue';
 import { useMiscStore } from '../../stores/misc';
 import SpinnerBox from '../../components/partial/SpinnerBox.vue';
@@ -97,7 +97,7 @@ onMounted(() => {
       <h5 class="mb-4">
         Konfigurasi
       </h5>
-      <div v-if="misc.config.installed" class="ms-auto">
+      <div v-if="misc.installed" class="ms-auto">
         <RouterLink to="/account" class="small">
           &larr; Akun
         </RouterLink>

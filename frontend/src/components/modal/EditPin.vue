@@ -1,7 +1,7 @@
 <script setup>
 import { computed, onMounted, ref, watch } from 'vue'
 import { useAuthStore } from '../../stores/auth';
-import { apiReq, handleErrorApi } from '../../helpers/fns'
+import { apiReq, handleErrorApi } from '../../utils/fns'
 import SubmitButton from '../partial/SubmitButton.vue';
 
 const auth = useAuthStore()

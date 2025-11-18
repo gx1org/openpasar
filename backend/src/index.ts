@@ -3,7 +3,7 @@ import { jwt, type JwtVariables } from 'hono/jwt'
 import { envCheck, getEnv } from './env.js';
 import { authorize, refreshToken } from './controllers/auth.js';
 import { profile, updatePin, updateProfile } from './controllers/user.js';
-import { getSiteConfig, getSiteConfigAll, setSiteConfig } from './controllers/config.js';
+import { clearSiteConfigCache, getSiteConfig, getSiteConfigAll, setSiteConfig } from './controllers/config.js';
 import { catalogueDetail, catalogueList } from './controllers/catalogue.js';
 import { addToCart, cartList, checkout, removeFromCart } from './controllers/cart.js';
 import { transactionDetail, transactionList, transactionStatusUpdate } from './controllers/transaction.js';
@@ -28,6 +28,7 @@ const app = new Hono<{ Variables: Variables }>().basePath('/api');
 app.use('/*', cors({ origin: '*' }))
 
 app.get('/config', getSiteConfig);
+app.get('/config/clear', clearSiteConfigCache);
 app.post('/config', initialConfig, setSiteConfig);
 app.post('/authorize', authorize);
 app.post('/refresh-token', jwt({ secret: jwt_secret }), refreshToken);
@@ -95,7 +96,7 @@ adminRoute.get('/transactions/:id', adminTransactionDetail)
 adminRoute.patch('/transactions/:id/status', adminTransactionStatusUpdate)
 
 adminRoute.get('/withdrawals', adminWithdrawalList)
-adminRoute.post('/withdrawals/:id/action', adminWithdrawalApproveReject)
+adminRoute.patch('/withdrawals/:id/status', adminWithdrawalApproveReject)
 
 app.route('/user', userRoute)
 app.route('/admin', adminRoute)

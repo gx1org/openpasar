@@ -1,6 +1,6 @@
 import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
-import { apiReq, handleErrorApi } from '../helpers/fns'
+import { apiReq, handleErrorApi } from '../utils/fns'
 
 export const useAuthStore = defineStore('auth', () => {
   const isLoading = ref(true)

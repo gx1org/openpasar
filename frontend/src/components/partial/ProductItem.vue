@@ -1,5 +1,5 @@
 <script setup>
-import { img, Rp } from '../../helpers/fns';
+import { img, Rp } from '../../utils/fns';
 
 const props = defineProps({
   data: Object
@@ -7,7 +7,7 @@ const props = defineProps({
 const emits = defineEmits(['clicked'])
 </script>
 <template>
-  <a :href="'/search/?show=' + data.sku" @click="emits('clicked')" class="text-decoration-none">
+  <a :href="'/p/' + data.sku" @click="emits('clicked')" class="text-decoration-none">
     <div class="card h-100">
       <img :src="img(data.image_url)" class="card-img-top square" alt="image">
       <div class="card-body p-2 border-top">

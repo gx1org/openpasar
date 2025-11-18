@@ -1,7 +1,7 @@
 <script setup>
 import { computed, onMounted, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import { apiReq, handleErrorApi, img, Rp } from '../helpers/fns';
+import { apiReq, handleErrorApi, img, Rp } from '../utils/fns';
 import SpinnerBox from '../components/partial/SpinnerBox.vue';
 import SubmitButton from '../components/partial/SubmitButton.vue';
 import ProductShow from '../components/modal/ProductShow.vue';
@@ -47,7 +47,7 @@ const addToCart = (sku) => {
     sku
   }).then(res => {
     carts.value = res.data.carts
-    router.replace({ name: 'Cart' })
+    router.replace('/cart')
   })
   .catch(handleErrorApi)
   .finally(() => {
@@ -125,15 +125,11 @@ onMounted(() => {
           <li v-for="c in g.carts" :key="c.id" class="list-group-item">
             <div class="d-flex">
               <div class="small me-2">
-                <a :href="'/search?show='+c.sku" @click="showProduct(c)" class="text-decoration-none">
+                <a :href="'/p/'+c.sku" @click="showProduct(c)" class="text-decoration-none">
                   {{ c.name }} ({{ c.sku }})
                 </a>
-                ({{ c.quantity }} pcs)
                 <br>
                 <div class="d-flex">
-                  <div class="mt-1 me-2">
-                    {{ Rp(c.quantity * c.price) }}
-                  </div>
                   <div class="btn-group">
                     <button @click="minusBtn(c)" class="btn btn-light btn-sm border text-danger fw-bold">
                       <i class="bi bi-dash-circle-fill"></i>
@@ -141,6 +137,9 @@ onMounted(() => {
                     <button @click="plusBtn(c)" class="btn btn-light btn-sm border text-success fw-bold">
                       <i class="bi bi-plus-circle-fill"></i>
                     </button>
+                  </div>
+                  <div class="mt-1 ms-2">
+                    {{ Rp(c.quantity * c.price) }} ({{ c.quantity }} pcs)
                   </div>
                 </div>
               </div>

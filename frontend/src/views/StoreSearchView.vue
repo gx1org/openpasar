@@ -1,7 +1,7 @@
 <script setup>
 import { onMounted, onUnmounted, ref, watch } from 'vue';
 import { useRoute, useRouter} from 'vue-router'
-import { apiReq, formatDate, handleErrorApi } from '../helpers/fns';
+import { apiReq, formatDate, handleErrorApi } from '../utils/fns';
 import SpinnerBox from '../components/partial/SpinnerBox.vue';
 
 const router = useRouter()
@@ -13,9 +13,9 @@ const isFetching = ref(true)
 const fetchData = () => {
   isFetching.value = true
   const qs = new URLSearchParams(location.search)
-  const q = qs.get('q') || ''
+  const sq = qs.get('sq') || ''
   const sort = qs.get('sort') || 'latest'
-  apiReq('get', `/stores?q=${q}&page=${page.value}&sort=${sort}`)
+  apiReq('get', `/stores?search=${sq}&page=${page.value}&sort=${sort}`)
   .then(res => {
     stores.value = res.data.stores
   })
@@ -34,18 +34,21 @@ const handleSort = () => {
 }
 const handleSearch = () => {
   const qs = new URLSearchParams(location.search)
-  qs.set('q', searchInput.value)
+  qs.set('sq', searchInput.value)
   router.push(route.path+'?'+qs.toString())
 }
 
 watch(() => route.query, (newValue, oldValue) => {
-  if (newValue.sort != oldValue.sort || newValue.q != oldValue.q) {
+  if (newValue.sort != oldValue.sort || newValue.sq != oldValue.sq) {
     fetchData()  
   }
 })
 
 onMounted(() => {
   fetchData()
+  if (route.query.sq) {
+    searchInput.value = route.query.sq
+  }
 })
 </script>
 

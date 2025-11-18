@@ -1,12 +1,12 @@
 <script setup>
 import { onMounted, ref, watch } from 'vue';
-import { img, Rp } from '../../helpers/fns';
+import { img, Rp } from '../../utils/fns';
 import { useMiscStore } from '../../stores/misc';
 import LinkifiedText from '../partial/LinkifiedText.vue';
 
 const misc = useMiscStore()
 const prop = defineProps({
-  data: Object
+  data: Object,
 })
 const images = ref([])
 const syncImage = () => {

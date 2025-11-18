@@ -1,7 +1,7 @@
 <script setup>
 import { computed, onMounted, ref, watch } from 'vue'
 import { useAuthStore } from '../../stores/auth';
-import { apiReq, handleErrorApi } from '../../helpers/fns'
+import { apiReq, handleErrorApi } from '../../utils/fns'
 import SubmitButton from '../partial/SubmitButton.vue';
 
 const auth = useAuthStore()
@@ -55,7 +55,7 @@ onMounted(() => {
           </div>
           <div class="mb-3">
             <label for="" class="form-label">Deskripsi Toko</label>
-            <textarea class="form-control" v-model="form.description"></textarea>
+            <textarea class="form-control" v-model="form.description" rows="7"></textarea>
           </div>
           <div>
             <SubmitButton :disabled="!isValidForm" :sending="isSending" @click="updateBtn" class="btn btn-primary w-100">

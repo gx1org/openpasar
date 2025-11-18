@@ -1,7 +1,7 @@
 <script setup>
 import { onMounted, ref } from 'vue';
 import SpinnerBox from '../../components/partial/SpinnerBox.vue';
-import { apiReq, formatDate, handleErrorApi, Rp } from '../../helpers/fns';
+import { apiReq, formatDate, handleErrorApi, Rp } from '../../utils/fns';
 
 const isFetching = ref(true)
 const users = ref([])
@@ -76,10 +76,10 @@ onMounted(() => {
               <td class="small">
                 {{ p.phone }}
               </td>
-              <td>
+              <td class="small">
                 {{ formatDate(p.created_at) }}
               </td>
-              <td class="">
+              <td class="small">
                 {{ Rp(p.balance) }}
               </td>
             </tr>

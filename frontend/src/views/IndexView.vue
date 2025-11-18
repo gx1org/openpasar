@@ -1,7 +1,7 @@
 <script setup>
 import { onMounted, ref } from 'vue';
 import { useMiscStore } from '../stores/misc';
-import { apiReq, handleErrorApi } from '../helpers/fns';
+import { apiReq, handleErrorApi } from '../utils/fns';
 import SpinnerBox from '../components/partial/SpinnerBox.vue';
 import ProductShow from '../components/modal/ProductShow.vue';
 import ProductItem from '../components/partial/ProductItem.vue';

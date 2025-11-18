@@ -1,7 +1,7 @@
 <script setup>
 import { onMounted, ref } from 'vue';
 import SpinnerBox from '../../components/partial/SpinnerBox.vue';
-import { apiReq, formatDate, handleErrorApi, img, Rp } from '../../helpers/fns';
+import { apiReq, formatDate, handleErrorApi, img, Rp } from '../../utils/fns';
 import ProductForm from '../../components/modal/ProductForm.vue';
 
 const isFetching = ref(true)

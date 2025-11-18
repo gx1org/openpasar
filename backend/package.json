@@ -4,19 +4,23 @@
   "scripts": {
     "dev": "tsx watch src/serve.ts",
     "build": "tsc",
-    "start": "node dist/index.js",
+    "start": "node dist/src/serve.js",
     "db:migrate": "drizzle-kit generate && drizzle-kit push"
   },
   "dependencies": {
     "@hono/node-server": "^1.19.6",
     "@neondatabase/serverless": "^1.0.2",
+    "dayjs": "^1.11.19",
     "dotenv": "^17.2.3",
     "drizzle-kit": "^0.31.6",
     "drizzle-orm": "^0.44.7",
-    "hono": "^4.10.4"
+    "hono": "^4.10.4",
+    "nodemailer": "^7.0.10",
+    "zod": "^4.1.12"
   },
   "devDependencies": {
     "@types/node": "^20.11.17",
+    "@types/nodemailer": "^7.0.3",
     "tsx": "^4.7.1",
     "typescript": "^5.8.3"
   }

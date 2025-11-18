@@ -1,7 +1,7 @@
 <script setup>
 import { onMounted, ref } from 'vue';
 import SpinnerBox from '../../components/partial/SpinnerBox.vue';
-import { apiReq, formatDate, handleErrorApi, Rp } from '../../helpers/fns';
+import { apiReq, formatDate, handleErrorApi, Rp } from '../../utils/fns';
 import StatusLabel from '../../components/partial/StatusLabel.vue';
 
 const isFetching = ref(true)
@@ -68,16 +68,16 @@ onMounted(() => {
                   <i class="bi bi-eye"></i>
                 </RouterLink>
               </td>
-              <td class="">
+              <td class="small">
                 #{{ p.id }}
               </td>
-              <td>
+              <td class="small">
                 {{ formatDate(p.created_at) }}
               </td>
-              <td class="">
+              <td class="small">
                 <StatusLabel :status="p.status" />
               </td>
-              <td>
+              <td class="small">
                 {{ Rp(p.total_amount) }}
               </td>
               <td class="small">

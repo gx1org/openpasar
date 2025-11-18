@@ -1,6 +1,6 @@
 <script setup>
 import { computed, onMounted, ref, watch } from 'vue'
-import { apiReq, handleErrorApi, img } from '../../helpers/fns'
+import { apiReq, handleErrorApi, img } from '../../utils/fns'
 import SubmitButton from '../partial/SubmitButton.vue';
 
 const prop = defineProps({

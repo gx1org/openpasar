@@ -28,8 +28,7 @@ const auth = useAuthStore()
     </div>
     <div class="w-100">
       <RouterLink to="/account">
-        <i v-if="auth.isLogin" class="bi bi-person-check-fill"></i>
-        <i v-else class="bi bi-person-fill"></i>
+        <i class="bi bi-person-fill"></i>
       </RouterLink>
     </div>
   </footer>

@@ -3,7 +3,7 @@ import EditPin from '../components/modal/EditPin.vue';
 import EditProfile from '../components/modal/EditProfile.vue';
 import EditStoreProfile from '../components/modal/EditStoreProfile.vue';
 import SellerRule from '../components/modal/SellerRule.vue';
-import { apiReq, Rp } from '../helpers/fns';
+import { apiReq, Rp } from '../utils/fns';
 import { useAuthStore } from '../stores/auth';
 import { useMiscStore } from '../stores/misc';
 
@@ -41,7 +41,7 @@ const logoutBtn = () => {
           </div>
         </a>
         <RouterLink to="/withdrawals" class="list-group-item d-flex">
-          <span>Penarikan Saldo ({{ Rp(auth.user.balance) }})</span>
+          <span>Penarikan Saldo</span>
           <div class="ms-auto">
             <i class="bi bi-chevron-right"></i>
           </div>
@@ -119,6 +119,12 @@ const logoutBtn = () => {
         </div>
       </div>
       <div class="list-group mb-4">
+        <RouterLink to="/admin/all-withdrawals" class="list-group-item d-flex">
+          <span>Semua Penarikan</span>
+          <div class="ms-auto">
+            <i class="bi bi-chevron-right"></i>
+          </div>
+        </RouterLink>
         <RouterLink to="/admin/all-transactions" class="list-group-item d-flex">
           <span>Semua Transaksi</span>
           <div class="ms-auto">
