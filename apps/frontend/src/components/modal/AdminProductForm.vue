@@ -33,24 +33,6 @@ const submitBtn = () => {
     })
 }
 
-const isRekber = computed(() => {
-  return form.value.name?.startsWith('(Rekber) ')
-})
-
-const clickRekber = () => {
-  if (isRekber.value) {
-    form.value.name = form.value.name.replace('(Rekber) ', '')
-  } else {
-    form.value.name = '(Rekber) ' + form.value.name
-  }
-  detectRekber()
-}
-const detectRekber = () => {
-  if (isRekber.value) {
-    form.value.visibility = 'private'
-  }
-}
-
 const handleImageChange = (e, i) => {
   images.value[i] = e.target.value
   images.value = images.value.filter(Boolean)
@@ -86,15 +68,7 @@ onMounted(() => {
           </div>
           <div class="mb-1">
             <label for="" class="form-label">Nama</label>
-            <input type="text" class="form-control" v-model="form.name" @input="detectRekber">
-          </div>
-          <div class="mb-3">
-            <div class="form-check">
-              <input class="form-check-input" type="checkbox" style="cursor: pointer;" value="" id="rekber" :checked="isRekber" @click="clickRekber">
-              <label class="form-check-label small" for="rekber" style="cursor: pointer;">
-                Tandai sebagai rekber
-              </label>
-            </div>
+            <input type="text" class="form-control" v-model="form.name">
           </div>
           <div class="mb-3">
             <label for="" class="form-label">Harga</label>
@@ -130,7 +104,7 @@ onMounted(() => {
           </div>
           <div v-if="!isNew" class="mb-3">
             <label for="" class="form-label">Tampilkan</label>
-            <select class="form-control" v-model="form.visibility" :disabled="isRekber">
+            <select class="form-control" v-model="form.visibility">
               <option value="pending_review">Pending Review</option>
               <option value="private">Privat</option>
               <option value="public">Publik (Muncul di pencarian)</option>
