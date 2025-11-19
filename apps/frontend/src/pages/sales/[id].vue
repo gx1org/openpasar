@@ -2,6 +2,8 @@
 import SaleDetailView from '../../views/seller/SaleDetailView.vue';
 import { useMiscStore } from '../../stores/misc';
 import { useRoute } from 'nuxt/app';
+import LoginView from '~/views/LoginView.vue';
+const auth = useAuthStore()
 const route = useRoute()
 const misc = useMiscStore()
 useHead({
@@ -9,5 +11,11 @@ useHead({
 })
 </script>
 <template>
-  <SaleDetailView />
+  <div v-if="!auth.isLoading">
+    <LoginView v-if="!auth.isLogin"/>
+    <SaleDetailView v-if="auth.store.id" />
+    <div v-else class="card text-center p-3">
+      Kamu tidak memiliki toko
+    </div>
+  </div>
 </template>

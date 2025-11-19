@@ -7,20 +7,34 @@ import { parseError } from "../utils/helper.js";
 import { configSchema } from "../validators/user.js";
 
 export const getSiteConfig = async (c: Context): Promise<HandlerResponse<any>> => {
+  const {
+    installed,
+    site_name,
+    site_icon,
+    site_description,
+    site_mode,
+    site_theme,
+    autzorg_app_id,
+    pakasir_slug,
+    admin_phone,
+    content_info,
+    content_seller_rules,
+    seller_fee
+  } = await getAllConfigs()
+
   const config = {
-    installed: await getConfig('installed'),
-    site_name: await getConfig('site_name'),
-    site_icon: await getConfig('site_icon'),
-    site_description: await getConfig('site_description'),
-    site_mode: await getConfig('site_mode'),
-    site_theme: await getConfig('site_theme'),
-    autzorg_app_id: await getConfig('autzorg_app_id'),
-    pakasir_slug: await getConfig('pakasir_slug'),
-    admin_email: await getConfig('admin_email'),
-    admin_phone: await getConfig('admin_phone'),
-    content_info: await getConfig('content_info'),
-    content_seller_rules: await getConfig('content_seller_rules'),
-    seller_fee: await getConfig('seller_fee'),
+    installed,
+    site_name,
+    site_icon,
+    site_description,
+    site_mode,
+    site_theme,
+    autzorg_app_id,
+    pakasir_slug,
+    admin_phone,
+    content_info,
+    content_seller_rules,
+    seller_fee
   }
   return c.json({ config });
 }
@@ -35,7 +49,7 @@ interface ReqType {
 }
 
 export const setSiteConfig = async (c: Context): Promise<HandlerResponse<any>> => {
-  const valid = z.safeParse(configSchema, c.req.json());
+  const valid = z.safeParse(configSchema, await c.req.json());
   if (!valid.success) {
     return c.json({ message: parseError(valid.error) }, 400);
   }

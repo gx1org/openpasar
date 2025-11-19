@@ -21,7 +21,7 @@ export const profile = async (c: Context): Promise<HandlerResponse<any>> => {
 
 export const updateProfile = async (c: Context): Promise<HandlerResponse<any>> => {
   const payload = c.get('jwtPayload');
-  const valid = z.safeParse(profileSchema, c.req.json())
+  const valid = z.safeParse(profileSchema, await c.req.json())
   if (!valid.success) {
     return c.json({ message: parseError(valid.error) }, 400);
   }
@@ -56,7 +56,7 @@ export const updateProfile = async (c: Context): Promise<HandlerResponse<any>> =
 
 export const updatePin = async (c: Context): Promise<HandlerResponse<any>> => {
   const userId = c.get('jwtPayload').id;
-  const valid = z.safeParse(pinUpdateSchema, c.req.json())
+  const valid = z.safeParse(pinUpdateSchema, await c.req.json())
   if (!valid.success) {
     return c.json({ message: parseError(valid.error) }, 400);
   }

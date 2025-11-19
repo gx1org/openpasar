@@ -1,5 +1,4 @@
 import z from "zod";
-import { parseError } from "../utils/helper.js";
 
 export const productListSchema = z.object({
   search: z.string().optional().default(''),
@@ -14,6 +13,7 @@ export const productCreateUpdateSchema = z.object({
   in_stock: z.enum(['one', 'many', 'empty']).nonoptional(),
   description: z.string().nonempty(),
   image_url: z.string().nonempty(),
+  visibility: z.enum(['public', 'private', 'pending_review']).nonoptional(),
 });
 
 export const transactionListSchema = z.object({

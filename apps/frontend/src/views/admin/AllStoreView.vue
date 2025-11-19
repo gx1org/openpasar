@@ -2,6 +2,7 @@
 import { onMounted, ref } from 'vue';
 import SpinnerBox from '../../components/partial/SpinnerBox.vue';
 import { apiReq, formatDate, handleErrorApi, Rp } from '../../utils/fns';
+import AdminEditStore from '~/components/modal/AdminEditStore.vue';
 
 const isFetching = ref(true)
 const stores = ref([])
@@ -19,6 +20,12 @@ const fetchData = () => {
   .finally(() => {
     isFetching.value = false
   })
+}
+
+const storeEditing = ref({})
+const editBtn = (s = {}) => {
+  storeEditing.value = s
+  document.getElementById('AdminEditStore-btn').click()
 }
 
 onMounted(() => {
@@ -39,15 +46,7 @@ onMounted(() => {
     <template v-else>
       <div class="d-flex mb-4 gap-2">
         <input type="search" class="form-control form-control-sm" placeholder="Cari..." v-model="form.search" @change="fetchData">
-        <select class="form-control form-control-sm" v-model="form.status" @change="fetchData">
-          <option value="">Semua status</option>
-          <option value="in_process">in_process</option>
-          <option value="sent">sent</option>
-          <option value="completed">completed</option>
-          <option value="rejected">rejected</option>
-          <option value="complained">complained</option>
-        </select>
-        <button class="btn btn-primary ms-auto btn-sm text-nowrap" @click="addBtn">
+        <button class="btn btn-primary ms-auto btn-sm text-nowrap" @click="editBtn()">
           Buat Toko
         </button>
       </div>
@@ -67,11 +66,12 @@ onMounted(() => {
             <tr v-for="p,i in stores" :key="i">
               <td>
                 <button @click="editBtn(p)" class="btn btn-sm btn-primary">
-                  <i class="bi bi-eye"></i>
+                  <i class="bi bi-pencil"></i>
                 </button>
               </td>
               <td class="small">
                 {{ p.name }}
+                <a :href="`/stores/${p.id}`" target="_blank" rel="noopener noreferrer">&nearr;</a>
               </td>
               <td class="small">
                 {{ p.email }}
@@ -93,5 +93,7 @@ onMounted(() => {
         </table>
       </div>
     </template>
+    <button class="d-none" id="AdminEditStore-btn" data-bs-toggle="modal" data-bs-target="#AdminEditStore"></button>
+    <AdminEditStore @updated="fetchData" :data="storeEditing" />
   </div>
 </template>

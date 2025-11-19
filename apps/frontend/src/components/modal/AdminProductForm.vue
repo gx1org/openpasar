@@ -22,7 +22,7 @@ const submitBtn = () => {
   images.value = images.value.filter(Boolean)
   form.value.image_url = images.value.join(',')
   isSending.value = true
-  apiReq(isNew.value ? 'post' : 'put', `/user/stores/products${isNew.value ? '' : `/${prop.data.id}`}`, form.value)
+  apiReq('put', `/admin/products/${prop.data.id}`, form.value)
     .then(() => {
       emit('updated')
       closeBtn.value.click()
@@ -72,11 +72,11 @@ onMounted(() => {
 })
 </script>
 <template>
-  <div class="modal fade" tabindex="-1" id="ProductForm">
+  <div class="modal fade" tabindex="-1" id="AdminProductForm">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title">{{ isNew ? 'Produk Baru' : 'Edit Produk'}}</h5>
+          <h5 class="modal-title">{{ 'Edit Produk'}}</h5>
           <button ref="closeBtn" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
@@ -131,13 +131,14 @@ onMounted(() => {
           <div v-if="!isNew" class="mb-3">
             <label for="" class="form-label">Tampilkan</label>
             <select class="form-control" v-model="form.visibility" :disabled="isRekber">
+              <option value="pending_review">Pending Review</option>
               <option value="private">Privat</option>
               <option value="public">Publik (Muncul di pencarian)</option>
             </select>
           </div>
           <div>
             <SubmitButton :disabled="!isValidForm" :sending="isSending" @click="submitBtn" class="btn btn-primary w-100">
-              {{ isNew ? 'Tambah Produk' : 'Simpan Perubahan' }}
+              {{ 'Simpan Perubahan' }}
             </SubmitButton>
           </div>
         </div>

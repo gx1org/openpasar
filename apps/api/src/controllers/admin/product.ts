@@ -2,10 +2,11 @@ import type { Context } from "hono";
 import type { HandlerResponse } from "hono/types";
 import { db } from "../../db.js";
 import { Product, Store } from "../../schema.js";
-import { and, desc, eq, gt, ilike, or } from "drizzle-orm";
+import { and, desc, eq, gt, ilike, ne, or } from "drizzle-orm";
 import { productFeaturedSchema, productListSchema } from "../../validators/admin.js";
 import z from "zod";
 import { parseError } from "../../utils/helper.js";
+import { productCreateUpdateSchema } from "../../validators/seller.js";
 
 export const adminProductList = async (c: Context): Promise<HandlerResponse<any>> => {
   const valid = z.safeParse(productListSchema, c.req.query());
@@ -14,7 +15,7 @@ export const adminProductList = async (c: Context): Promise<HandlerResponse<any>
   }
 
   const req = valid.data;
-  const isActive = req.is_active === '1';
+  const activeQuery = req.is_active ? eq(Product.is_active, req.is_active === '1') : undefined;
   const search = req.search || '';
   const featuredQuery = req.sort === 'featured' ? gt(Product.featured, 0) : undefined;
   const orderByMap = {
@@ -34,6 +35,9 @@ export const adminProductList = async (c: Context): Promise<HandlerResponse<any>
     is_active: Product.is_active,
     created_at: Product.created_at,
     featured: Product.featured,
+    sold_count: Product.sold_count,
+    description: Product.description,
+    visibility: Product.visibility,
     store: {
       id: Store.id,
       name: Store.name
@@ -42,7 +46,7 @@ export const adminProductList = async (c: Context): Promise<HandlerResponse<any>
     .from(Product)
     .innerJoin(Store, eq(Store.id, Product.store_id))
     .where(and(
-      eq(Product.is_active, isActive),
+      activeQuery,
       search === '' ? undefined :
         or(
           ilike(Product.name, `%${search}%`),
@@ -95,7 +99,7 @@ export const adminProductFeatured = async (c: Context): Promise<HandlerResponse<
     return c.json({ message: "Produk tidak ditemukan" }, 400);
   }
 
-  const valid = z.safeParse(productFeaturedSchema, c.req.json());
+  const valid = z.safeParse(productFeaturedSchema, await c.req.json());
   if (!valid.success) {
     return c.json({ message: parseError(valid.error) }, 400);
   }
@@ -112,4 +116,56 @@ export const adminProductFeatured = async (c: Context): Promise<HandlerResponse<
     .set({ featured: req.featured })
     .where(eq(Product.id, product.id));
   return c.json({ message: `Success` });
+}
+
+export const adminProductUpdate = async (c: Context): Promise<HandlerResponse<any>> => {
+  const id = Number(c.req.param('id'));
+  if (isNaN(id)) {
+    return c.json({ message: 'Produk tidak ditemukan' }, 404);
+  }
+
+  const valid = z.safeParse(productCreateUpdateSchema, await c.req.json());
+  if (!valid.success) {
+    return c.json({ message: parseError(valid.error) }, 400);
+  }
+
+  const req = valid.data;
+  const [product] = await db.select().from(Product)
+    .where(and(
+      eq(Product.id, id),
+    ))
+    .limit(1);
+  if (!product) {
+    return c.json({ message: 'Produk tidak ditemukan' }, 404);
+  }
+
+  if (req.sku !== product.sku) {
+    const [check] = await db.select().from(Product)
+      .where(and(
+        eq(Product.sku, req.sku),
+        ne(Product.id, id)
+      ))
+      .limit(1);
+    if (check) {
+      return c.json({ message: `Produk dengan sku: ${req.sku} sudah ada` }, 400);
+    }
+  }
+
+  await db.update(Product)
+    .set({
+      name: req.name,
+      sku: req.sku,
+      price: req.price,
+      in_stock: req.in_stock,
+      description: req.description,
+      image_url: req.image_url,
+      visibility: req.visibility,
+    })
+    .where(eq(Product.id, id));
+  return c.json({
+    product: {
+      ...product,
+      ...req
+    }
+  });
 }

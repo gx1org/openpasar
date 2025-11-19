@@ -23,7 +23,7 @@ export const adminWithdrawalApproveReject = async (c: Context): Promise<HandlerR
     return c.json({ message: "Withdrawal tidak ditemukan" }, 404);
   }
 
-  const valid = z.safeParse(withdrawalApproveRejectSchema, c.req.json());
+  const valid = z.safeParse(withdrawalApproveRejectSchema, await c.req.json());
   if (!valid.success) {
     return c.json({ message: parseError(valid.error) }, 400);
   }

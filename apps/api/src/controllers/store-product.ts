@@ -6,6 +6,8 @@ import { and, desc, eq, ilike, ne, or } from "drizzle-orm";
 import { productCreateUpdateSchema, productListSchema } from "../validators/seller.js";
 import z from "zod";
 import { parseError } from "../utils/helper.js";
+import { sendEmail } from "../utils/email.js";
+import { getConfig } from "../config.js";
 
 export const storeProductList = async (c: Context): Promise<HandlerResponse<any>> => {
   const store = c.get('store');
@@ -52,12 +54,12 @@ export const storeProductDetail = async (c: Context): Promise<HandlerResponse<an
 }
 
 export const storeProductCreate = async (c: Context): Promise<HandlerResponse<any>> => {
-  const req = await c.req.json();
-  const valid = z.safeParse(productCreateUpdateSchema, req);
+  const valid = z.safeParse(productCreateUpdateSchema, await c.req.json());
   if (!valid.success) {
     return c.json({ message: parseError(valid.error) }, 400);
   }
 
+  const req = valid.data;
   const store = c.get('store');
   const [check] = await db.select().from(Product)
     .where(eq(Product.sku, req.sku))
@@ -74,8 +76,16 @@ export const storeProductCreate = async (c: Context): Promise<HandlerResponse<an
     description: req.description,
     image_url: req.image_url,
     is_active: true,
+    visibility: 'pending_review',
     store_id: store.id,
   }).returning()
+
+  const adminEmail = await getConfig('admin_email')
+  sendEmail(
+    adminEmail,
+    'Pengajuan Produk Baru',
+    `Ada pengajuan Produk baru dengan nama: ${product.name} dan id: ${product.id}`
+  )
 
   return c.json({ product });
 }
@@ -86,12 +96,12 @@ export const storeProductUpdate = async (c: Context): Promise<HandlerResponse<an
     return c.json({ message: 'Produk tidak ditemukan' }, 404);
   }
 
-  const req = await c.req.json();
-  const valid = z.safeParse(productCreateUpdateSchema, req);
+  const valid = z.safeParse(productCreateUpdateSchema, await c.req.json());
   if (!valid.success) {
     return c.json({ message: parseError(valid.error) }, 400);
   }
 
+  const req = valid.data;
   const store = c.get('store');
   const [product] = await db.select().from(Product)
     .where(and(
@@ -101,6 +111,10 @@ export const storeProductUpdate = async (c: Context): Promise<HandlerResponse<an
     .limit(1);
   if (!product) {
     return c.json({ message: 'Produk tidak ditemukan' }, 404);
+  }
+
+  if (product.visibility === 'pending_review') {
+    return c.json({ message: 'Produk sedang dalam review' }, 400);
   }
 
   if (req.sku !== product.sku) {
@@ -123,6 +137,7 @@ export const storeProductUpdate = async (c: Context): Promise<HandlerResponse<an
       in_stock: req.in_stock,
       description: req.description,
       image_url: req.image_url,
+      visibility: req.visibility,
     })
     .where(eq(Product.id, id));
   return c.json({

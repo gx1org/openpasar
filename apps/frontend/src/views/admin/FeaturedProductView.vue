@@ -22,12 +22,6 @@ const fetchData = () => {
   })
 }
 
-const productEditing = ref({})
-const editBtn = (p) => {
-  productEditing.value = p
-  document.getElementById('ProductForm-btn').click()
-}
-
 const handlePower = (p) => {
   apiReq('post', `/admin/products/${p.id}/featured`, { featured: p.featured })
   .then(() => {
@@ -95,10 +89,12 @@ onMounted(() => {
                 <img :src="img(p.image_url)" alt="img" width="32">
                 <p class="small mb-0 ms-2">
                   {{ p.name }}
+                  <a :href="`/p/${p.sku}`" target="_blank" rel="noopener noreferrer">&nearr;</a>
                 </p>
               </td>
               <td class="small">
                 {{ p.store.name }}
+                <a :href="`/stores/${p.store.id}`" target="_blank" rel="noopener noreferrer">&nearr;</a>
               </td>
             </tr>
             <tr v-if="products.length == 0">

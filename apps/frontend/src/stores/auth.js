@@ -9,6 +9,7 @@ export const useAuthStore = defineStore('auth', () => {
   const store = ref({})
   const role = ref('')
   const isLogin = computed(() => user.value.id)
+  const isAdmin = ref(false)
 
   const refreshAccessToken = async () => {
     if (!accessToken.value) {
@@ -16,8 +17,10 @@ export const useAuthStore = defineStore('auth', () => {
     }
     await apiReq('post', '/refresh-token', { token: accessToken.value }).then(async res => {
       await setAuth(res.data)
-    }).catch(() => {
-      setLogout()
+    }).catch(e => {
+      if (e.response.status == 401) {
+        setLogout()
+      }
     })
   }
 
@@ -36,6 +39,7 @@ export const useAuthStore = defineStore('auth', () => {
     role.value = data.role
     user.value = data.user
     store.value = data.store || {}
+    isAdmin.value = data.isAdmin
     accessToken.value = data.token
     localStorage.setItem('token', data.token)
   }
@@ -53,6 +57,7 @@ export const useAuthStore = defineStore('auth', () => {
     store,
     role,
     isLogin,
+    isAdmin,
     isLoading,
     accessToken,
     refreshAccessToken,

@@ -86,7 +86,7 @@ export const adminTransactionStatusUpdate = async (c: Context): Promise<HandlerR
     return c.json({ message: "Transaksi tidak ditemukan" }, 404);
   }
 
-  const valid = z.safeParse(transactionStatusUpdateSchema, c.req.json())
+  const valid = z.safeParse(transactionStatusUpdateSchema, await c.req.json())
   if (!valid.success) {
     return c.json({ message: parseError(valid.error) }, 400);
   }

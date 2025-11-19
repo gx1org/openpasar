@@ -1,16 +1,19 @@
 <script setup>
 import AccountView from '../views/AccountView.vue'
 import { useMiscStore } from '../stores/misc';
-import { useAuthStore } from '../stores/auth';
+import LoginView from '~/views/LoginView.vue';
 const misc = useMiscStore()
+const auth = useAuthStore()
 useHead({
   title: 'Akun | ' + misc.config.site_name,
 })
-const auth = useAuthStore()
 definePageMeta({
   requireAuth: true
 })
 </script>
 <template>
-  <AccountView v-if="!auth.isLoading"/>
+  <div v-if="!auth.isLoading">
+    <LoginView v-if="!auth.isLogin"/>
+    <AccountView v-else />
+  </div>
 </template>

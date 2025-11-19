@@ -71,6 +71,7 @@ onMounted(() => {
               <th>Aksi</th>
               <th>SKU</th>
               <th>Nama</th>
+              <th>Tampil</th>
               <th>Stok</th>
               <th>Harga</th>
             </tr>
@@ -78,24 +79,28 @@ onMounted(() => {
           <tbody>
             <tr v-for="p,i in products" :key="i">
               <td>
-                <button @click="editBtn(p)" class="btn btn-sm btn-primary">
+                <button v-if="p.is_active" @click="editBtn(p)" class="btn btn-sm btn-primary">
                   <i class="bi bi-pencil"></i>
                 </button>
                 <button v-if="p.is_active" @click="deleteBtn(p)" class="btn btn-sm btn-danger ms-1">
-                  <i class="bi bi-eye-slash"></i>
+                  <i class="bi bi-trash"></i>
                 </button>
                 <button v-else @click="deleteBtn(p)" class="btn btn-sm btn-success ms-1">
-                  <i class="bi bi-eye"></i>
+                  <i class="bi bi-box-arrow-up"></i>
                 </button>
               </td>
               <td class="small">
                 {{ p.sku }}
+                <a :href="`/p/${p.sku}`" target="_blank" rel="noopener noreferrer">&nearr;</a>
               </td>
               <td class="d-flex">
                 <img :src="img(p.image_url)" alt="img" width="32" class="square">
                 <p class="small mb-0 ms-2">
                   {{ p.name }}
                 </p>
+              </td>
+              <td class="small">
+                {{ p.visibility == 'private' ? 'Privat' : (p.visibility == 'public' ? 'Publik' : 'Pending') }}
               </td>
               <td class="small">
                 {{ p.in_stock == 'one' ? 'Satu' : p.in_stock == 'many' ? 'Banyak' : 'Kosong' }}

@@ -44,6 +44,7 @@ export const catalogueList = async (c: Context): Promise<HandlerResponse<any>> =
     .innerJoin(Store, eq(Store.id, Product.store_id))
     .where(and(
       eq(Product.is_active, true),
+      eq(Product.visibility, 'public'),
       searchQuery,
       featuredQuery,
     ))

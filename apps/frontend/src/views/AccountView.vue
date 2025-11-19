@@ -112,7 +112,7 @@ const logoutBtn = () => {
         </div>
       </div>
     </template>
-    <template v-if="auth.user.email == misc.config.admin_email">
+    <template v-if="auth.isAdmin">
       <div class="d-flex">
         <h5 class="mb-4">Menu Admin</h5>
         <div class="ms-auto">
@@ -170,7 +170,7 @@ const logoutBtn = () => {
     </div>
     <EditProfile />
     <EditPin />
-    <EditStoreProfile />
+    <EditStoreProfile :data="auth.store" />
     <SellerRule />
   </div>
 </template>

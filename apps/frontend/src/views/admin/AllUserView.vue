@@ -21,6 +21,16 @@ const fetchData = () => {
   })
 }
 
+const suspendBtn = (u) => {
+  if (!u.is_suspended) {
+    if (!confirm(`Anda yakin ingin menonaktifkan akun ${u.name}?`)) return
+  }
+  apiReq('post', `/admin/users/${u.id}/suspend`).then(() => {
+    fetchData()
+  })
+  .catch(handleErrorApi)
+}
+
 onMounted(() => {
   fetchData()
 })
@@ -38,15 +48,7 @@ onMounted(() => {
     <SpinnerBox v-if="isFetching" />
     <template v-else>
       <div class="d-flex mb-4 gap-2">
-        <input type="search" class="form-control form-control-sm" placeholder="Cari..." v-model="form.search" @change="fetchData">
-        <select class="form-control form-control-sm" v-model="form.status" @change="fetchData">
-          <option value="">Semua status</option>
-          <option value="in_process">in_process</option>
-          <option value="sent">sent</option>
-          <option value="completed">completed</option>
-          <option value="rejected">rejected</option>
-          <option value="complained">complained</option>
-        </select>
+        <input type="search" class="form-control form-control-sm" placeholder="Cari..." v-model="form.search" @change="fetchData" />
       </div>
       <div class="table-responsive">
         <table class="table table-bordered">
@@ -63,8 +65,11 @@ onMounted(() => {
           <tbody>
             <tr v-for="p,i in users" :key="i">
               <td>
-                <button @click="editBtn(p)" class="btn btn-sm btn-primary">
-                  <i class="bi bi-eye"></i>
+                <button v-if="!p.is_suspended" @click="suspendBtn(p)" class="btn btn-sm btn-danger">
+                  <i class="bi bi-ban"></i>
+                </button>
+                <button v-else @click="suspendBtn(p)" class="btn btn-sm btn-success">
+                  <i class="bi bi-check-circle"></i>
                 </button>
               </td>
               <td class="small">

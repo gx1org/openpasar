@@ -11,11 +11,11 @@ import { withdrawalCreate, withdrawalList } from './controllers/withdraw.js';
 import { hasStore, initialConfig, isAdmin } from './utils/middleware.js';
 import { storeCreate, storeDetail, storeList, storeUpdate } from './controllers/store.js';
 import { storeProductCreate, storeProductToggle, storeProductDetail, storeProductList, storeProductUpdate } from './controllers/store-product.js';
-import { adminStoreDetail, adminStoreList } from './controllers/admin/store.js';
+import { adminStoreCreate, adminStoreDetail, adminStoreList, adminStoreUpdate } from './controllers/admin/store.js';
 import { adminWithdrawalApproveReject, adminWithdrawalList } from './controllers/admin/withdraw.js';
 import { adminTransactionDetail, adminTransactionList, adminTransactionStatusUpdate } from './controllers/admin/transaction.js';
 import { adminUserDetail, adminUserList, adminUserSuspendStatusUpdate } from './controllers/admin/user.js';
-import { adminProductDetail, adminProductFeatured, adminProductList, adminProductToggle } from './controllers/admin/product.js';
+import { adminProductDetail, adminProductFeatured, adminProductList, adminProductToggle, adminProductUpdate } from './controllers/admin/product.js';
 import { cors } from 'hono/cors';
 import { storeTransactionDetail, storeTransactionList, storeTransactionStatusUpdate } from './controllers/store-transaction.js';
 import { webhookPakasir } from './controllers/webhook.js';
@@ -92,11 +92,14 @@ adminRoute.post('/users/:id/suspend', adminUserSuspendStatusUpdate)
 
 adminRoute.get('/stores', adminStoreList)
 adminRoute.get('/stores/:id', adminStoreDetail)
+adminRoute.post('/stores', adminStoreCreate)
+adminRoute.put('/stores/:id', adminStoreUpdate)
 
 adminRoute.get('/products', adminProductList)
 adminRoute.get('/products/:id', adminProductDetail)
 adminRoute.post('/products/:id/toggle', adminProductToggle)
 adminRoute.post('/products/:id/featured', adminProductFeatured)
+adminRoute.put('/products/:id', adminProductUpdate)
 
 adminRoute.get('/transactions', adminTransactionList)
 adminRoute.get('/transactions/:id', adminTransactionDetail)

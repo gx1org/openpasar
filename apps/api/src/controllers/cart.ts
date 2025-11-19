@@ -34,7 +34,7 @@ export const cartList = async (c: Context): Promise<HandlerResponse<any>> => {
 }
 
 export const addToCart = async (c: Context): Promise<HandlerResponse<any>> => {
-  const valid = z.safeParse(cartSchema, c.req.json());
+  const valid = z.safeParse(cartSchema, await c.req.json());
   if (!valid.success) {
     return c.json({ message: parseError(valid.error) }, 400);
   }
@@ -93,7 +93,7 @@ export const removeFromCart = async (c: Context): Promise<HandlerResponse<any>> 
 
 export const checkout = async (c: Context): Promise<HandlerResponse<any>> => {
   const userId = c.get('jwtPayload')?.id;
-  const valid = z.safeParse(checkoutSchema, c.req.json());
+  const valid = z.safeParse(checkoutSchema, await c.req.json());
   if (!valid.success) {
     return c.json({ message: parseError(valid.error) }, 400);
   }

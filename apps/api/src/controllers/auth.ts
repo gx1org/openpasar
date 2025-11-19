@@ -10,7 +10,7 @@ import { parseError } from "../utils/helper.js";
 import { authSchema } from "../validators/user.js";
 
 export const authorize = async (c: Context): Promise<HandlerResponse<any>> => {
-  const valid = z.safeParse(authSchema, c.req.json())
+  const valid = z.safeParse(authSchema, await c.req.json())
   if (!valid.success) {
     return c.json({ message: parseError(valid.error) }, 400);
   }
@@ -35,7 +35,7 @@ export const authorize = async (c: Context): Promise<HandlerResponse<any>> => {
     users.push(newUser);
     isNewUser = true
   }
-
+  
   const user = users[0];
   let store = {
     id: 0
@@ -46,8 +46,14 @@ export const authorize = async (c: Context): Promise<HandlerResponse<any>> => {
       .where(eq(Store.user_id, user.id)).limit(1);
   }
 
-  const token = await generateJwt(String(user.id), user.email, String(store.id));
-  return c.json({ message: "Authorized", token, user, store });
+  const token = await generateJwt(String(user.id), user.email, String(store?.id || 0));
+  const adminEmail = await getConfig('admin_email')
+  return c.json({ message: "Authorized",
+    token,
+    user,
+    store,
+    isAdmin: user.email == adminEmail,
+  });
 }
 
 export const refreshToken = async (c: Context): Promise<HandlerResponse<any>> => {
@@ -60,6 +66,12 @@ export const refreshToken = async (c: Context): Promise<HandlerResponse<any>> =>
     .from(Store)
     .where(eq(Store.user_id, userId))
     .limit(1);
-  const token = await generateJwt(String(userId), user.email, String(store.id || 0));
-  return c.json({ message: "Authorized", token, user, store });
+  const token = await generateJwt(String(userId), user.email, String(store?.id || 0));
+  const adminEmail = await getConfig('admin_email')
+  return c.json({ message: "Authorized",
+    token,
+    user,
+    store,
+    isAdmin: user.email == adminEmail,
+  });
 }

@@ -3,6 +3,7 @@ import { onMounted, ref } from 'vue';
 import SpinnerBox from '../../components/partial/SpinnerBox.vue';
 import { apiReq, formatDate, handleErrorApi, img, Rp } from '../../utils/fns';
 import ProductForm from '../../components/modal/ProductForm.vue';
+import AdminProductForm from '~/components/modal/AdminProductForm.vue';
 
 const isFetching = ref(true)
 const form = ref({
@@ -25,7 +26,7 @@ const fetchData = () => {
 const productEditing = ref({})
 const editBtn = (p) => {
   productEditing.value = p
-  document.getElementById('ProductForm-btn').click()
+  document.getElementById('AdminProductForm-btn').click()
 }
 
 const deleteBtn = (p) => {
@@ -74,6 +75,7 @@ onMounted(() => {
               <th>Aksi</th>
               <th>SKU</th>
               <th>Nama</th>
+              <th>Tampil</th>
               <th>Stok</th>
               <th>Harga</th>
               <th>Penjual</th>
@@ -82,11 +84,14 @@ onMounted(() => {
           <tbody>
             <tr v-for="p,i in products" :key="i">
               <td>
+                <button v-if="p.is_active" @click="editBtn(p)" class="btn btn-sm btn-primary">
+                  <i class="bi bi-pencil"></i>
+                </button>
                 <button v-if="p.is_active" @click="deleteBtn(p)" class="btn btn-sm btn-danger ms-1">
-                  <i class="bi bi-eye-slash"></i>
+                  <i class="bi bi-trash"></i>
                 </button>
                 <button v-else @click="deleteBtn(p)" class="btn btn-sm btn-success ms-1">
-                  <i class="bi bi-eye"></i>
+                  <i class="bi bi-box-arrow-up"></i>
                 </button>
                 <button v-if="p.featured == 0" @click="featuredBtn(p)" class="btn btn-sm btn-warning ms-1">
                   <i class="bi bi-star"></i>
@@ -94,12 +99,16 @@ onMounted(() => {
               </td>
               <td class="small">
                 {{ p.sku }}
+                <a :href="`/p/${p.sku}`" target="_blank" rel="noopener noreferrer">&nearr;</a>
               </td>
               <td class="d-flex">
                 <img :src="img(p.image_url)" alt="img" width="32">
                 <p class="small mb-0 ms-2">
                   {{ p.name }}
                 </p>
+              </td>
+              <td class="small">
+                {{ p.visibility == 'private' ? 'Privat' : (p.visibility == 'public' ? 'Publik' : 'Pending') }}
               </td>
               <td class="small">
                 {{ p.in_stock == 'one' ? 'Satu' : p.in_stock == 'many' ? 'Banyak' : 'Kosong' }}
@@ -109,6 +118,7 @@ onMounted(() => {
               </td>
               <td class="small">
                 {{ p.store.name }}
+                <a :href="`/stores/${p.store.id}`" target="_blank" rel="noopener noreferrer">&nearr;</a>
               </td>
             </tr>
             <tr v-if="products.length == 0">
@@ -118,7 +128,7 @@ onMounted(() => {
         </table>
       </div>
     </template>
-    <button id="ProductForm-btn" type="button" class="d-none" data-bs-toggle="modal" data-bs-target="#ProductForm"></button>
-    <ProductForm :data="productEditing" @updated="fetchData" :key="productEditing.id" />
+    <button id="AdminProductForm-btn" type="button" class="d-none" data-bs-toggle="modal" data-bs-target="#AdminProductForm"></button>
+    <AdminProductForm :data="productEditing" @updated="fetchData" />
   </div>
 </template>

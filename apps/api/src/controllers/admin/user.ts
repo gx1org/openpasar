@@ -1,11 +1,42 @@
 import type { Context } from "hono";
 import type { HandlerResponse } from "hono/types";
-import { User } from "../../schema.js";
+import { Store, User } from "../../schema.js";
 import { db } from "../../db.js";
-import { eq } from "drizzle-orm";
+import { eq, ilike, is, or } from "drizzle-orm";
+import z from "zod";
+import { userListSchema } from "../../validators/admin.js";
+import { parseError } from "../../utils/helper.js";
 
 export const adminUserList = async (c: Context): Promise<HandlerResponse<any>> => {
-  const users = await db.select().from(User);
+  const valid = z.safeParse(userListSchema, c.req.query());
+  if (!valid.success) {
+    return c.json({ message: parseError(valid.error) }, 400);
+  }
+
+  const search = valid.data.search;
+  const users = await db.select({
+    id: User.id,
+    name: User.name,
+    email: User.email,
+    phone: User.phone,
+    created_at: User.created_at,
+    balance: User.balance,
+    is_suspended: User.is_suspended,
+    store: {
+      id: Store.id,
+      name: Store.name,
+      email: Store.email,
+      phone: Store.phone,
+    }
+  }).from(User)
+    .leftJoin(Store, eq(User.id, Store.user_id))
+    .where(
+      or(
+        ilike(User.name, `%${search}%`),
+        ilike(User.email, `%${search}%`),
+        ilike(User.phone, `%${search}%`),
+      )
+    );
   return c.json({ users });
 }
 

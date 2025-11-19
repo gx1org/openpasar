@@ -1,5 +1,4 @@
 import z from "zod";
-import { parseError } from "../utils/helper.js";
 
 export const authSchema = z.object({
   auth_code: z.string().nonempty(),
