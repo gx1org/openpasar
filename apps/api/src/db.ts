@@ -5,11 +5,12 @@ import { migrate } from 'drizzle-orm/neon-http/migrator'
 import fs from "fs";
 import path from "path";
 
-const database_url = getEnv('DATABASE_URL', '')
-const sql = neon(database_url)
+const databaseUrl = getEnv('DATABASE_URL')
+const sanitizedUrl = databaseUrl.replace("psql '", "").replace("'", "")
+const sql = neon(sanitizedUrl)
 export const db = drizzle(sql)
 
-export async function runMigration() {
+export async function runMigration(): Promise<boolean> {
   try {
     console.log('Running migrations...');
     const drizzlePath = scanCWD()
@@ -17,9 +18,10 @@ export async function runMigration() {
       migrationsFolder: drizzlePath
     });
     console.log('Migrations completed successfully.');
+    return true
   } catch (error) {
     console.error('Migration failed:', error);
-    process.exit(1);
+    return false
   }
 }
 
