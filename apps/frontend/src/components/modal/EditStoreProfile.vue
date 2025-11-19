@@ -30,6 +30,10 @@ const updateBtn = () => {
 
 onMounted(() => {
   form.value = {...auth.store}
+  if (!form.value.id) {
+    form.value.email = auth.user.email
+    form.value.phone = auth.user.phone
+  }
 })
 </script>
 <template>

@@ -86,8 +86,3 @@ Silahkan login ke dashboard untuk melihat detail pesanan.`)
 
   return
 }
-
-export const runDbMigration = async (c: Context): Promise<HandlerResponse<any>> => {
-  await runMigration()
-  return c.json({ message: 'OK' });
-}

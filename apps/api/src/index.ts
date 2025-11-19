@@ -40,7 +40,6 @@ api.post('/authorize', authorize);
 api.post('/refresh-token', jwt({ secret: jwt_secret }), refreshToken);
 api.post('/webhooks/pakasir', webhookPakasir)
 api.get('/automate', runAutomation)
-api.get('/migrate', runDbMigration)
 
 api.get('/catalogues', catalogueList)
 api.get('/catalogues/:sku', catalogueDetail)
