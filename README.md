@@ -1,5 +1,7 @@
 # OpenPasar - Marketplace and Official Store Platform
 
+<img width="294" height="284" alt="Screenshot 2025-11-04 134338" src="https://github.com/user-attachments/assets/4b8501a0-9af5-4b5d-a039-a1b0ac18f4be" />
+
 OpenPasar merupakan project **marketplace / official store** berbasis **open source**  
 yang dioptimalkan agar dapat **di-hosting secara gratis di Vercel**.
 
