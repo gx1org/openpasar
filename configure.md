@@ -15,7 +15,7 @@ Saat pertama kali membuka halaman admin, Anda akan melihat form konfigurasi sepe
 
 ### **Email**
 Masukkan email yang akan menjadi **email utama administrator**.  
-Email ini tidak langsung digunakan untuk login, tetapi sebagai identitas pemilik platform.
+Jika email yang Anda gunakan untuk login sama dengan email ini, maka **Anda adalah admin**. Selain itu Anda akan dianggap pengguna biasa.
 
 ### **No. WhatsApp**
 Masukkan nomor WhatsApp yang akan ditampilkan kepada pengguna jika mereka membutuhkan bantuan.
