@@ -1,5 +1,7 @@
 # OpenPasar - Marketplace and Official Store Platform
 
+<img width="294" height="284" alt="OpenPasar" src="https://github.com/user-attachments/assets/4b8501a0-9af5-4b5d-a039-a1b0ac18f4be" />
+
 OpenPasar merupakan project **marketplace / official store** berbasis **open source**  
 yang dioptimalkan agar dapat **di-hosting secara gratis di Vercel**.
 
@@ -16,7 +18,7 @@ Sebelum mulai, siapkan:
 
 1. **Database [Neon.tech](http://console.neon.tech/)**
    
-   Buat database PostgreSQL lalu copy **connection string**.
+   Buat project, klik Connect, lalu copy **connection string**-nya (contoh: `postgresql://neondb_owner:npg_....`).
 
 3. **Akun GitHub**
 
@@ -44,6 +46,8 @@ Ada 2 ENV variable yang harus diisi:
 Selesaikan proses deployment. Lalu klik tombol "Continue to Dashboard" (di paling bawah).
 
 Di halaman tersebut ada nama domain yang diberikan oleh vercel. (contohnya: `openpasar-api.vercel.app`).
+
+Catat domain tersebut karena kita membutuhkannya di deploy frontend.
 
 ### ▶️ Deploy Frontend
 
