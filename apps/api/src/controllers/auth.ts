@@ -45,6 +45,9 @@ export const authorize = async (c: Context): Promise<HandlerResponse<any>> => {
       .from(Store)
       .where(eq(Store.user_id, user.id)).limit(1);
   }
+  if (user.is_suspended) {
+    return c.json({ message: "Pengguna terblokir" }, 403);
+  }
 
   const token = await generateJwt(String(user.id), user.email, String(store?.id || 0));
   const adminEmail = await getConfig('admin_email')
@@ -62,12 +65,17 @@ export const refreshToken = async (c: Context): Promise<HandlerResponse<any>> =>
   if (!user) {
     return c.json({ message: "Pengguna tidak ditemukan" }, 404);
   }
+  if (user.is_suspended) {
+    return c.json({ message: "Pengguna terblokir" }, 403);
+  }
+
   const [store] = await db.select()
     .from(Store)
     .where(eq(Store.user_id, userId))
     .limit(1);
   const token = await generateJwt(String(userId), user.email, String(store?.id || 0));
   const adminEmail = await getConfig('admin_email')
+
   return c.json({ message: "Authorized",
     token,
     user,
