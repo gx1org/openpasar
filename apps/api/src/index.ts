@@ -19,8 +19,7 @@ import { adminProductDetail, adminProductFeatured, adminProductList, adminProduc
 import { cors } from 'hono/cors';
 import { storeTransactionDetail, storeTransactionList, storeTransactionStatusUpdate } from './controllers/store-transaction.js';
 import { webhookPakasir } from './controllers/webhook.js';
-import { runMigration } from './db.js';
-import { runAutomation, runDbMigration } from './controllers/automation.js';
+import { runAutomation } from './controllers/automation.js';
 import { healthCheck } from './controllers/index.js';
 
 envCheck();
