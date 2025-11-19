@@ -56,3 +56,13 @@ export const storeCreateUpdateSchema = z.object({
   phone: z.string().nonempty(),
   description: z.string().nonempty(),
 })
+
+export const adminProductCreateUpdateSchema = z.object({
+  name: z.string().nonempty(),
+  sku: z.string().nonempty(),
+  price: z.number().int().min(1).nonoptional(),
+  in_stock: z.enum(['one', 'many', 'empty']).nonoptional(),
+  description: z.string().nonempty(),
+  image_url: z.string().nonempty(),
+  visibility: z.enum(['public', 'private', 'pending_review-private', 'pending_review-public']).nonoptional(),
+});

@@ -180,11 +180,17 @@ onMounted(() => {
       <div class="p-3 border card bg-white mb-4">
         <p>Integrasi</p>
         <div class="mb-3">
-          <label for="" class="form-label">Autz.org App ID</label>
+          <div class="d-flex">
+            <label for="" class="form-label">Autz.org App ID</label>
+            <a href="https://autz.org" target="_blank" rel="noopener noreferrer" class="small ms-auto">Autz.org &nearr;</a>
+          </div>
           <input type="text" class="form-control" v-model="form.autzorg_app_id">
         </div>
         <div class="mb-3">
-          <label for="" class="form-label">Pakasir Slug</label>
+          <div class="d-flex">
+            <label for="" class="form-label">Pakasir Slug</label>
+            <a href="https://app.pakasir.com" target="_blank" rel="noopener noreferrer" class="small ms-auto">Pakasir &nearr;</a>
+          </div>
           <input type="text" class="form-control" v-model="form.pakasir_slug">
         </div>
         <div class="mb-3">
@@ -192,7 +198,10 @@ onMounted(() => {
           <input type="text" class="form-control" v-model="form.pakasir_api_key">
         </div>
         <div class="mb-3">
-          <label for="" class="form-label">Cronjob Secret</label>
+          <div class="d-flex">
+            <label for="" class="form-label">Cronjob Secret</label>
+            <a href="https://console.cron-job.org" target="_blank" rel="noopener noreferrer" class="small ms-auto">Cron-job.org &nearr;</a>
+          </div>
           <input type="text" class="form-control" v-model="form.cronjob_secret" @change="handleChangeSecret">
         </div>
       </div>

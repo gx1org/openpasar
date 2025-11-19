@@ -1,8 +1,7 @@
 <script setup>
 import { onMounted, ref } from 'vue';
 import SpinnerBox from '../../components/partial/SpinnerBox.vue';
-import { apiReq, formatDate, handleErrorApi, img, Rp } from '../../utils/fns';
-import ProductForm from '../../components/modal/ProductForm.vue';
+import { apiReq, handleErrorApi, img } from '../../utils/fns';
 
 const isFetching = ref(true)
 const form = ref({
@@ -104,7 +103,5 @@ onMounted(() => {
         </table>
       </div>
     </template>
-    <button id="ProductForm-btn" type="button" class="d-none" data-bs-toggle="modal" data-bs-target="#ProductForm"></button>
-    <ProductForm :data="productEditing" @updated="fetchData" :key="productEditing.id" />
   </div>
 </template>

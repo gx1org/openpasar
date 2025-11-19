@@ -14,7 +14,7 @@ const isNew = ref(true)
 
 const isValidForm = computed(() => {
   return form.value.sku && form.value.name && form.value.price
-    && form.value.in_stock && form.value.description && form.value.image_url
+    && form.value.in_stock && form.value.description && images.value.length > 0
 })
 
 const isSending = ref(false)
@@ -33,24 +33,6 @@ const submitBtn = () => {
     })
 }
 
-const isPrivat = computed(() => {
-  return form.value.name?.startsWith('(Privat) ')
-})
-
-const clickPrivat = () => {
-  if (isPrivat.value) {
-    form.value.name = form.value.name.replace('(Privat) ', '')
-  } else {
-    form.value.name = '(Privat) ' + form.value.name
-  }
-  detectPrivat()
-}
-const detectPrivat = () => {
-  if (isPrivat.value) {
-    form.value.visibility = 'private'
-  }
-}
-
 const handleImageChange = (e, i) => {
   images.value[i] = e.target.value
   images.value = images.value.filter(Boolean)
@@ -58,7 +40,7 @@ const handleImageChange = (e, i) => {
 
 const syncProp = () => {
   form.value = JSON.parse(JSON.stringify(prop.data))
-  images.value = form.value.image_url?.split(',') || []
+  images.value = form.value.image_url?.split(',') || ['']
   form.value.visibility = form.value.visibility || 'public'
   if (prop.data?.id) {
     isNew.value = false
@@ -86,15 +68,7 @@ onMounted(() => {
           </div>
           <div class="mb-1">
             <label for="" class="form-label">Nama</label>
-            <input type="text" class="form-control" v-model="form.name" @input="detectPrivat">
-          </div>
-          <div class="mb-3">
-            <div class="form-check">
-              <input class="form-check-input" type="checkbox" style="cursor: pointer;" value="" id="privat" :checked="isPrivat" @click="clickPrivat">
-              <label class="form-check-label small" for="privat" style="cursor: pointer;">
-                Tandai selalu privat
-              </label>
-            </div>
+            <input type="text" class="form-control" v-model="form.name">
           </div>
           <div class="mb-3">
             <label for="" class="form-label">Harga</label>
@@ -128,9 +102,9 @@ onMounted(() => {
             <label for="" class="form-label">Deskripsi</label>
             <textarea class="form-control" v-model="form.description" rows="7"></textarea>
           </div>
-          <div v-if="!isNew" class="mb-3">
+          <div class="mb-3">
             <label for="" class="form-label">Tampilkan</label>
-            <select class="form-control" v-model="form.visibility" :disabled="isPrivat">
+            <select class="form-control" v-model="form.visibility">
               <option value="private">Privat</option>
               <option value="public">Publik (Muncul di pencarian)</option>
             </select>

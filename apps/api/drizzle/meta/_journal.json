@@ -5,29 +5,8 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1763436120499,
-      "tag": "0000_silent_starfox",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "7",
-      "when": 1763500300484,
-      "tag": "0001_superb_omega_sentinel",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "7",
-      "when": 1763512408213,
-      "tag": "0002_little_la_nuit",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "7",
-      "when": 1763514535318,
-      "tag": "0003_icy_black_queen",
+      "when": 1763584357913,
+      "tag": "0000_illegal_donald_blake",
       "breakpoints": true
     }
   ]

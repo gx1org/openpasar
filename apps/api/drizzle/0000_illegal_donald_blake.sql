@@ -24,6 +24,7 @@ CREATE TABLE "products" (
 	"price" integer DEFAULT 0 NOT NULL,
 	"in_stock" varchar DEFAULT '' NOT NULL,
 	"is_active" boolean DEFAULT true NOT NULL,
+	"visibility" varchar DEFAULT 'public' NOT NULL,
 	"sold_count" integer DEFAULT 0 NOT NULL,
 	"featured" integer DEFAULT 0 NOT NULL,
 	"image_url" text DEFAULT '' NOT NULL,
@@ -68,8 +69,7 @@ CREATE TABLE "users" (
 	"hashed_pin" varchar DEFAULT '' NOT NULL,
 	"created_at" timestamp DEFAULT now(),
 	"is_suspended" boolean DEFAULT false NOT NULL,
-	CONSTRAINT "users_email_unique" UNIQUE("email"),
-	CONSTRAINT "users_phone_unique" UNIQUE("phone")
+	CONSTRAINT "users_email_unique" UNIQUE("email")
 );
 --> statement-breakpoint
 CREATE TABLE "withdrawals" (

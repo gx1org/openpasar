@@ -1,5 +1,5 @@
 {
-  "id": "b49c0807-8b39-438a-bf00-cdf098bee061",
+  "id": "ccb4a852-6511-4486-95bc-c23246ea62c9",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -200,6 +200,13 @@
           "primaryKey": false,
           "notNull": true,
           "default": true
+        },
+        "visibility": {
+          "name": "visibility",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'public'"
         },
         "sold_count": {
           "name": "sold_count",
@@ -544,13 +551,6 @@
           "nullsNotDistinct": false,
           "columns": [
             "email"
-          ]
-        },
-        "users_phone_unique": {
-          "name": "users_phone_unique",
-          "nullsNotDistinct": false,
-          "columns": [
-            "phone"
           ]
         }
       },

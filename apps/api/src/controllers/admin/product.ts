@@ -6,7 +6,7 @@ import { and, desc, eq, gt, ilike, ne, or } from "drizzle-orm";
 import { productFeaturedSchema, productListSchema } from "../../validators/admin.js";
 import z from "zod";
 import { parseError } from "../../utils/helper.js";
-import { productCreateUpdateSchema } from "../../validators/seller.js";
+import { adminProductCreateUpdateSchema } from "../../validators/admin.js";
 
 export const adminProductList = async (c: Context): Promise<HandlerResponse<any>> => {
   const valid = z.safeParse(productListSchema, c.req.query());
@@ -124,7 +124,7 @@ export const adminProductUpdate = async (c: Context): Promise<HandlerResponse<an
     return c.json({ message: 'Produk tidak ditemukan' }, 404);
   }
 
-  const valid = z.safeParse(productCreateUpdateSchema, await c.req.json());
+  const valid = z.safeParse(adminProductCreateUpdateSchema, await c.req.json());
   if (!valid.success) {
     return c.json({ message: parseError(valid.error) }, 400);
   }

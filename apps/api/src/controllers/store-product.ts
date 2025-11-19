@@ -76,7 +76,7 @@ export const storeProductCreate = async (c: Context): Promise<HandlerResponse<an
     description: req.description,
     image_url: req.image_url,
     is_active: true,
-    visibility: 'pending_review',
+    visibility: 'pending_review-'+req.visibility,
     store_id: store.id,
   }).returning()
 
@@ -113,7 +113,7 @@ export const storeProductUpdate = async (c: Context): Promise<HandlerResponse<an
     return c.json({ message: 'Produk tidak ditemukan' }, 404);
   }
 
-  if (product.visibility === 'pending_review') {
+  if (product.visibility.startsWith('pending_review')) {
     return c.json({ message: 'Produk sedang dalam review' }, 400);
   }
 

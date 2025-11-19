@@ -105,7 +105,8 @@ onMounted(() => {
           <div v-if="!isNew" class="mb-3">
             <label for="" class="form-label">Tampilkan</label>
             <select class="form-control" v-model="form.visibility">
-              <option value="pending_review">Pending Review</option>
+              <option value="pending_review-private">Pending Review (Privat)</option>
+              <option value="pending_review-public">Pending Review (Publik)</option>
               <option value="private">Privat</option>
               <option value="public">Publik (Muncul di pencarian)</option>
             </select>

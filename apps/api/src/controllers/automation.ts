@@ -1,6 +1,6 @@
 import type { Context } from "hono";
 import type { HandlerResponse } from "hono/types";
-import { db } from "../db.js";
+import { db, runMigration } from "../db.js";
 import { Store, Transaction, User } from "../schema.js";
 import { and, eq, inArray, lt, sql } from "drizzle-orm";
 import dayjs from "dayjs";
@@ -85,4 +85,9 @@ Silahkan login ke dashboard untuk melihat detail pesanan.`)
   }
 
   return
+}
+
+export const runDbMigration = async (c: Context): Promise<HandlerResponse<any>> => {
+  await runMigration()
+  return c.json({ message: 'OK' });
 }

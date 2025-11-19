@@ -20,7 +20,7 @@ import { cors } from 'hono/cors';
 import { storeTransactionDetail, storeTransactionList, storeTransactionStatusUpdate } from './controllers/store-transaction.js';
 import { webhookPakasir } from './controllers/webhook.js';
 import { runMigration } from './db.js';
-import { runAutomation } from './controllers/automation.js';
+import { runAutomation, runDbMigration } from './controllers/automation.js';
 import { healthCheck } from './controllers/index.js';
 
 envCheck();
@@ -40,6 +40,7 @@ api.post('/authorize', authorize);
 api.post('/refresh-token', jwt({ secret: jwt_secret }), refreshToken);
 api.post('/webhooks/pakasir', webhookPakasir)
 api.get('/automate', runAutomation)
+api.get('/migrate', runDbMigration)
 
 api.get('/catalogues', catalogueList)
 api.get('/catalogues/:sku', catalogueDetail)
