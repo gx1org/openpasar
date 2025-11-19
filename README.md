@@ -61,6 +61,21 @@ Klik domainnya untuk mengunjungi website OpenPasar Anda.
 
 ---
 
+## 📘 Next Step
+
+Setelah berhasil deploy API dan Frontend, lanjutkan dengan panduan berikut:
+
+1. **[Panduan Konfigurasi](./configure.md)**  
+   Penjelasan untuk mengisi form Konfigurasi saat pertama kali membuka website.
+
+2. **[Panduan Development](./development-guides.md)**  
+   Cara menjalankan project di local development.
+
+3. **[Panduan Vercel](./vercel-guides.md)**  
+   Tutorial menggunakan Vercel, seperti memasang custom domain, dll.
+
+---
+
 ## 🤝 Kontribusi
 
 Kontribusi sangat dipersilakan!
