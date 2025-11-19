@@ -10,7 +10,7 @@ import { getConfig } from "../config.js";
 export const runAutomation = async (c: Context): Promise<HandlerResponse<any>> => {
   const cronjobSecret = await getConfig('cronjob_secret')
   if (cronjobSecret != c.req.query('secret')) {
-    return c.json({ message: "Unauthorized" }, 401);
+    return c.json({ message: "Wrong secret" }, 400);
   }
 
   console.log(`Automation running...`);

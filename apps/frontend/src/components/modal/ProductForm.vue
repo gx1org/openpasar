@@ -33,20 +33,20 @@ const submitBtn = () => {
     })
 }
 
-const isRekber = computed(() => {
-  return form.value.name?.startsWith('(Rekber) ')
+const isPrivat = computed(() => {
+  return form.value.name?.startsWith('(Privat) ')
 })
 
-const clickRekber = () => {
-  if (isRekber.value) {
-    form.value.name = form.value.name.replace('(Rekber) ', '')
+const clickPrivat = () => {
+  if (isPrivat.value) {
+    form.value.name = form.value.name.replace('(Privat) ', '')
   } else {
-    form.value.name = '(Rekber) ' + form.value.name
+    form.value.name = '(Privat) ' + form.value.name
   }
-  detectRekber()
+  detectPrivat()
 }
-const detectRekber = () => {
-  if (isRekber.value) {
+const detectPrivat = () => {
+  if (isPrivat.value) {
     form.value.visibility = 'private'
   }
 }
@@ -86,13 +86,13 @@ onMounted(() => {
           </div>
           <div class="mb-1">
             <label for="" class="form-label">Nama</label>
-            <input type="text" class="form-control" v-model="form.name" @input="detectRekber">
+            <input type="text" class="form-control" v-model="form.name" @input="detectPrivat">
           </div>
           <div class="mb-3">
             <div class="form-check">
-              <input class="form-check-input" type="checkbox" style="cursor: pointer;" value="" id="rekber" :checked="isRekber" @click="clickRekber">
-              <label class="form-check-label small" for="rekber" style="cursor: pointer;">
-                Tandai sebagai rekber
+              <input class="form-check-input" type="checkbox" style="cursor: pointer;" value="" id="privat" :checked="isPrivat" @click="clickPrivat">
+              <label class="form-check-label small" for="privat" style="cursor: pointer;">
+                Tandai selalu privat
               </label>
             </div>
           </div>
@@ -130,7 +130,7 @@ onMounted(() => {
           </div>
           <div v-if="!isNew" class="mb-3">
             <label for="" class="form-label">Tampilkan</label>
-            <select class="form-control" v-model="form.visibility" :disabled="isRekber">
+            <select class="form-control" v-model="form.visibility" :disabled="isPrivat">
               <option value="private">Privat</option>
               <option value="public">Publik (Muncul di pencarian)</option>
             </select>

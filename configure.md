@@ -49,8 +49,7 @@ URL gambar ikon/logo website.
 Anda dapat meng-upload gambar melalui tombol **Upload**.
 
 ### **Tema**
-Nama tema tampilan frontend (default: `default`).  
-Jika Anda membuat tema baru, nama tema dapat diisi di sini.
+Pilihan tema website.
 
 ---
 
@@ -96,6 +95,14 @@ Masukkan keduanya ke dalam form konfigurasi.
 
 > 🔎 *Slug* akan digunakan sebagai identitas proyek, dan *API Key* digunakan untuk memverifikasi pembayaran dari API Pakasir.
 
+#### Atur Webhook di Pakasir
+
+Agar pembayaran berfungsi dengan baik, Anda perlu mengatur webhook pada proyek Pakasir.
+
+1. Setelah di halaman detail Proyek, klik tomnol Edit
+2. Masukan url dengan format berikut: `https://domainmu.vercel.app/api/webhooks/pakasir`
+3. Kemudian klik simpan
+
 ---
 
 ### 🔷 **Cronjob Secret**
@@ -119,16 +126,7 @@ OpenPasar menggunakan SMTP untuk mengirim email seperti:
 - Notifikasi penarikan saldo
 - dll
 
-Jika Anda belum punya SMTP, Anda bisa mengisi semuanya dengan tanda **-** terlebih dahulu.
-
-Contoh:
-```
-Host: -
-Port: -
-User: -
-Password: -
-Email From: -
-```
+Jika Anda belum punya SMTP, Anda dapat membiarkan form SMTP terisi nilai default.
 
 > Email tidak akan berfungsi dulu, tetapi sistem tetap berjalan.  
 > Anda dapat memperbarui SMTP kapan saja.
@@ -156,6 +154,28 @@ Bisa diisi sesuai kebijakan platform Anda.
 
 Klik **Submit** untuk menyimpan konfigurasi.  
 Website Anda sekarang sudah siap dipakai.
+
+---
+
+## Buat Cronjob
+
+Cronjob adalah cara aplikasi melakukan tugas secara terjadwal. Misalnya tiap 5 menit, tiap 1 jam, tiap tengah malam, dll.
+
+Aplikasi ini membutuhkan cronjob yang berjalan tiap 5 menit untuk mengecek transaksi yang tidak terbayar selama 24 jam, atau transaksi yang tidak kunjung di selesaikan oleh pembeli.
+
+Caranya:
+
+1. Buat akun di https://console.cron-job.org
+2. Klik "Create Cronjob"
+3. Masukan Judul "OpenPasar"
+4. Masukan URL dengan format: `https://domainmu.vercel.app/api/automate?secret=cronjob-secret`.
+
+   Contoh: `https://domainmu.vercel.app/api/automate?secret=jhsdg7qg3gig`
+
+5. Pada Execution schedule, pilih Every 5 minutes
+6. Klik Simpan
+
+Selesai. Sekarang aplikasimu akan di-panggil oleh cronjob setiap 5 menit.
 
 ---
 
