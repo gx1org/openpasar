@@ -28,36 +28,36 @@ Sebelum mulai, siapkan:
 
 ## 🚀 Deploy ke Vercel
 
-Klik tombol berikut untuk meng-clone dan deploy project:
+OpenPasar terdiri dari **dua aplikasi** sehingga proses deploy dilakukan **dua kali**:
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/gx1org/openpasar)
+### ▶️ Deploy API
 
-> **Catatan:**  
-> 1. Deploy **apps/api** terlebih dahulu → pilih `root-directory=apps/api`  
-> 2. Setelah API berhasil di-deploy, lanjutkan dengan **apps/frontend** → `root-directory=apps/frontend`  
-> 3. Ikuti konfigurasi ENV Variable berikut
+Klik tombol berikut untuk deploy API:
 
----
+[![Deploy API to Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/gx1org/openpasar&root-directory=apps/api&repository-name=openpasar-api&env=DATABASE_URL,JWT_SECRET)
 
-## ⚙️ Konfigurasi Environment
+Ada 2 ENV variable yang harus diisi:
 
-### 📌 A. Environment untuk **API**
-
-```
-DATABASE_URL=postgresql://...
-JWT_SECRET=...
-```
 - `DATABASE_URL` → ambil dari Neon.tech  
 - `JWT_SECRET` → isi dengan string acak minimal 32 karakter
 
----
+Selesaikan proses deployment. Lalu klik tombol "Continue to Dashboard" (di paling bawah).
 
-### 📌 B. Environment untuk **Frontend**
+Di halaman tersebut ada nama domain yang diberikan oleh vercel. (contohnya: `openpasar-api.vercel.app`).
 
-```
-API_URL=...
-```
-- `API_URL` → isi dengan URL hasil deploy dari API
+### ▶️ Deploy Frontend
+
+Klik tombol berikut untuk deploy Frontend:
+
+[![Deploy API to Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/gx1org/openpasar&root-directory=apps/frontend&repository-name=openpasar-fe&env=API_URL)
+
+Ada 1 ENV variable yang harus diisi:
+
+- `API_URL` → ambil domain API (awali dengan https://). Sehingga dalam contoh sekarang menjadi `https://openpasar-api.vercel.app`.
+
+Selesaikan proses deployment. Lalu klik tombol "Continue to Dashboard" (di paling bawah).
+
+Klik domainnya untuk mengunjungi website OpenPasar Anda.
 
 ---
 
@@ -74,8 +74,7 @@ Kontribusi sangat dipersilakan!
 
 Project ini berbasis **MIT License**, dengan syarat tambahan:
 
-> Wajib menampilkan teks: **"powered by OpenPasar"**  
-> Beserta credit link ke repository ini.  
+> Repository ini berisi credit link: **"powered by OpenPasar"** yang mengarah ke repository ini.  
 > Penghapusan credit tidak diperbolehkan.
 
 ---
