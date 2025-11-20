@@ -49,7 +49,8 @@ const isValidForm = computed(() => {
     && form.value.content_info
     && form.value.content_seller_rules
     && form.value.cronjob_secret
-    && form.value.seller_fee
+    && Number(form.value.seller_fee) >= 0
+    && Number(form.value.seller_fee) <= 100
   )
 })
 

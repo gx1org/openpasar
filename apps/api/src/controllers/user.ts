@@ -32,22 +32,12 @@ export const updateProfile = async (c: Context): Promise<HandlerResponse<any>> =
     return c.json({ message: 'Pengguna tidak ditemukan' }, 404);
   }
 
-  const [check] = await db.select().from(User).where(eq(User.email, req.email)).limit(1);
-  if (check) {
-    return c.json({ message: 'Email sudah dipakai' }, 400);
-  }
-
   await db.update(User)
     .set({
       name: req.name,
       phone: req.phone,
     })
     .where(eq(User.id, payload.id));
-
-  const adminEmail = await getConfig('admin_email');
-  if (user.email == adminEmail && user.email !== req.email) {
-    await setConfig('admin_email', req.email)
-  }
 
   return c.json({
     user: { ...user, ...req }
@@ -70,7 +60,7 @@ export const updatePin = async (c: Context): Promise<HandlerResponse<any>> => {
   if (user.hashed_pin != '') {
     const hashedOldPin = await hashString(req.old_pin);
     if (user.hashed_pin !== hashedOldPin) {
-      return c.json({ message: "Invalid old pin" }, 400);
+      return c.json({ message: "Pin lama tidak cocok" }, 400);
     }
   }
 

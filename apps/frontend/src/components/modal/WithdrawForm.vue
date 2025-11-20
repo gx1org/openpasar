@@ -33,6 +33,11 @@ const updateBtn = () => {
 const tryMe = () => {
   form.value.receiver = event.target.innerText
 }
+
+const norm = (key) => {
+  form.value.pin = normalizePin(form.value.pin)
+}
+
 onMounted(() => {
   if (props.lastWd) {
     form.value.receiver = props.lastWd.receiver
@@ -61,14 +66,18 @@ onMounted(() => {
             <label for="" class="form-label">Tujuan</label>
             <input type="text" class="form-control" v-model="form.receiver">
             <p v-if="!form.receiver" class="mb-0 mt-1 small text-muted">Contoh: 
-              <a href="#" @click="tryMe">
+              <a href="javascript:;" @click="tryMe">
                 Seabank 90123456789 A.n John Doe
               </a>
             </p>
           </div>
+          <div class="mb-3">
+            <label for="" class="form-label">Masukan PIN (6 digit angka)</label>
+            <input type="text" class="form-control" v-model="form.pin" @input="norm('new_pin')">
+          </div>
           <div>
             <SubmitButton :disabled="!isValidForm" :sending="isSending" @click="updateBtn" class="btn btn-primary w-100">
-              Simpan Perubahan
+              Submit
             </SubmitButton>
           </div>
         </div>

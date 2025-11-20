@@ -1,7 +1,7 @@
 <script setup>
 import { computed, onMounted, ref, watch } from 'vue'
 import { useAuthStore } from '../../stores/auth';
-import { apiReq, handleErrorApi } from '../../utils/fns'
+import { apiReq, handleErrorApi, normalizePin } from '../../utils/fns'
 import SubmitButton from '../partial/SubmitButton.vue';
 
 const auth = useAuthStore()
@@ -27,6 +27,10 @@ const updateBtn = () => {
     })
 }
 
+const norm = (key) => {
+  form.value[key] = normalizePin(form.value[key])
+}
+
 onMounted(() => {
   form.value = {...auth.user}
 })
@@ -42,12 +46,12 @@ onMounted(() => {
         <div class="modal-body">
           <div class="mb-3">
             <label for="" class="form-label">PIN Lama</label>
-            <input type="text" class="form-control" v-model="form.old_pin">
+            <input type="text" class="form-control" v-model="form.old_pin" @input="norm('old_pin')">
             <p class="mb-0 mt-1 small text-muted">Kosongkan jika belum pernah mengatur PIN</p>
           </div>
           <div class="mb-3">
-            <label for="" class="form-label">PIN Baru</label>
-            <input type="text" class="form-control" v-model="form.new_pin">
+            <label for="" class="form-label">PIN Baru (6 digit angka)</label>
+            <input type="text" class="form-control" v-model="form.new_pin" @input="norm('new_pin')">
           </div>
           <div>
             <SubmitButton :disabled="!isValidForm" :sending="isSending" @click="updateBtn" class="btn btn-primary w-100">

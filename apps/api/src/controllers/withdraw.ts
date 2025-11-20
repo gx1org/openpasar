@@ -5,7 +5,7 @@ import { User, Withdrawal } from "../schema.js";
 import { desc, eq, sql } from "drizzle-orm";
 import { withdrawalCreateSchema } from "../validators/user.js";
 import z from "zod";
-import { parseError } from "../utils/helper.js";
+import { hashString, parseError } from "../utils/helper.js";
 
 export const withdrawalList = async (c: Context): Promise<HandlerResponse<any>> => {
   const userId = c.get('jwtPayload')?.id;
@@ -37,7 +37,11 @@ export const withdrawalCreate = async (c: Context): Promise<HandlerResponse<any>
   if (req.amount > user.balance) {
     return c.json({ message: 'Saldo tidak mencukupi' }, 400);
   }
-
+  const wdPin = await hashString(req.pin);
+  if (user.hashed_pin !== wdPin) {
+    return c.json({ message: "Invalid pin" }, 400);
+  }
+  
   const [withdrawal] = await db.insert(Withdrawal).values(wd).returning();
   if (withdrawal) {
     await db.update(User)

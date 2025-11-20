@@ -66,13 +66,13 @@ onMounted(() => {
             <label for="" class="form-label">SKU</label>
             <input type="text" class="form-control" v-model="form.sku">
           </div>
-          <div class="mb-1">
+          <div class="mb-3">
             <label for="" class="form-label">Nama</label>
             <input type="text" class="form-control" v-model="form.name">
           </div>
           <div class="mb-3">
             <label for="" class="form-label">Harga</label>
-            <input type="number" class="form-control" v-model="form.price">
+            <input type="number" class="form-control" v-model="form.price" step="1000">
           </div>
           <div class="mb-3">
             <label for="" class="form-label">Stok</label>

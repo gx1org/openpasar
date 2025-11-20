@@ -15,7 +15,7 @@ const colorMap = {
 }
 const labelMap = {
   'pending': 'Menunggu Pembayaran',
-  'in_process': 'Diprocess',
+  'in_process': 'Diproses',
   'sent': 'Dikirim',
   'completed': 'Selesai',
   'complained': 'Dikomplain',

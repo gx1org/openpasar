@@ -78,12 +78,11 @@ export const transactionStatusUpdateSchema = z.object({
 
 export const profileSchema = z.object({
   name: z.string().nonempty(),
-  email: z.email().nonempty(),
   phone: z.string().nonempty(),
 })
 
 export const pinUpdateSchema = z.object({
-  old_pin: z.string().nonempty().length(6),
+  old_pin: z.string(),
   new_pin: z.string().nonempty().length(6),
 })
 
@@ -95,4 +94,5 @@ export const webhookPakasirSchema = z.object({
 export const withdrawalCreateSchema = z.object({
   amount: z.number().int().min(1),
   receiver: z.string().nonempty(),
+  pin: z.string().nonempty().length(6),
 })
