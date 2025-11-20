@@ -4,7 +4,7 @@ Setelah Anda berhasil mendepoloy OpenPasar (API dan Frontend), langkah berikutny
 
 Saat pertama kali membuka halaman admin, Anda akan melihat form konfigurasi seperti ini:
 
-<img width="842" height="988" alt="image" src="https://github.com/user-attachments/assets/2214b360-6b1b-4b40-ad57-3ff303db2616" />
+<img style="max-width: 90%;max-height:70vh" alt="image" src="https://github.com/user-attachments/assets/2214b360-6b1b-4b40-ad57-3ff303db2616" />
 
 
 > Konfigurasi ini hanya perlu dilakukan **sekali di awal**, namun bisa diubah kapan saja melalui menu pengaturan admin.
@@ -46,7 +46,7 @@ Deskripsi singkat tentang marketplace Anda.
 
 ### **Ikon**
 URL gambar ikon/logo website.  
-Anda dapat meng-upload gambar melalui tombol **Upload**.
+Anda dapat meng-upload gambar melalui tombol **Upload**. Jika belum ada, bisa dibiarkan saja, pakai gambar default.
 
 ### **Tema**
 Pilihan tema website.
@@ -69,9 +69,10 @@ Digunakan untuk sistem login berbasis OAuth milik **Autz.org**.
 2. Buat akun / login  
 3. Masuk ke **Dashboard**  
 4. Aktifkan **Mode Developer**  
-5. Buat **1 aplikasi baru**  
-6. Buka halaman detail aplikasi tersebut  
-7. Salin **App ID**
+5. Buat **1 aplikasi baru**
+6. Masukan URL website-mu (url untuk frontend)
+7. Buka halaman detail aplikasi tersebut  
+8. Salin **App ID**
 
 Tempel App ID tersebut ke dalam form konfigurasi.
 
@@ -99,9 +100,10 @@ Masukkan keduanya ke dalam form konfigurasi.
 
 Agar pembayaran berfungsi dengan baik, Anda perlu mengatur webhook pada proyek Pakasir.
 
-1. Setelah di halaman detail Proyek, klik tomnol Edit
-2. Masukan url dengan format berikut: `https://domainmu.vercel.app/api/webhooks/pakasir`
-3. Kemudian klik simpan
+1. Setelah di halaman detail Proyek, klik tombol "Edit Proyek"
+2. Masukan url dengan format berikut: `https://domainmu-api-mu.vercel.app/api/webhooks/pakasir`
+3. Ingat. domain yang dimasukan adalah domain api. Bukan domain frontend.
+4. Kemudian klik simpan
 
 ---
 
@@ -168,12 +170,13 @@ Caranya:
 1. Buat akun di https://console.cron-job.org
 2. Klik "Create Cronjob"
 3. Masukan Judul "OpenPasar"
-4. Masukan URL dengan format: `https://domainmu.vercel.app/api/automate?secret=cronjob-secret`.
+4. Masukan URL dengan format: `https://domain-api-mu.vercel.app/api/automate?secret=cronjob-secret`.
 
-   Contoh: `https://domainmu.vercel.app/api/automate?secret=jhsdg7qg3gig`
+   Contoh: `https://domain-api-mu.vercel.app/api/automate?secret=jhsdg7qg3gig`
 
-5. Pada Execution schedule, pilih Every 5 minutes
-6. Klik Simpan
+5. Ingat. Yang dipakai adalah domain api. Bukan domain untuk frontend.
+6. Pada Execution schedule, pilih Every 5 minutes
+7. Klik Simpan
 
 Selesai. Sekarang aplikasimu akan di-panggil oleh cronjob setiap 5 menit.
 
