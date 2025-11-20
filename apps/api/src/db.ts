@@ -35,7 +35,10 @@ function scanCWD(): string {
     return path.join(process.cwd(), 'api', 'drizzle');
   }
 
-  console.log('Files:', files);  
+  if (files.includes('apps')) {
+    return path.join(process.cwd(), 'apps', 'api', 'drizzle');
+  }
 
+  console.log('Files:', files);  
   return path.join(process.cwd(), 'drizzle');
 }
