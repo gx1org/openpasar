@@ -18,50 +18,55 @@ Sebelum mulai, siapkan:
 
 1. **Database [Neon.tech](http://console.neon.tech/)**
    
-   Buat project, klik Connect, lalu copy **connection string**-nya (contoh: `postgresql://neondb_owner:npg_....`).
+   Buat project, klik Connect, lalu copy **connection string**-nya, simpan untuk nanti. (contoh: `postgresql://neondb_owner:npg_....`).
 
-3. **Akun GitHub**
+2. **Akun GitHub**
 
-4. **Akun Vercel**
-   
-   Untuk deploy API dan Frontend.
+   Fork repository ini, dengan mengeklik tombol "Fork" di kanan atas. **Hal ini wajib**. Karena jika tidak, maka Vercel tidak akan mendeteksi repository ini.
 
 ---
 
 ## 🚀 Deploy ke Vercel
 
-OpenPasar terdiri dari **dua aplikasi** sehingga proses deploy dilakukan **dua kali**:
+Pertama, buat akun di https://vercel.com. Setelah berhasil mulailah menghubungkan akun Github Anda ke Vercel.
 
-### ▶️ Deploy API
+### ▶️ Hubungkan Vercel dan Github
 
-Klik tombol berikut untuk deploy API:
+1. Klik New > Projects
+2. Di bagian bawah Import Git Repository, klik Continue with Github
+3. Akan muncul halaman Popup. Klik Continue untuk memberi izin Vercel mengakses akun Github
+4. Klik Continue untuk menginstal Vercel.
 
-[![Deploy API to Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/gx1org/openpasar&root-directory=apps/api&repository-name=openpasar-api&env=DATABASE_URL,JWT_SECRET)
+### ▶️ Deployment
 
-Ada 2 ENV variable yang harus diisi:
+Setelah berhasil terhubung, Anda akan melihat daftar repository yang dapat di import.
 
-- `DATABASE_URL` → ambil dari Neon.tech  
+Karena OpenPasar terdiri dari **dua aplikasi** sehingga proses deploy dilakukan **dua kali**:
+
+#### 1. Deploy API
+
+Klik tombol Import di sebelah repository openpasar untuk memulai deployment. Pertama, project api yang akan di-deploy.
+
+1. Klik Environment Variable untuk menambahkan 2 ENV berikut:
+
+- `DATABASE_URL` → isi connection string dari Neon.tech  
 - `JWT_SECRET` → isi dengan string acak minimal 32 karakter
 
-Selesaikan proses deployment. Lalu klik tombol "Continue to Dashboard" (di paling bawah).
+2. Klik Deploy lalu tunggu sampai selesai.
+3. Di bagian paling bawah, ada tombol Deploy untuk frontend. Tapi jangan klik dulu.
+4. Klik screenshot untuk mengunjungi api lalu salin url-nya. Kita butuh urlnya untuk deploy frontend.
 
-Di halaman tersebut ada nama domain yang diberikan oleh vercel. (contohnya: `openpasar-api.vercel.app`).
+#### 2. Deploy Frontend
 
-Catat domain tersebut karena kita membutuhkannya di deploy frontend.
+Setelah deploy api selesai, waktunya deploy frontend.
 
-### ▶️ Deploy Frontend
+1. Klik tombol deploy di paling bawah
+2. Pada bagian Environment Variable, masukan 1 ENV berikut:
 
-Klik tombol berikut untuk deploy Frontend:
+- `API_URL` → isi dengan url api yang sudah kita salin tadi.
 
-[![Deploy API to Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/gx1org/openpasar&root-directory=apps/frontend&repository-name=openpasar-fe&env=API_URL)
-
-Ada 1 ENV variable yang harus diisi:
-
-- `API_URL` → ambil domain API (awali dengan https://). Sehingga dalam contoh sekarang menjadi `https://openpasar-api.vercel.app`.
-
-Selesaikan proses deployment. Lalu klik tombol "Continue to Dashboard" (di paling bawah).
-
-Klik domainnya untuk mengunjungi website OpenPasar Anda.
+3. Klik Deploy lalu tunggu sampai selesai.
+4. Klik screenshot untuk mengunjungi website. Jika semuanya benar, Anda akan melihat form Konfigurasi.
 
 ---
 
