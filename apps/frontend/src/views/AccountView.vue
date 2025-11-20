@@ -54,7 +54,7 @@ const logoutBtn = () => {
         </a>
       </div>
     </div>
-    <template v-if="!(misc.config.site_mode == 'official_store' && !auth.store.id)">
+    <template v-if="misc.config.site_mode == 'marketplace' || auth.store.id">
       <div class="d-flex">
         <h5 class="mb-4">Toko Saya</h5>
         <div class="ms-auto">

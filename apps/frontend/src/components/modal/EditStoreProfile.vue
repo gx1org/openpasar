@@ -15,6 +15,7 @@ const isValidForm = computed(() => {
 
 const isSending = ref(false)
 const updateBtn = () => {
+  normalize()
   isSending.value = true
   apiReq(auth.store.id ? 'put' : 'post', `/user/stores`, form.value)
     .then(res => {
@@ -26,6 +27,10 @@ const updateBtn = () => {
     .finally(() => {
       isSending.value = false
     })
+}
+
+const normalize = () => {
+  form.value.phone = normalizePhone(form.value.phone)
 }
 
 onMounted(() => {
@@ -55,7 +60,7 @@ onMounted(() => {
           </div>
           <div class="mb-3">
             <label for="" class="form-label">No. Whatsapp</label>
-            <input type="text" class="form-control" v-model="form.phone">
+            <input type="text" class="form-control" v-model="form.phone" @change="normalize">
           </div>
           <div class="mb-3">
             <label for="" class="form-label">Deskripsi Toko</label>

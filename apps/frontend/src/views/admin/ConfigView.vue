@@ -66,6 +66,7 @@ const fetchData = () => {
 }
 
 const saveBtn = async () => {
+  normalize()
   isSending.value = true
   apiReq('post', !misc.installed ? '/config' : '/admin/config', form.value)
     .then(async res => {
@@ -79,6 +80,10 @@ const saveBtn = async () => {
 
 const handleChangeSecret = () => {
   form.value.cronjob_secret = createPermalink(form.value.cronjob_secret)
+}
+
+const normalize = () => {
+  form.value.admin_phone = normalizePhone(form.value.admin_phone)
 }
 
 onMounted(() => {
@@ -116,7 +121,7 @@ onMounted(() => {
         </div>
         <div class="mb-3">
           <label for="" class="form-label">No. Whatsapp</label>
-          <input type="text" class="form-control" v-model="form.admin_phone">
+          <input type="text" class="form-control" v-model="form.admin_phone" @change="normalize">
           <p class="mt-1 mb-0 small text-muted">
             Nomor ini yang akan dihubungi pengguna jika ada masalah.
           </p>

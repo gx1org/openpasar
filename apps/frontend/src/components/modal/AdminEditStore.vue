@@ -17,6 +17,7 @@ const isValidForm = computed(() => {
 
 const isSending = ref(false)
 const updateBtn = () => {
+  normalize()
   isSending.value = true
   const method = form.value.id ? 'put' : 'post'
   const url = form.value.id ? `/admin/stores/${form.value.id}` : `/admin/stores`
@@ -48,6 +49,10 @@ const selectUser = (user = {}) => {
   form.value.phone = user.phone
   searchUserInput.value = ''
   filteredUsers.value = []
+}
+
+const normalize = () => {
+  form.value.phone = normalizePhone(form.value.phone)
 }
 
 watch(() => props.data, () => {
@@ -93,7 +98,7 @@ onMounted(() => {
           </div>
           <div class="mb-3">
             <label for="" class="form-label">No. Whatsapp</label>
-            <input type="text" class="form-control" v-model="form.phone">
+            <input type="text" class="form-control" v-model="form.phone" @change="normalize">
           </div>
           <div class="mb-3">
             <label for="" class="form-label">Deskripsi Toko</label>

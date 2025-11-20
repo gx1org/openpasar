@@ -108,3 +108,32 @@ export const setTheme = () => {
     ],
   })
 }
+
+export function normalizePhone(number) {
+  if (!number) return "";
+
+  // Hapus spasi, dash, dan tanda baca lain
+  let cleaned = number.replace(/[^0-9+]/g, "");
+
+  // Jika diawali +62 → langsung oke
+  if (cleaned.startsWith("+62")) {
+    return cleaned;
+  }
+
+  // Jika diawali 62 → tambahkan +
+  if (cleaned.startsWith("62")) {
+    return "+" + cleaned;
+  }
+
+  // Jika diawali 08 → ubah 08... menjadi +628...
+  if (cleaned.startsWith("08")) {
+    return "+62" + cleaned.substring(1);
+  }
+
+  // Jika diawali 8 (tanpa 0) → +628...
+  if (cleaned.startsWith("8")) {
+    return "+62" + cleaned;
+  }
+
+  return cleaned;
+}
