@@ -7,6 +7,7 @@ const props = defineProps({
   data: Object
 })
 
+const auth = useAuthStore()
 const emit = defineEmits(['updated'])
 const form = ref({})
 const closeBtn = ref(null)
@@ -23,6 +24,11 @@ const updateBtn = () => {
   const url = form.value.id ? `/admin/stores/${form.value.id}` : `/admin/stores`
   apiReq(method, url, form.value)
     .then(res => {
+      if (form.value.user_id == auth.user.id) {
+        auth.store.name = form.value.name
+        auth.store.email = form.value.email
+        auth.store.phone = form.value.phone
+      }
       emit('updated')
       closeBtn.value.click()
     })

@@ -65,17 +65,33 @@ const fetchData = () => {
   })
 }
 
+const router = useRouter()
 const saveBtn = async () => {
   normalize()
   isSending.value = true
   apiReq('post', !misc.installed ? '/config' : '/admin/config', form.value)
     .then(async res => {
-      misc.setConfig(res.data.config)
+      if (isThemeChanged()) {
+        location.href = '/account'
+      } else {
+        misc.setConfig(res.data.config)
+        router.push('/account')
+      }
     })
     .catch(handleErrorApi)
     .finally(() => {
       isSending.value = false
     })
+}
+
+const isThemeChanged = () => {
+  if (
+    form.value.site_icon != misc.config.site_icon
+    || form.value.site_theme != misc.config.site_theme
+  ) {
+    return true
+  }
+  return false
 }
 
 const handleChangeSecret = () => {

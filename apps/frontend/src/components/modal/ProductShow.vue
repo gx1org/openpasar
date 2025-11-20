@@ -52,7 +52,7 @@ onMounted(() => syncImage)
             <span class="fw-bold text-primary">{{ Rp(data.price) }}</span>
             <span class="text-danger small fw-bold ms-auto" v-if="data.in_stock == 'empty'">Habis</span>
           </p>
-          <div class="mb-4">
+          <div class="mb-4 small">
             <LinkifiedText :text="data.description" />
           </div>
           <div v-if="misc.config.site_mode == 'official_store'" class="bg-light border p-2 card small">

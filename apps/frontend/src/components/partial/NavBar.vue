@@ -23,7 +23,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <nav class="navbar navbar-light navbar-expand px-3 fixed-top container bg-white border-bottom">
+  <nav class="navbar navbar-light navbar-expand px-3 fixed-top container bg-white border-0 border-bottom">
     <RouterLink to="/" class="navbar-brand me-2">
       <img :src="img(misc.config.site_icon)" alt="logo" width="30" class="mb-1" />
     </RouterLink>

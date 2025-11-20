@@ -6,6 +6,7 @@ import SpinnerBox from '../components/partial/SpinnerBox.vue';
 import ProductShow from '../components/modal/ProductShow.vue';
 import ProductItem from '../components/partial/ProductItem.vue';
 
+const misc = useMiscStore()
 const router = useRouter()
 const route = useRoute()
 const page = ref(1)
@@ -103,6 +104,11 @@ onUnmounted(() => {
   <div class="">
     <div class="d-flex">
       <h5 class="mb-4">Pencarian</h5>
+      <div v-if="misc.config.site_mode == 'marketplace'" class="ms-2">
+        <RouterLink to="/stores" class="btn text-primary border btn-sm bg-white">
+          Cari Toko &nearr;
+        </RouterLink>
+      </div>
       <div class="ms-auto">
         <div class="input-group input-group-sm">
           <div class="input-group-text">
@@ -115,11 +121,6 @@ onUnmounted(() => {
             <option value="sell">Terlaris</option>
           </select>
         </div>
-      </div>
-      <div class="ms-2">
-        <RouterLink to="/stores" class="btn btn-outline-primary btn-sm">
-          Cari Toko &nearr;
-        </RouterLink>
       </div>
     </div>
     <SpinnerBox v-if="isFetching" />
