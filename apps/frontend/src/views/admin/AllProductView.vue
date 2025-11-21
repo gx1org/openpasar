@@ -29,20 +29,30 @@ const editBtn = (p) => {
   document.getElementById('AdminProductForm-btn').click()
 }
 
+const isSending = ref(false)
+
 const deleteBtn = (p) => {
+  isSending.value = true
   apiReq('post', `/admin/products/${p.id}/toggle`)
     .then(() => {
       fetchData()
     }) 
     .catch(handleErrorApi)
+    .finally(() => {
+      isSending.value = false
+    })
 }
 
 const featuredBtn = (p) => {
+  isSending.value = true
   apiReq('post', `/admin/products/${p.id}/featured`, { featured: 1 })
     .then(() => {
       fetchData()
     }) 
     .catch(handleErrorApi)
+    .finally(() => {
+      isSending.value = false
+    })
 }
 
 onMounted(() => {
@@ -84,16 +94,16 @@ onMounted(() => {
           <tbody>
             <tr v-for="p,i in products" :key="i">
               <td>
-                <button v-if="p.is_active" @click="editBtn(p)" class="btn btn-sm btn-primary">
+                <button :disabled="isSending" v-if="p.is_active" @click="editBtn(p)" class="btn btn-sm btn-primary">
                   <i class="bi bi-pencil"></i>
                 </button>
-                <button v-if="p.is_active" @click="deleteBtn(p)" class="btn btn-sm btn-danger ms-1">
+                <button :disabled="isSending" v-if="p.is_active" @click="deleteBtn(p)" class="btn btn-sm btn-danger ms-1">
                   <i class="bi bi-trash"></i>
                 </button>
-                <button v-else @click="deleteBtn(p)" class="btn btn-sm btn-success ms-1">
+                <button :disabled="isSending" v-else @click="deleteBtn(p)" class="btn btn-sm btn-success ms-1">
                   <i class="bi bi-box-arrow-up"></i>
                 </button>
-                <button v-if="p.featured == 0" @click="featuredBtn(p)" class="btn btn-sm btn-warning ms-1">
+                <button :disabled="isSending" v-if="p.featured == 0" @click="featuredBtn(p)" class="btn btn-sm btn-warning ms-1">
                   <i class="bi bi-star"></i>
                 </button>
               </td>

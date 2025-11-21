@@ -44,6 +44,9 @@ export const addToCart = async (c: Context): Promise<HandlerResponse<any>> => {
   if (!product) {
     return c.json({ message: "Produk tidak ditemukan" }, 404);
   }
+  if (product.in_stock == 'empty') {
+    return c.json({ message: "Produk habis terjual" }, 400);
+  }
 
   const userId = c.get('jwtPayload')?.id;
   const [exist] = await db.select().from(Cart)
@@ -106,6 +109,7 @@ export const checkout = async (c: Context): Promise<HandlerResponse<any>> => {
     quantity: Cart.quantity,
     sku: Product.sku,
     name: Product.name,
+    in_stock: Product.in_stock,
     image_url: Product.image_url,
     description: Product.description,
     price: Product.price,
@@ -118,6 +122,12 @@ export const checkout = async (c: Context): Promise<HandlerResponse<any>> => {
     ));
   if (carts.length === 0) {
     return c.json({ message: "Keranjang masih kosong" }, 400);
+  }
+
+  for (const cart of carts) {
+    if (cart.in_stock == 'empty') {
+      return c.json({ message: `Produk habis terjual (${cart.name})` }, 400);
+    }
   }
 
   const transaction = {

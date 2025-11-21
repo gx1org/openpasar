@@ -28,14 +28,18 @@ Sebelum mulai, siapkan:
 
 ## 🚀 Deploy ke Vercel
 
-Pertama, buat akun di https://vercel.com. Setelah berhasil mulailah menghubungkan akun Github Anda ke Vercel.
+### Buat Akun
+
+1. Pertama, buat akun di https://vercel.com/signup
+2. Pilih paket hobby, klik Continue
+3. Pilih Continue with Github
+4. Saat muncul popup, klik Continue
 
 ### ▶️ Hubungkan Vercel dan Github
 
 1. Klik New > Projects
-2. Di bagian bawah Import Git Repository, klik Continue with Github
-3. Akan muncul halaman Popup. Klik Continue untuk memberi izin Vercel mengakses akun Github
-4. Klik Continue untuk menginstal Vercel.
+2. Di bagian bawah Import Git Repository, klik Install untuk menginstal vercel ke Github
+3. Saat muncul popup, klik Install
 
 ### ▶️ Deployment
 
@@ -79,9 +83,6 @@ Setelah berhasil deploy API dan Frontend, lanjutkan dengan panduan berikut:
 
 2. **[Panduan Development](./development-guides.md)**  
    Cara menjalankan project di local development.
-
-3. **[Panduan Vercel](./vercel-guides.md)**  
-   Tutorial menggunakan Vercel, seperti memasang custom domain, dll.
 
 ---
 

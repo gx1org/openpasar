@@ -10,7 +10,8 @@ const form = ref({})
 const closeBtn = ref(null)
 
 const isValidForm = computed(() => {
-  return form.value.new_pin
+  return form.value.new_pin && form.value.new_pin.length === 6
+  && (!form.value.old_pin || form.value.old_pin.length === 6)
 })
 
 const isSending = ref(false)

@@ -21,14 +21,31 @@ const fetchData = () => {
   })
 }
 
+const isSending = ref(false)
 const suspendBtn = (u) => {
   if (!u.is_suspended) {
     if (!confirm(`Anda yakin ingin menonaktifkan akun ${u.name}?`)) return
   }
+  isSending.value = true
   apiReq('post', `/admin/users/${u.id}/suspend`).then(() => {
     fetchData()
   })
   .catch(handleErrorApi)
+  .finally(() => {
+    isSending.value = false
+  })
+}
+
+const pinBtn = (u) => {
+  if (!confirm(`Reset PIN akun ${u.name}?`)) return
+  isSending.value = true
+  apiReq('patch', `/admin/users/${u.id}/pin`).then(() => {
+    fetchData()
+  })
+  .catch(handleErrorApi)
+  .finally(() => {
+    isSending.value = false
+  })
 }
 
 onMounted(() => {
@@ -65,11 +82,14 @@ onMounted(() => {
           <tbody>
             <tr v-for="p,i in users" :key="i">
               <td>
-                <button v-if="!p.is_suspended" @click="suspendBtn(p)" class="btn btn-sm btn-danger">
+                <button :disabled="isSending" v-if="!p.is_suspended" @click="suspendBtn(p)" class="btn btn-sm btn-danger">
                   <i class="bi bi-ban"></i>
                 </button>
-                <button v-else @click="suspendBtn(p)" class="btn btn-sm btn-success">
+                <button :disabled="isSending" v-else @click="suspendBtn(p)" class="btn btn-sm btn-success">
                   <i class="bi bi-check-circle"></i>
+                </button>
+                <button :disabled="isSending" @click="pinBtn(p)" class="btn btn-sm btn-warning ms-1">
+                  <i class="bi bi-arrow-counterclockwise"></i>
                 </button>
               </td>
               <td class="small">

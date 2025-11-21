@@ -1,7 +1,7 @@
 import type { Context } from "hono";
 import type { HandlerResponse } from "hono/types";
 import { db } from "../db.js";
-import { Store, Transaction, User } from "../schema.js";
+import { Product, Store, Transaction, User } from "../schema.js";
 import { and, desc, eq, ilike, or, sql } from "drizzle-orm";
 import { sendEmail } from "../utils/email.js";
 import { getConfig } from "../config.js";
@@ -106,7 +106,7 @@ export const transactionStatusUpdate = async (c: Context): Promise<HandlerRespon
 
   const updated = await db.update(Transaction)
     .set({ status: req.status })
-    .where(eq(Transaction.id, Number(id)));
+    .where(eq(Transaction.id, id));
   const [store] = await db.select().from(Store)
     .where(eq(Store.id, transaction.store_id))
     .limit(1);
@@ -130,6 +130,13 @@ Pesanan #${transaction.id} dikomplain pembeli. Silahkan login ke dashboard untuk
     await db.update(User)
       .set({ balance: sql`${User.balance} + ${income}` })
       .where(eq(User.id, store.user_id));
+    
+    await db.update(Product)
+      .set({
+        sold_count: sql`${Product.sold_count} + 1`,
+        in_stock: sql`CASE WHEN ${Product.in_stock} = 'one' THEN 'empty' ELSE ${Product.in_stock} END`,
+      })
+      .where(eq(Product.id, transaction.items[0].product_id));
 
     sendEmail(
       store.email,

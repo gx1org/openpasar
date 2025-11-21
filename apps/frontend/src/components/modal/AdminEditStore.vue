@@ -23,11 +23,9 @@ const updateBtn = () => {
   const method = form.value.id ? 'put' : 'post'
   const url = form.value.id ? `/admin/stores/${form.value.id}` : `/admin/stores`
   apiReq(method, url, form.value)
-    .then(res => {
-      if (form.value.user_id == auth.user.id) {
-        auth.store.name = form.value.name
-        auth.store.email = form.value.email
-        auth.store.phone = form.value.phone
+    .then(async res => {
+      if (form.value.user_id == auth.user.id || props.data.user_id == auth.user.id) {
+        await auth.refreshAccessToken()
       }
       emit('updated')
       closeBtn.value.click()
@@ -61,11 +59,19 @@ const normalize = () => {
   form.value.phone = normalizePhone(form.value.phone)
 }
 
+const canSelectUser = ref(false)
+
 watch(() => props.data, () => {
   form.value = {...props.data}
+  if (!form.value.id) {
+    canSelectUser.value = true
+  }
 })
 onMounted(() => {
   form.value = {...props.data}
+  if (!form.value.id) {
+    canSelectUser.value = true
+  }
 })
 </script>
 <template>

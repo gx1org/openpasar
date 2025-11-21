@@ -2,6 +2,7 @@
 import { computed, onMounted, ref, watch } from 'vue'
 import { apiReq, handleErrorApi, img } from '../../utils/fns'
 import SubmitButton from '../partial/SubmitButton.vue';
+import ProductImageInput from '../partial/ProductImageInput.vue';
 
 const prop = defineProps({
   data: Object
@@ -82,22 +83,7 @@ onMounted(() => {
               <option value="empty">Kosong</option>
             </select>
           </div>
-          <div class="mb-3">
-            <div class="d-flex">
-              <label for="" class="form-label">Foto Produk</label>
-              <a href="https://upld.zone.id" target="_blank" class="small ms-auto">Upld &nearr;</a>
-            </div>
-            <div v-for="image,i in images" :key="img" class="d-flex mb-2">
-              <a :href="image" target="_blank" rel="noopener noreferrer">
-                <img :src="(image)" alt="" class="border me-2" width="50" height="50">
-              </a>
-              <input type="text" class="form-control" :value="image" @change="handleImageChange($event, i)">
-              <button class="btn btn-light border text-danger ms-2" @click="images.splice(i, 1)">&times;</button>
-            </div>
-            <div>
-              <button class="btn btn-outline-primary btn-sm" @click="images.push('')">Tambah Foto</button>
-            </div>
-          </div>
+          <ProductImageInput :images="images" @change="handleImageChange" />
           <div class="mb-3">
             <label for="" class="form-label">Deskripsi</label>
             <textarea class="form-control" v-model="form.description" rows="7"></textarea>

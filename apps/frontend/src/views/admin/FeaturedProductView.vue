@@ -21,20 +21,29 @@ const fetchData = () => {
   })
 }
 
+const isSending = ref(false)
 const handlePower = (p) => {
+  isSending.value = true
   apiReq('post', `/admin/products/${p.id}/featured`, { featured: Number(p.featured) })
   .then(() => {
     fetchData()
   }) 
   .catch(handleErrorApi)
+  .finally(() => {
+    isSending.value = false
+  })
 }
 
 const deleteBtn = (p) => {
+  isSending.value = true
   apiReq('post', `/admin/products/${p.id}/featured`, { featured: 0 })
     .then(() => {
       fetchData()
     }) 
     .catch(handleErrorApi)
+    .finally(() => {
+      isSending.value = false
+    })
 }
 
 onMounted(() => {
@@ -66,12 +75,12 @@ onMounted(() => {
           <tbody>
             <tr v-for="p,i in products" :key="i">
               <td>
-                <button @click="deleteBtn(p)" class="btn btn-sm btn-danger ms-1">
+                <button :disabled="isSending" @click="deleteBtn(p)" class="btn btn-sm btn-danger ms-1">
                   <i class="bi bi-x"></i>
                 </button>
               </td>
               <td>
-                <select class="form-control form-control-sm" @change="handlePower(p)" v-model="p.featured">
+                <select :disabled="isSending" class="form-control form-control-sm" @change="handlePower(p)" v-model="p.featured">
                   <option :value="10">10</option>
                   <option :value="9">9</option>
                   <option :value="8">8</option>

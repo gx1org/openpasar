@@ -18,8 +18,8 @@ const updateBtn = () => {
   normalize()
   isSending.value = true
   apiReq(auth.store.id ? 'put' : 'post', `/user/stores`, form.value)
-    .then(res => {
-      auth.store = res.data.store
+    .then(async res => {
+      await auth.refreshAccessToken()
       emit('updated')
       closeBtn.value.click()
     })

@@ -11,7 +11,7 @@ useHead({
 <template>
   <div v-if="!auth.isLoading">
     <LoginView v-if="!auth.isLogin"/>
-    <SaleView v-if="auth.store.id" />
+    <SaleView v-else-if="auth.store.id" />
     <div v-else class="card text-center p-3">
       Kamu tidak memiliki toko
     </div>

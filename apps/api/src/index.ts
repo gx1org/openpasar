@@ -14,7 +14,7 @@ import { storeProductCreate, storeProductToggle, storeProductDetail, storeProduc
 import { adminStoreCreate, adminStoreDetail, adminStoreList, adminStoreUpdate } from './controllers/admin/store.js';
 import { adminWithdrawalApproveReject, adminWithdrawalList } from './controllers/admin/withdraw.js';
 import { adminTransactionDetail, adminTransactionList, adminTransactionStatusUpdate } from './controllers/admin/transaction.js';
-import { adminUserDetail, adminUserList, adminUserSuspendStatusUpdate } from './controllers/admin/user.js';
+import { adminUserDetail, adminUserList, adminUserResetPin, adminUserSuspendStatusUpdate } from './controllers/admin/user.js';
 import { adminProductDetail, adminProductFeatured, adminProductList, adminProductToggle, adminProductUpdate } from './controllers/admin/product.js';
 import { cors } from 'hono/cors';
 import { storeTransactionDetail, storeTransactionList, storeTransactionStatusUpdate } from './controllers/store-transaction.js';
@@ -88,6 +88,7 @@ adminRoute.post('/config', setSiteConfig);
 adminRoute.get('/users', adminUserList)
 adminRoute.get('/users/:id', adminUserDetail)
 adminRoute.post('/users/:id/suspend', adminUserSuspendStatusUpdate)
+adminRoute.patch('/users/:id/pin', adminUserResetPin)
 
 adminRoute.get('/stores', adminStoreList)
 adminRoute.get('/stores/:id', adminStoreDetail)
