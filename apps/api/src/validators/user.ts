@@ -16,7 +16,7 @@ export const checkoutSchema = z.object({
 export const catalogueSchema = z.object({
   search: z.string().optional(),
   sort: z.enum(['latest', 'lowest', 'highest', 'sell', 'featured']).optional().default('latest'),
-  page: z.coerce.number().int().min(1).default(1).transform(String),
+  page: z.coerce.number().int().min(1).default(1),
 });
 
 export const configSchema = z.object({
@@ -66,7 +66,7 @@ export const transactionListSchema = z.object({
     'canceled',
     '',
   ]).optional(),
-  page: z.coerce.number().int().min(1).default(1).transform(String),
+  page: z.coerce.number().int().min(1).default(1),
 });
 
 export const transactionStatusUpdateSchema = z.object({
@@ -74,6 +74,10 @@ export const transactionStatusUpdateSchema = z.object({
     'rejected',
     'sent',
   ]),
+})
+
+export const withdrawalListSchema = z.object({
+  page: z.coerce.number().int().min(1).default(1),
 })
 
 export const profileSchema = z.object({

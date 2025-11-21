@@ -2,7 +2,7 @@ import z from "zod";
 
 export const productListSchema = z.object({
   search: z.string().optional().default(''),
-  page: z.coerce.number().int().min(1).default(1).transform(String),
+  page: z.coerce.number().int().min(1).default(1),
   is_active: z.enum(['0', '1', '']).optional().default(''),
   sort: z.enum(['latest', 'sell', 'name', 'featured']).optional().default('latest'),
   featured: z.enum(['0', '1', '']).optional().default(''),
@@ -23,7 +23,7 @@ export const transactionListSchema = z.object({
     'canceled',
     '',
   ]).optional().default(''),
-  page: z.coerce.number().int().min(1).default(1).transform(String),
+  page: z.coerce.number().int().min(1).default(1),
 });
 
 export const transactionStatusUpdateSchema = z.object({
@@ -44,10 +44,17 @@ export const withdrawalApproveRejectSchema = z.object({
 
 export const userListSchema = z.object({
   search: z.string().optional().default(''),
+  page: z.coerce.number().int().min(1).default(1),
 })
 
 export const storeListSchema = z.object({
   search: z.string().optional().default(''),
+  page: z.coerce.number().int().min(1).default(1),
+})
+
+export const withdrawalListSchema = z.object({
+  search: z.string().optional().default(''),
+  page: z.coerce.number().int().min(1).default(1),
 })
 
 export const storeCreateUpdateSchema = z.object({

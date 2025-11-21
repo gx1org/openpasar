@@ -2,7 +2,7 @@ import type { Context } from "hono";
 import type { HandlerResponse } from "hono/types";
 import { db } from "../db.js";
 import { Product } from "../schema.js";
-import { and, desc, eq, ilike, ne, or } from "drizzle-orm";
+import { and, desc, eq, ilike, ne, or, sql } from "drizzle-orm";
 import { productCreateUpdateSchema, productListSchema } from "../validators/seller.js";
 import z from "zod";
 import { parseError } from "../utils/helper.js";
@@ -18,19 +18,31 @@ export const storeProductList = async (c: Context): Promise<HandlerResponse<any>
 
   const req = valid.data;
   const isActive = req.is_active === '1';
+  const where = and(
+    eq(Product.store_id, store.id),
+    eq(Product.is_active, isActive),
+    req.search === '' ? undefined :
+      or(
+        ilike(Product.name, `%${req.search}%`),
+        ilike(Product.sku, `%${req.search}%`)
+      )
+  )
+  const limit = 10;
+  const offset = (req.page - 1) * limit;
+
+  const total = await db.select({
+    count: sql<number>`COUNT(*)`
+  }).from(Product)
+    .where(where)
+
   const products = await db.select()
     .from(Product)
-    .where(and(
-      eq(Product.store_id, store.id),
-      eq(Product.is_active, isActive),
-      req.search === '' ? undefined :
-        or(
-          ilike(Product.name, `%${req.search}%`),
-          ilike(Product.sku, `%${req.search}%`)
-        )
-    ))
-    .orderBy(desc(Product.created_at));
-  return c.json({ products });
+    .where(where)
+    .orderBy(desc(Product.created_at))
+    .limit(limit)
+    .offset(offset);
+
+  return c.json({ products, total: total[0].count });
 }
 
 export const storeProductDetail = async (c: Context): Promise<HandlerResponse<any>> => {

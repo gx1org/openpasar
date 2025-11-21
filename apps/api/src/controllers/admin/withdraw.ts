@@ -2,19 +2,44 @@ import type { Context } from "hono";
 import type { HandlerResponse } from "hono/types";
 import { User, Withdrawal } from "../../schema.js";
 import { db } from "../../db.js";
-import { desc, eq, sql } from "drizzle-orm";
-import { withdrawalApproveRejectSchema } from "../../validators/admin.js";
+import { and, desc, eq, ilike, or, sql } from "drizzle-orm";
+import { withdrawalApproveRejectSchema, withdrawalListSchema } from "../../validators/admin.js";
 import z from "zod";
 import { parseError } from "../../utils/helper.js";
 import { sendEmail } from "../../utils/email.js";
 
 export const adminWithdrawalList = async (c: Context): Promise<HandlerResponse<any>> => {
-  const withdrawals = await db.select().from(Withdrawal)
+  const valid = z.safeParse(withdrawalListSchema, c.req.query());
+  if (!valid.success) {
+    return c.json({ message: parseError(valid.error) }, 400);
+  }
+
+  const req = valid.data
+  const where = and(
+    req.search === '' ? undefined :
+      or(
+        ilike(Withdrawal.receiver, `%${req.search}%`),
+      ),
+  )
+  const limit = 10;
+  const offset = (req.page - 1) * limit;
+
+  const total = await db.select({
+    count: sql<number>`COUNT(*)`
+  }).from(Withdrawal)
+    .where(where)
+
+  const withdrawals = await db.select()
+    .from(Withdrawal)
+    .where(where)
     .orderBy(
       desc(eq(Withdrawal.status, 'in_process')),
       desc(Withdrawal.created_at)
-    );
-  return c.json({ withdrawals });
+    )
+    .limit(limit)
+    .offset(offset);
+
+  return c.json({ withdrawals, total: total[0].count });
 }
 
 export const adminWithdrawalApproveReject = async (c: Context): Promise<HandlerResponse<any>> => {

@@ -24,15 +24,26 @@ export const transactionList = async (c: Context): Promise<HandlerResponse<any>>
       searchQuery = eq(Transaction.id, Number(req.search))
     }
   }
+  const where = and(
+    eq(Transaction.buyer_id, userId),
+    searchQuery,
+    req.status ? eq(Transaction.status, req.status) : undefined,
+  )
+  const limit = 10
+  const offset = (req.page - 1) * limit
+
+  const total = await db.select({
+    count: sql<number>`COUNT(*)`
+  }).from(Transaction)
+    .where(where)
 
   const transactions = await db.select().from(Transaction)
-    .where(and(
-      eq(Transaction.buyer_id, userId),
-      searchQuery,
-      req.status ? eq(Transaction.status, req.status) : undefined,
-    ))
-    .orderBy(desc(Transaction.created_at));
-  return c.json({ transactions });
+    .where(where)
+    .orderBy(desc(Transaction.created_at))
+    .limit(limit)
+    .offset(offset)
+
+  return c.json({ transactions, total: total[0].count });
 }
 
 export const transactionDetail = async (c: Context): Promise<HandlerResponse<any>> => {

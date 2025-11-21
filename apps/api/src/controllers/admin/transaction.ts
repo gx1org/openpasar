@@ -10,11 +10,27 @@ import z from "zod";
 import { parseError } from "../../utils/helper.js";
 
 export const adminTransactionList = async (c: Context): Promise<HandlerResponse<any>> => {
-  const req = c.req.query();
-  const valid = z.safeParse(transactionListSchema, req);
+  const valid = z.safeParse(transactionListSchema, c.req.query());
   if (!valid.success) {
     return c.json({ message: parseError(valid.error) }, 400);
   }
+
+  const req = valid.data
+  const where = and(
+    req.search === '' ? undefined :
+      or(
+        ilike(Transaction.id, `%${req.search}%`),
+        ilike(Transaction.description, `%${req.search}%`)
+      ),
+      req.status ? eq(Transaction.status, req.status) : undefined,
+  )
+  const limit = 10;
+  const offset = (req.page - 1) * limit;
+
+  const total = await db.select({
+    count: sql<number>`COUNT(*)`
+  }).from(Transaction)
+    .where(where)
 
   const transactions = await db.select({
     id: Transaction.id,
@@ -29,17 +45,12 @@ export const adminTransactionList = async (c: Context): Promise<HandlerResponse<
   })
     .from(Transaction)
     .innerJoin(Store, eq(Transaction.store_id, Store.id))
-    .where(and(
-      req.search === '' ? undefined :
-        or(
-          ilike(Transaction.id, `%${req.search}%`),
-          ilike(Transaction.description, `%${req.search}%`)
-        ),
-        ne(Transaction.status, 'pending'),
-        req.status ? eq(Transaction.status, req.status) : undefined,
-    ))
-    .orderBy(desc(Transaction.created_at));
-  return c.json({ transactions });
+    .where(where)
+    .orderBy(desc(Transaction.created_at))
+    .limit(limit)
+    .offset(offset)
+
+  return c.json({ transactions, total: total[0].count });
 }
 
 export const adminTransactionDetail = async (c: Context): Promise<HandlerResponse<any>> => {

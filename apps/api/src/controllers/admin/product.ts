@@ -2,7 +2,7 @@ import type { Context } from "hono";
 import type { HandlerResponse } from "hono/types";
 import { db } from "../../db.js";
 import { Product, Store } from "../../schema.js";
-import { and, asc, desc, eq, gt, ilike, ne, or } from "drizzle-orm";
+import { and, asc, desc, eq, gt, ilike, ne, or, sql } from "drizzle-orm";
 import { productFeaturedSchema, productListSchema } from "../../validators/admin.js";
 import z from "zod";
 import { parseError } from "../../utils/helper.js";
@@ -26,6 +26,24 @@ export const adminProductList = async (c: Context): Promise<HandlerResponse<any>
   };
   const orderBy = orderByMap[req.sort as keyof typeof orderByMap];
 
+  const limit = 10;
+  const offset = (req.page - 1) * limit;
+
+  const where = and(
+    activeQuery,
+    search === '' ? undefined :
+      or(
+        ilike(Product.name, `%${search}%`),
+        ilike(Product.sku, `%${search}%`)
+      ),
+    featuredQuery
+  );
+
+  const total = await db.select({
+    count: sql<number>`COUNT(*)`
+  }).from(Product)
+    .where(where)
+
   const products = await db.select({
     id: Product.id,
     name: Product.name,
@@ -46,17 +64,12 @@ export const adminProductList = async (c: Context): Promise<HandlerResponse<any>
   })
     .from(Product)
     .innerJoin(Store, eq(Store.id, Product.store_id))
-    .where(and(
-      activeQuery,
-      search === '' ? undefined :
-        or(
-          ilike(Product.name, `%${search}%`),
-          ilike(Product.sku, `%${search}%`)
-        ),
-      featuredQuery
-    ))
-    .orderBy(orderBy, orderByMap['latest']);
-  return c.json({ products });
+    .where(where)
+    .orderBy(orderBy, orderByMap['latest'])
+    .limit(limit)
+    .offset(offset);
+
+  return c.json({ products, total: total[0].count });
 }
 
 export const adminProductDetail = async (c: Context): Promise<HandlerResponse<any>> => {
@@ -95,7 +108,7 @@ export const adminProductToggle = async (c: Context): Promise<HandlerResponse<an
 }
 
 export const adminProductFeatured = async (c: Context): Promise<HandlerResponse<any>> => {
-    const id = Number(c.req.param('id'));
+  const id = Number(c.req.param('id'));
   if (isNaN(id)) {
     return c.json({ message: "Produk tidak ditemukan" }, 400);
   }
@@ -120,7 +133,7 @@ export const adminProductFeatured = async (c: Context): Promise<HandlerResponse<
 }
 
 export const adminProductPublish = async (c: Context): Promise<HandlerResponse<any>> => {
-    const id = Number(c.req.param('id'));
+  const id = Number(c.req.param('id'));
   if (isNaN(id)) {
     return c.json({ message: "Produk tidak ditemukan" }, 400);
   }

@@ -2,7 +2,7 @@ import type { Context } from "hono";
 import type { HandlerResponse } from "hono/types";
 import { Store, User } from "../../schema.js";
 import { db } from "../../db.js";
-import { eq, ilike, is, or } from "drizzle-orm";
+import { desc, eq, ilike, is, or, sql } from "drizzle-orm";
 import z from "zod";
 import { userListSchema } from "../../validators/admin.js";
 import { parseError } from "../../utils/helper.js";
@@ -13,7 +13,20 @@ export const adminUserList = async (c: Context): Promise<HandlerResponse<any>> =
     return c.json({ message: parseError(valid.error) }, 400);
   }
 
-  const search = valid.data.search;
+  const req = valid.data;
+  const where = or(
+    ilike(User.name, `%${req.search}%`),
+    ilike(User.email, `%${req.search}%`),
+    ilike(User.phone, `%${req.search}%`),
+  )
+  const limit = 10;
+  const offset = (req.page - 1) * limit;
+
+  const total = await db.select({
+    count: sql<number>`COUNT(*)`
+  }).from(User)
+    .where(where)
+
   const users = await db.select({
     id: User.id,
     name: User.name,
@@ -30,14 +43,12 @@ export const adminUserList = async (c: Context): Promise<HandlerResponse<any>> =
     }
   }).from(User)
     .leftJoin(Store, eq(User.id, Store.user_id))
-    .where(
-      or(
-        ilike(User.name, `%${search}%`),
-        ilike(User.email, `%${search}%`),
-        ilike(User.phone, `%${search}%`),
-      )
-    );
-  return c.json({ users });
+    .where(where)
+    .orderBy(desc(User.created_at))
+    .limit(limit)
+    .offset(offset);
+
+  return c.json({ users, total: total[0].count });
 }
 
 export const adminUserDetail = async (c: Context): Promise<HandlerResponse<any>> => {

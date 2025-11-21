@@ -3,17 +3,35 @@ import type { HandlerResponse } from "hono/types";
 import { db } from "../db.js";
 import { User, Withdrawal } from "../schema.js";
 import { desc, eq, sql } from "drizzle-orm";
-import { withdrawalCreateSchema } from "../validators/user.js";
+import { withdrawalCreateSchema, withdrawalListSchema } from "../validators/user.js";
 import z from "zod";
 import { hashString, parseError } from "../utils/helper.js";
 
 export const withdrawalList = async (c: Context): Promise<HandlerResponse<any>> => {
   const userId = c.get('jwtPayload')?.id;
+  const valid = z.safeParse(withdrawalListSchema, c.req.query());
+  if (!valid.success) {
+    return c.json({ message: parseError(valid.error) }, 400);
+  }
+
+  const req = valid.data
+  const where = eq(Withdrawal.user_id, userId)
+  const limit = 10;
+  const offset = (req.page - 1) * limit;
+
+  const total = await db.select({
+    count: sql<number>`COUNT(*)`
+  }).from(Withdrawal)
+    .where(where)
+
   const withdrawals = await db.select()
     .from(Withdrawal)
-    .where(eq(Withdrawal.user_id, userId))
-    .orderBy(desc(Withdrawal.created_at));
-  return c.json({ withdrawals });
+    .where(where)
+    .orderBy(desc(Withdrawal.created_at))
+    .limit(limit)
+    .offset(offset);
+
+  return c.json({ withdrawals, total: total[0].count });
 }
 
 export const withdrawalCreate = async (c: Context): Promise<HandlerResponse<any>> => {

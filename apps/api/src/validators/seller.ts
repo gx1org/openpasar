@@ -2,7 +2,7 @@ import z from "zod";
 
 export const productListSchema = z.object({
   search: z.string().optional().default(''),
-  page: z.coerce.number().int().min(1).default(1).transform(String),
+  page: z.coerce.number().int().min(1).default(1),
   is_active: z.enum(['0', '1']).nonoptional(),
 });
 
@@ -27,7 +27,7 @@ export const transactionListSchema = z.object({
     'canceled',
     '',
   ]).optional(),
-  page: z.coerce.number().int().min(1).default(1).transform(String),
+  page: z.coerce.number().int().min(1).default(1),
 });
 
 export const transactionStatusUpdateSchema = z.object({

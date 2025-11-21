@@ -16,20 +16,32 @@ export const storeTransactionList = async (c: Context): Promise<HandlerResponse<
   }
 
   const req = valid.data;
+  const where = and(
+    inArray(Transaction.status, ['in_process', 'sent', 'complained', 'completed', 'rejected']),
+    eq(Transaction.store_id, store.id),
+    req.search === '' ? undefined :
+      or(
+        ilike(Transaction.id, `%${req.search}%`),
+        ilike(Transaction.description, `%${req.search}%`)
+      ),
+      req.status ? eq(Transaction.status, req.status) : undefined,
+  )
+  const limit = 10
+  const offset = (req.page - 1) * limit
+
+  const total = await db.select({
+    count: sql<number>`COUNT(*)`
+  }).from(Transaction)
+    .where(where)
+
   const transactions = await db.select()
     .from(Transaction)
-    .where(and(
-      inArray(Transaction.status, ['in_process', 'sent', 'complained', 'completed', 'rejected']),
-      eq(Transaction.store_id, store.id),
-      req.search === '' ? undefined :
-        or(
-          ilike(Transaction.id, `%${req.search}%`),
-          ilike(Transaction.description, `%${req.search}%`)
-        ),
-        req.status ? eq(Transaction.status, req.status) : undefined,
-    ))
-    .orderBy(desc(Transaction.created_at));
-  return c.json({ transactions });
+    .where(where)
+    .orderBy(desc(Transaction.created_at))
+    .limit(limit)
+    .offset(offset)
+
+  return c.json({ transactions, total: total[0].count });
 }
 
 export const storeTransactionDetail = async (c: Context): Promise<HandlerResponse<any>> => {
