@@ -43,9 +43,9 @@ const deleteBtn = (p) => {
     })
 }
 
-const featuredBtn = (p) => {
+const publishBtn = (p) => {
   isSending.value = true
-  apiReq('post', `/admin/products/${p.id}/featured`, { featured: 1 })
+  apiReq('patch', `/admin/products/${p.id}/publish`)
     .then(() => {
       fetchData()
     }) 
@@ -83,7 +83,6 @@ onMounted(() => {
           <thead>
             <tr>
               <th>Aksi</th>
-              <th>SKU</th>
               <th>Nama</th>
               <th>Tampil</th>
               <th>Stok</th>
@@ -103,18 +102,15 @@ onMounted(() => {
                 <button :disabled="isSending" v-else @click="deleteBtn(p)" class="btn btn-sm btn-success ms-1">
                   <i class="bi bi-box-arrow-up"></i>
                 </button>
-                <button :disabled="isSending" v-if="p.featured == 0" @click="featuredBtn(p)" class="btn btn-sm btn-warning ms-1">
-                  <i class="bi bi-star"></i>
+                <button :disabled="isSending" v-if="p.visibility?.startsWith('pending')" @click="publishBtn(p)" class="btn btn-sm btn-warning ms-1">
+                  <i class="bi bi-check"></i>
                 </button>
-              </td>
-              <td class="small">
-                {{ p.sku }}
-                <a :href="`/p/${p.sku}`" target="_blank" rel="noopener noreferrer">&nearr;</a>
               </td>
               <td class="d-flex">
                 <img :src="img(p.image_url)" alt="img" width="32">
                 <p class="small mb-0 ms-2">
                   {{ p.name }}
+                  <a :href="`/p/${p.sku}`" target="_blank" rel="noopener noreferrer">&nearr;</a>
                 </p>
               </td>
               <td class="small">

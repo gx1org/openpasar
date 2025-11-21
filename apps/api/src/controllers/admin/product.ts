@@ -2,7 +2,7 @@ import type { Context } from "hono";
 import type { HandlerResponse } from "hono/types";
 import { db } from "../../db.js";
 import { Product, Store } from "../../schema.js";
-import { and, desc, eq, gt, ilike, ne, or } from "drizzle-orm";
+import { and, asc, desc, eq, gt, ilike, ne, or } from "drizzle-orm";
 import { productFeaturedSchema, productListSchema } from "../../validators/admin.js";
 import z from "zod";
 import { parseError } from "../../utils/helper.js";
@@ -17,11 +17,12 @@ export const adminProductList = async (c: Context): Promise<HandlerResponse<any>
   const req = valid.data;
   const activeQuery = req.is_active ? eq(Product.is_active, req.is_active === '1') : undefined;
   const search = req.search || '';
-  const featuredQuery = req.sort === 'featured' ? gt(Product.featured, 0) : undefined;
+  const featuredQuery = req.featured === '1' ? gt(Product.featured, 0) : (req.featured === '0' ? eq(Product.featured, 0) : undefined);
   const orderByMap = {
     latest: desc(Product.created_at),
     sell: desc(Product.sold_count),
     featured: desc(Product.featured),
+    name: asc(Product.name),
   };
   const orderBy = orderByMap[req.sort as keyof typeof orderByMap];
 
@@ -109,11 +110,30 @@ export const adminProductFeatured = async (c: Context): Promise<HandlerResponse<
     .where(eq(Product.id, id))
     .limit(1);
   if (!product) {
-    return c.json({ message: "Product not found" }, 404);
+    return c.json({ message: "Produk tidak ditemukan" }, 404);
   }
 
   await db.update(Product)
     .set({ featured: req.featured })
+    .where(eq(Product.id, product.id));
+  return c.json({ message: `Success` });
+}
+
+export const adminProductPublish = async (c: Context): Promise<HandlerResponse<any>> => {
+    const id = Number(c.req.param('id'));
+  if (isNaN(id)) {
+    return c.json({ message: "Produk tidak ditemukan" }, 400);
+  }
+
+  const [product] = await db.select().from(Product)
+    .where(eq(Product.id, id))
+    .limit(1);
+  if (!product) {
+    return c.json({ message: "Produk tidak ditemukan" }, 404);
+  }
+
+  await db.update(Product)
+    .set({ visibility: product.visibility.replace('pending_review-', '') })
     .where(eq(Product.id, product.id));
   return c.json({ message: `Success` });
 }

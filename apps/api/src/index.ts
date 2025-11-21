@@ -15,7 +15,7 @@ import { adminStoreCreate, adminStoreDetail, adminStoreList, adminStoreUpdate } 
 import { adminWithdrawalApproveReject, adminWithdrawalList } from './controllers/admin/withdraw.js';
 import { adminTransactionDetail, adminTransactionList, adminTransactionStatusUpdate } from './controllers/admin/transaction.js';
 import { adminUserDetail, adminUserList, adminUserResetPin, adminUserSuspendStatusUpdate } from './controllers/admin/user.js';
-import { adminProductDetail, adminProductFeatured, adminProductList, adminProductToggle, adminProductUpdate } from './controllers/admin/product.js';
+import { adminProductDetail, adminProductFeatured, adminProductList, adminProductPublish, adminProductToggle, adminProductUpdate } from './controllers/admin/product.js';
 import { cors } from 'hono/cors';
 import { storeTransactionDetail, storeTransactionList, storeTransactionStatusUpdate } from './controllers/store-transaction.js';
 import { webhookPakasir } from './controllers/webhook.js';
@@ -99,6 +99,7 @@ adminRoute.get('/products', adminProductList)
 adminRoute.get('/products/:id', adminProductDetail)
 adminRoute.post('/products/:id/toggle', adminProductToggle)
 adminRoute.post('/products/:id/featured', adminProductFeatured)
+adminRoute.patch('/products/:id/publish', adminProductPublish)
 adminRoute.put('/products/:id', adminProductUpdate)
 
 adminRoute.get('/transactions', adminTransactionList)

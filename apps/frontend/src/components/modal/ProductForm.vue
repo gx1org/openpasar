@@ -39,6 +39,10 @@ const handleImageChange = (e, i) => {
   images.value = images.value.filter(Boolean)
 }
 
+const refineSKU = () => {
+  form.value.sku = createPermalink(form.value.sku)
+}
+
 const syncProp = () => {
   form.value = JSON.parse(JSON.stringify(prop.data))
   images.value = form.value.image_url?.split(',') || ['']
@@ -65,7 +69,7 @@ onMounted(() => {
         <div class="modal-body">
           <div class="mb-3">
             <label for="" class="form-label">SKU</label>
-            <input type="text" class="form-control" v-model="form.sku">
+            <input type="text" class="form-control" v-model="form.sku" @input="refineSKU">
           </div>
           <div class="mb-3">
             <label for="" class="form-label">Nama</label>

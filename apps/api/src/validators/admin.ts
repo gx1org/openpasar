@@ -4,7 +4,8 @@ export const productListSchema = z.object({
   search: z.string().optional().default(''),
   page: z.coerce.number().int().min(1).default(1).transform(String),
   is_active: z.enum(['0', '1', '']).optional().default(''),
-  sort: z.enum(['latest', 'sell', 'featured']).optional().default('latest'),
+  sort: z.enum(['latest', 'sell', 'name', 'featured']).optional().default('latest'),
+  featured: z.enum(['0', '1', '']).optional().default(''),
 })
 
 export const productFeaturedSchema = z.object({

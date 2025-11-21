@@ -12,7 +12,7 @@ const products = ref([])
 
 const fetchData = () => {
   isFetching.value = true
-  apiReq('get', `/admin/products?sort=featured&search=${form.value.search}`).then(res => {
+  apiReq('get', `/admin/products?sort=featured&featured=1&search=${form.value.search}`).then(res => {
     products.value = res.data.products
   })
   .catch(handleErrorApi)
@@ -46,6 +46,38 @@ const deleteBtn = (p) => {
     })
 }
 
+const searchResults = ref([])
+const searchInput = ref('')
+const isSearching = ref(false)
+const searchBtn = () => {
+  if (searchInput.value == '') {
+    searchResults.value = []
+    return
+  }
+  isSearching.value = true
+  apiReq('get', `/admin/products?sort=name&featured=0&is_active=1&search=${searchInput.value}`).then(res => {
+    searchResults.value = res.data.products
+  })
+  .catch(handleErrorApi)
+  .finally(() => {
+    isSearching.value = false
+  })
+}
+
+const addFeatured = (p) => {
+  isSending.value = true
+  apiReq('post', `/admin/products/${p.id}/featured`, { featured: 1 })
+  .then(() => {
+    searchInput.value = ''
+    searchResults.value = []
+    fetchData()
+  })
+  .catch(handleErrorApi)
+  .finally(() => {
+    isSending.value = false
+  })
+}
+
 onMounted(() => {
   fetchData()
 })
@@ -62,6 +94,19 @@ onMounted(() => {
     </div>
     <SpinnerBox v-if="isFetching" />
     <template v-else>
+      <div class="mb-2">
+        <input :disabled="isSearching" type="search" class="form-control form-control-sm mb-1" placeholder="Cari produk untuk diunggulkan" v-model="searchInput" @change="searchBtn">
+        <ul class="list-group">
+          <a v-for="s,i in searchResults" :key="i" class="list-group-item small d-flex" href="javascript:;" @click="addFeatured(s)">
+            <span>
+             {{ s.name }} ({{ s.store.name }})
+            </span>
+            <span class="ms-auto">
+              <i class="bi bi-chevron-right"></i>
+            </span>
+          </a>
+        </ul>
+      </div>
       <div class="table-responsive">
         <table class="table table-bordered">
           <thead>
