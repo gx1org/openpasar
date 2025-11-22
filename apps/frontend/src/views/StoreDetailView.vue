@@ -157,10 +157,10 @@ onUnmounted(() => {
       <div class="d-flex">
         <h5 class="mb-4">{{ store.name }}</h5>
         <div class="ms-auto">
-          <button class="btn btn-sm btn-outline-success">
+          <a :href="`https://wa.me/${store.phone}`" target="_blank" class="btn btn-sm btn-outline-success">
             <i class="bi bi-whatsapp"></i>
             Chat Penjual
-          </button>
+          </a>
         </div>
       </div>
       <div class="p-2 card mb-3">
