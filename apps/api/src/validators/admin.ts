@@ -72,5 +72,5 @@ export const adminProductCreateUpdateSchema = z.object({
   in_stock: z.enum(['one', 'many', 'empty']).nonoptional(),
   description: z.string().nonempty(),
   image_url: z.string().nonempty(),
-  visibility: z.enum(['public', 'private', 'pending_review-private', 'pending_review-public']).nonoptional(),
+  visibility: z.enum(['public', 'private', 'pending_review']).nonoptional(),
 });

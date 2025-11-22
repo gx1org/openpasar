@@ -40,10 +40,6 @@ const navigate = (to) => {
 
 const productEditing = ref({})
 const editBtn = (p) => {
-  if (p.visibility?.startsWith('pending_review')) {
-    alert('Produk sedang dalam peninjauan')
-    return
-  }
   productEditing.value = p
   productEditing.value.key = Math.random()
   document.getElementById('ProductForm-btn').click()

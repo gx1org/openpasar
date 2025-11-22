@@ -88,16 +88,18 @@ export const storeProductCreate = async (c: Context): Promise<HandlerResponse<an
     description: req.description,
     image_url: req.image_url,
     is_active: true,
-    visibility: 'pending_review-'+req.visibility,
+    visibility: req.visibility == 'public' ? 'pending_review' : req.visibility,
     store_id: store.id,
   }).returning()
 
-  const adminEmail = await getConfig('admin_email')
-  sendEmail(
-    adminEmail,
-    'Pengajuan Produk Baru',
-    `Ada pengajuan Produk baru dengan nama: ${product.name} dan id: ${product.id}`
-  )
+  if (req.visibility == 'public') {
+    const adminEmail = await getConfig('admin_email')
+    sendEmail(
+      adminEmail,
+      'Pengajuan Produk Baru',
+      `Ada pengajuan Produk baru dengan nama: ${product.name} dan id: ${product.id}`
+    )
+  }
 
   return c.json({ product });
 }
@@ -125,10 +127,6 @@ export const storeProductUpdate = async (c: Context): Promise<HandlerResponse<an
     return c.json({ message: 'Produk tidak ditemukan' }, 404);
   }
 
-  if (product.visibility.startsWith('pending_review')) {
-    return c.json({ message: 'Produk sedang dalam review' }, 400);
-  }
-
   if (req.sku !== product.sku) {
     const [check] = await db.select().from(Product)
       .where(and(
@@ -141,6 +139,8 @@ export const storeProductUpdate = async (c: Context): Promise<HandlerResponse<an
     }
   }
 
+  const isChangedToPublic = product.visibility != 'public' && req.visibility == 'public'
+
   await db.update(Product)
     .set({
       name: req.name,
@@ -149,9 +149,19 @@ export const storeProductUpdate = async (c: Context): Promise<HandlerResponse<an
       in_stock: req.in_stock,
       description: req.description,
       image_url: req.image_url,
-      visibility: req.visibility,
+      visibility: isChangedToPublic ? 'pending_review' : req.visibility,
     })
     .where(eq(Product.id, id));
+
+  if (isChangedToPublic) {
+    const adminEmail = await getConfig('admin_email')
+    sendEmail(
+      adminEmail,
+      'Pengubahan Produk dari privat ke publik',
+      `Ada Pengubahan Produk dari privat ke publik dengan nama: ${product.name} dan id: ${product.id}`
+    )
+  }
+
   return c.json({
     product: {
       ...product,

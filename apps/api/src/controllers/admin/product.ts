@@ -146,7 +146,7 @@ export const adminProductPublish = async (c: Context): Promise<HandlerResponse<a
   }
 
   await db.update(Product)
-    .set({ visibility: product.visibility.replace('pending_review-', '') })
+    .set({ visibility: 'public' })
     .where(eq(Product.id, product.id));
   return c.json({ message: `Success` });
 }

@@ -92,12 +92,16 @@ onMounted(() => {
             <label for="" class="form-label">Deskripsi</label>
             <textarea class="form-control" v-model="form.description" rows="7"></textarea>
           </div>
-          <div class="mb-3">
+          <div class="mb-4">
             <label for="" class="form-label">Tampilkan</label>
             <select class="form-control" v-model="form.visibility">
               <option value="private">Privat</option>
-              <option value="public">Publik (Muncul di pencarian)</option>
+              <option v-if="prop.data.visibility == 'pending_review'" value="pending_review">Publik (Pending Review)</option>
+              <option v-else value="public">Publik (Muncul di pencarian)</option>
             </select>
+            <p v-if="prop.data.visibility != 'public' && form.visibility == 'public'" class="mb-0 small mt-1 text-muted">
+              Butuh persetujuan admin untuk menampilkan sebagai Publik
+            </p>
           </div>
           <div>
             <SubmitButton :disabled="!isValidForm" :sending="isSending" @click="submitBtn" class="btn btn-primary w-100">
