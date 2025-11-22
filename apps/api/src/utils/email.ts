@@ -47,3 +47,7 @@ export const sendEmail = async (to: string, subject: string, text: string) => {
   console.log('Failed to send email:', err);
   }
 };
+
+export const clearEmailTransporterCache = () => {
+  global.__smtpTransporter = undefined;
+};

@@ -67,8 +67,8 @@ onMounted(() => {
       <div class="d-flex mb-4 gap-2">
         <input type="search" class="form-control form-control-sm" placeholder="Cari..." v-model="form.search" @change="fetchData" />
       </div>
-      <div class="table-responsive">
-        <table class="table table-bordered">
+      <div class="table-responsive mb-3">
+        <table class="table table-bordered mb-0">
           <thead>
             <tr>
               <th>Aksi</th>

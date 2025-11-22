@@ -128,13 +128,14 @@ OpenPasar menggunakan SMTP untuk mengirim email seperti:
 - Notifikasi penarikan saldo
 - dll
 
-Jika Anda belum punya SMTP, Anda dapat membiarkan form SMTP terisi nilai default.
+Jika Anda belum punya SMTP, Anda dapat membiarkan form SMTP kosong
 
 > Email tidak akan berfungsi dulu, tetapi sistem tetap berjalan.  
 > Anda dapat memperbarui SMTP kapan saja.
 
 Jika Anda ingin SMTP real, Anda bisa memakai:
 
+- Resend
 - Gmail SMTP  
 - Brevo (Sendinblue)  
 - Atau SMTP server apa pun

@@ -1,7 +1,7 @@
 import type { Context } from "hono";
 import { configCache, configKeys, getAllConfigs, getConfig, setConfig } from "../config.js";
 import type { HandlerResponse } from "hono/types";
-import { sendEmail } from "../utils/email.js";
+import { clearEmailTransporterCache, sendEmail } from "../utils/email.js";
 import z from "zod";
 import { parseError } from "../utils/helper.js";
 import { configSchema } from "../validators/user.js";
@@ -68,6 +68,8 @@ export const setSiteConfig = async (c: Context): Promise<HandlerResponse<any>> =
   if (configs['installed'] !== 'yes') {
     await setConfig('installed', 'yes')
   }
+
+  clearEmailTransporterCache()
   return getSiteConfig(c)
 }
 

@@ -11,11 +11,11 @@ const defaultForm = {
   site_icon: 'https://upld.zone.id/uploads/quay/openpasar.webp',
   site_mode: 'marketplace',
   site_theme: 'default',
-  smtp_host: 'smtp.example.org',
-  smtp_port: '587',
-  smtp_user: 'user',
-  smtp_password: '123123',
-  smtp_from: 'noreply@example.org',
+  smtp_host: '',
+  smtp_port: '',
+  smtp_user: '',
+  smtp_password: '',
+  smtp_from: '',
   autzorg_app_id: '',
   pakasir_slug: '',
   pakasir_api_key: '',
@@ -36,11 +36,6 @@ const isValidForm = computed(() => {
     && form.value.site_description
     && form.value.site_icon
     && form.value.site_theme
-    && form.value.smtp_host
-    && form.value.smtp_port
-    && form.value.smtp_user
-    && form.value.smtp_password
-    && form.value.smtp_from
     && form.value.autzorg_app_id
     && form.value.pakasir_slug
     && form.value.pakasir_api_key
@@ -131,14 +126,14 @@ onMounted(() => {
         <p>Admin</p>
         <div class="mb-3">
           <label for="" class="form-label">Email</label>
-          <input type="text" class="form-control" v-model="form.admin_email">
+          <input type="email" class="form-control" v-model="form.admin_email" placeholder="cth. yourname@email.com">
           <p class="mt-1 mb-0 small text-muted">
             Email ini yang menentukan akun admin.
           </p>
         </div>
         <div class="mb-3">
           <label for="" class="form-label">No. Whatsapp</label>
-          <input type="text" class="form-control" v-model="form.admin_phone" @change="normalize">
+          <input type="text" class="form-control" v-model="form.admin_phone" @change="normalize" placeholder="cth.+6281234567890">
           <p class="mt-1 mb-0 small text-muted">
             Nomor ini yang akan dihubungi pengguna jika ada masalah.
           </p>
@@ -206,48 +201,48 @@ onMounted(() => {
             <label for="" class="form-label">Autz.org App ID</label>
             <a href="https://autz.org" target="_blank" rel="noopener noreferrer" class="small ms-auto">Autz.org &nearr;</a>
           </div>
-          <input type="text" class="form-control" v-model="form.autzorg_app_id">
+          <input type="text" class="form-control" v-model="form.autzorg_app_id" placeholder="cth. 37iq5c5iq">
         </div>
         <div class="mb-3">
           <div class="d-flex">
             <label for="" class="form-label">Pakasir Slug</label>
             <a href="https://app.pakasir.com" target="_blank" rel="noopener noreferrer" class="small ms-auto">Pakasir &nearr;</a>
           </div>
-          <input type="text" class="form-control" v-model="form.pakasir_slug">
+          <input type="text" class="form-control" v-model="form.pakasir_slug" placeholder="cth. my-store">
         </div>
         <div class="mb-3">
           <label for="" class="form-label">Pakasir Api Key</label>
-          <input type="text" class="form-control" v-model="form.pakasir_api_key">
+          <input type="text" class="form-control" v-model="form.pakasir_api_key" placeholder="cth. ND6CtzorlBR69a74f5Q1YPr1e2OOQpZl">
         </div>
         <div class="mb-3">
           <div class="d-flex">
             <label for="" class="form-label">Cronjob Secret</label>
             <a href="https://console.cron-job.org" target="_blank" rel="noopener noreferrer" class="small ms-auto">Cron-job.org &nearr;</a>
           </div>
-          <input type="text" class="form-control" v-model="form.cronjob_secret" @change="handleChangeSecret">
+          <input type="text" class="form-control" v-model="form.cronjob_secret" @change="handleChangeSecret" placeholder="cth. 35fertrr6y-r6yr">
         </div>
       </div>
       <div class="p-3 border card bg-white mb-4">
         <p>Email SMTP</p>
         <div class="mb-3">
           <label for="" class="form-label">Host</label>
-          <input type="text" class="form-control" v-model="form.smtp_host">
+          <input type="text" class="form-control" v-model="form.smtp_host" placeholder="cth. smtp.example.com">
         </div>
         <div class="mb-3">
           <label for="" class="form-label">Port</label>
-          <input type="text" class="form-control" v-model="form.smtp_port">
+          <input type="text" class="form-control" v-model="form.smtp_port" placeholder="cth. 587">
         </div>
         <div class="mb-3">
           <label for="" class="form-label">User</label>
-          <input type="text" class="form-control" v-model="form.smtp_user">
+          <input type="text" class="form-control" v-model="form.smtp_user" placeholder="cth. user">
         </div>
         <div class="mb-3">
           <label for="" class="form-label">Password</label>
-          <input type="text" class="form-control" v-model="form.smtp_password">
+          <input type="text" class="form-control" v-model="form.smtp_password" placeholder="cth. 123123">
         </div>
         <div class="mb-3">
           <label for="" class="form-label">Email from</label>
-          <input type="text" class="form-control" v-model="form.smtp_from">
+          <input type="text" class="form-control" v-model="form.smtp_from" placeholder="cth. noreply@yourwebsite.com">
         </div>
       </div>
       <div class="p-3 border card bg-white mb-4">
