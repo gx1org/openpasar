@@ -18,7 +18,7 @@ export const storeList = async (c: Context): Promise<HandlerResponse<any>> => {
   const where = and(
     searchQuery,
   )
-  const limit = 10;
+  const limit = 12;
   const offset = (req.page - 1) * limit;
 
   const orderByMap = {
