@@ -3,10 +3,12 @@ import { onMounted, onUnmounted, ref, watch } from 'vue';
 import { useRoute, useRouter} from 'vue-router'
 import { apiReq, formatDate, handleErrorApi } from '../utils/fns';
 import SpinnerBox from '../components/partial/SpinnerBox.vue';
+import LoadMore from '~/components/partial/LoadMore.vue';
 
 const router = useRouter()
 const route = useRoute()
 const page = ref(1)
+const total = ref(0)
 
 const stores = ref([])
 const isFetching = ref(true)
@@ -17,7 +19,12 @@ const fetchData = () => {
   const sort = qs.get('sort') || 'latest'
   apiReq('get', `/stores?search=${sq}&page=${page.value}&sort=${sort}`)
   .then(res => {
-    stores.value = res.data.stores
+    if (page.value > 1) {
+      stores.value = [...stores.value, ...res.data.stores]
+    } else {
+      stores.value = res.data.stores
+    }
+    total.value = res.data.total
   })
   .catch(handleErrorApi)
   .finally(() => {
@@ -38,8 +45,16 @@ const handleSearch = () => {
   router.push(route.path+'?'+qs.toString())
 }
 
+const handleLoadMore = () => {
+  page.value++
+  fetchData()
+}
+
 watch(() => route.query, (newValue, oldValue) => {
   if (newValue.sort != oldValue.sort || newValue.sq != oldValue.sq) {
+    page.value = 1
+    isFetching.value = true
+    stores.value = []
     fetchData()  
   }
 })
@@ -71,13 +86,9 @@ onMounted(() => {
         </div>
       </div>
     </div>
-    <SpinnerBox v-if="isFetching" />
-    <template v-else>
-      <div v-if="stores.length == 0" class="text-center p-3 card">
-        Yahh, tidak ada toko yang sesuai :)
-      </div>
-      <div v-else class="row g-2">
-        <RouterLink :to="`/stores/${p.id}`" v-for="p,i in stores" :key="i" class="col-sm-6 text-reset text-decoration-none">
+    <div class="row g-2">
+      <div v-for="p,i in stores" :key="i" class="col-sm-6">
+        <RouterLink :to="`/stores/${p.id}`" class=" text-reset text-decoration-none">
           <div class="card">
             <div class="card-body p-2">
               <p class="mb-1 fw-bold">{{ p.name }}</p>
@@ -89,6 +100,11 @@ onMounted(() => {
           </div>
         </RouterLink>
       </div>
-    </template>
+    </div>
+    <SpinnerBox v-if="isFetching" />
+    <LoadMore v-else :items="stores?.length" :total="total" @click="handleLoadMore" />
+    <div v-if="!isFetching && stores.length == 0" class="text-center p-3 card mt-2">
+      Yahh, tidak ada toko yang sesuai :)
+    </div>
   </div>
 </template>

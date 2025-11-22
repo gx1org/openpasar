@@ -4,9 +4,12 @@ import SpinnerBox from '../../components/partial/SpinnerBox.vue';
 import { apiReq, formatDate, handleErrorApi, img, Rp } from '../../utils/fns';
 import ProductForm from '../../components/modal/ProductForm.vue';
 import AdminProductForm from '~/components/modal/AdminProductForm.vue';
+import PageBar from '~/components/partial/PageBar.vue';
 
 const isFetching = ref(true)
+const total = ref(0)
 const form = ref({
+  page: 1,
   is_active: 1,
   search: '',
 })
@@ -14,8 +17,9 @@ const products = ref([])
 
 const fetchData = () => {
   isFetching.value = true
-  apiReq('get', `/admin/products?is_active=${form.value.is_active}&search=${form.value.search}`).then(res => {
+  apiReq('get', `/admin/products?page=${form.value.page}&is_active=${form.value.is_active}&search=${form.value.search}`).then(res => {
     products.value = res.data.products
+    total.value = res.data.total
   })
   .catch(handleErrorApi)
   .finally(() => {
@@ -53,6 +57,18 @@ const publishBtn = (p) => {
     .finally(() => {
       isSending.value = false
     })
+}
+
+
+const navigate = (to) => {
+  if (to == 'prev') {
+    form.value.page--
+  } else if (to == 'next') {
+    form.value.page++
+  } else {
+    form.value.page = to
+  }
+  fetchData()
 }
 
 onMounted(() => {
@@ -133,6 +149,7 @@ onMounted(() => {
           </tbody>
         </table>
       </div>
+      <PageBar :page="form.page" :total-data="total" @navigate="navigate" />
     </template>
     <button id="AdminProductForm-btn" type="button" class="d-none" data-bs-toggle="modal" data-bs-target="#AdminProductForm"></button>
     <AdminProductForm :data="productEditing" @updated="fetchData" />

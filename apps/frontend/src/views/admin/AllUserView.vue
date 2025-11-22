@@ -2,18 +2,22 @@
 import { onMounted, ref } from 'vue';
 import SpinnerBox from '../../components/partial/SpinnerBox.vue';
 import { apiReq, formatDate, handleErrorApi, Rp } from '../../utils/fns';
+import PageBar from '~/components/partial/PageBar.vue';
 
 const isFetching = ref(true)
 const users = ref([])
+const total = ref(0)
 const form = ref({
+  page: 1,
   status: '',
   search: '',
 })
 
 const fetchData = () => {
   isFetching.value = true
-  apiReq('get', `/admin/users?status=${form.value.status}&search=${form.value.search}`).then(res => {
+  apiReq('get', `/admin/users?page=${form.value.page}&status=${form.value.status}&search=${form.value.search}`).then(res => {
     users.value = res.data.users
+    total.value = res.data.total
   })
   .catch(handleErrorApi)
   .finally(() => {
@@ -46,6 +50,17 @@ const pinBtn = (u) => {
   .finally(() => {
     isSending.value = false
   })
+}
+
+const navigate = (to) => {
+  if (to == 'prev') {
+    form.value.page--
+  } else if (to == 'next') {
+    form.value.page++
+  } else {
+    form.value.page = to
+  }
+  fetchData()
 }
 
 onMounted(() => {
@@ -114,6 +129,7 @@ onMounted(() => {
           </tbody>
         </table>
       </div>
+      <PageBar :page="form.page" :total-data="total" @navigate="navigate" />
     </template>
   </div>
 </template>

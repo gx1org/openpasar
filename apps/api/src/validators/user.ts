@@ -43,7 +43,7 @@ export const configSchema = z.object({
 
 export const storeListSchema = z.object({
   search: z.string().optional(),
-  sort: z.enum(['latest', 'lowest', 'highest', 'sell', 'featured']).optional().default('latest'),
+  sort: z.enum(['latest', 'sales']).optional().default('latest'),
   page: z.coerce.number().int().min(1).default(1),
 });
 

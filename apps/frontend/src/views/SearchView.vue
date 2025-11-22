@@ -5,11 +5,13 @@ import { apiReq, handleErrorApi } from '../utils/fns';
 import SpinnerBox from '../components/partial/SpinnerBox.vue';
 import ProductShow from '../components/modal/ProductShow.vue';
 import ProductItem from '../components/partial/ProductItem.vue';
+import LoadMore from '~/components/partial/LoadMore.vue';
 
 const misc = useMiscStore()
 const router = useRouter()
 const route = useRoute()
 const page = ref(1)
+const total = ref(0)
 
 const products = ref([])
 const isFetching = ref(true)
@@ -22,7 +24,12 @@ const fetchData = () => {
 
   apiReq('get', `/catalogues?search=${q}&page=${page.value}&sort=${sort}`)
   .then(res => {
-    products.value = res.data.products
+    if (page.value > 1) {
+      products.value = [...products.value, ...res.data.products]
+    } else {
+      products.value = res.data.products
+    }
+    total.value = res.data.total
     if (show) {
       const p = res.data.products.find(p => p.sku == show)
       if (!p) {
@@ -69,8 +76,16 @@ const handleSort = () => {
   router.push(route.path+'?'+qs.toString())
 }
 
+const handleLoadMore = () => {
+  page.value++
+  fetchData()
+}
+
 watch(() => route.query, (newValue, oldValue) => {
-  if (newValue.sort != oldValue.sort || newValue.q != oldValue.q || newValue.page != oldValue.page) {
+  if (newValue.sort != oldValue.sort || newValue.q != oldValue.q) {
+    isFetching.value = true
+    page.value = 1
+    products.value = []
     fetchData()  
   }
 })
@@ -123,17 +138,16 @@ onUnmounted(() => {
         </div>
       </div>
     </div>
+    <div class="row g-2">
+      <div v-for="p,i in products" :key="i" class="col-6 col-sm-4">
+        <ProductItem :data="p" @clicked="showProduct(p)" />
+      </div>
+    </div>
     <SpinnerBox v-if="isFetching" />
-    <template v-else>
-      <div v-if="products.length == 0" class="text-center p-3 card">
-        Yahh, tidak ada produk yang sesuai :)
-      </div>
-      <div v-else class="row g-2">
-        <div v-for="p,i in products" :key="i" class="col-6 col-sm-4">
-          <ProductItem :data="p" @clicked="showProduct(p)" />
-        </div>
-      </div>
-    </template>
+    <LoadMore v-else :items="products.length" :total="total" @click="handleLoadMore" />
+    <div v-if="!isFetching && products.length == 0" class="text-center p-3 card mt-2">
+      Yahh, tidak ada produk yang sesuai :)
+    </div>
     <button id="ProductShow-btn" type="button" class="d-none" data-bs-toggle="modal" data-bs-target="#ProductShow"></button>
     <ProductShow :data="productShowing" />
   </div>

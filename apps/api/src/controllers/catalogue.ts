@@ -31,7 +31,7 @@ export const catalogueList = async (c: Context): Promise<HandlerResponse<any>> =
     featured: desc(Product.featured),
   };
   const orderBy = orderByMap[req.sort as keyof typeof orderByMap];
-  const limit = req.sort === 'featured' ? 100 : 10;
+  const limit = req.sort === 'featured' ? 100 : 12;
   const offset = (req.page - 1) * limit;
 
   const total = await db.select({
@@ -58,7 +58,7 @@ export const catalogueList = async (c: Context): Promise<HandlerResponse<any>> =
     .limit(limit)
     .offset(offset);
 
-  return c.json({ products, total: total[0].count });
+  return c.json({ products, total: Number(total[0].count) });
 }
 
 export const catalogueDetail = async (c: Context): Promise<HandlerResponse<any>> => {

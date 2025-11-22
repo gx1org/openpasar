@@ -48,7 +48,7 @@ export const adminUserList = async (c: Context): Promise<HandlerResponse<any>> =
     .limit(limit)
     .offset(offset);
 
-  return c.json({ users, total: total[0].count });
+  return c.json({ users, total: Number(total[0].count) });
 }
 
 export const adminUserDetail = async (c: Context): Promise<HandlerResponse<any>> => {

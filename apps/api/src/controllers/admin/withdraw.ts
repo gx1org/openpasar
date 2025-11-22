@@ -39,7 +39,7 @@ export const adminWithdrawalList = async (c: Context): Promise<HandlerResponse<a
     .limit(limit)
     .offset(offset);
 
-  return c.json({ withdrawals, total: total[0].count });
+  return c.json({ withdrawals, total: Number(total[0].count) });
 }
 
 export const adminWithdrawalApproveReject = async (c: Context): Promise<HandlerResponse<any>> => {

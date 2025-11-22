@@ -42,7 +42,7 @@ export const storeProductList = async (c: Context): Promise<HandlerResponse<any>
     .limit(limit)
     .offset(offset);
 
-  return c.json({ products, total: total[0].count });
+  return c.json({ products, total: Number(total[0].count) });
 }
 
 export const storeProductDetail = async (c: Context): Promise<HandlerResponse<any>> => {

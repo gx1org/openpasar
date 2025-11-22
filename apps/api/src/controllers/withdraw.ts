@@ -31,7 +31,7 @@ export const withdrawalList = async (c: Context): Promise<HandlerResponse<any>> 
     .limit(limit)
     .offset(offset);
 
-  return c.json({ withdrawals, total: total[0].count });
+  return c.json({ withdrawals, total: Number(total[0].count) });
 }
 
 export const withdrawalCreate = async (c: Context): Promise<HandlerResponse<any>> => {

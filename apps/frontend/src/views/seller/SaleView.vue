@@ -6,19 +6,33 @@ import StatusLabel from '../../components/partial/StatusLabel.vue';
 
 const isFetching = ref(true)
 const transactions = ref([])
+const total = ref(0)
 const form = ref({
+  page: 1,
   status: '',
   search: '',
 })
 const fetchData = () => {
   isFetching.value = true
-  apiReq('get', `/user/stores/transactions?status=${form.value.status}&search=${form.value.search}`).then(res => {
+  apiReq('get', `/user/stores/transactions?page=${form.value.page}&status=${form.value.status}&search=${form.value.search}`).then(res => {
     transactions.value = res.data.transactions
+    total.value = res.data.total
   })
   .catch(handleErrorApi)
   .finally(() => {
     isFetching.value = false
   })
+}
+
+const navigate = (to) => {
+  if (to == 'prev') {
+    form.value.page--
+  } else if (to == 'next') {
+    form.value.page++
+  } else {
+    form.value.page = to
+  }
+  fetchData()
 }
 
 onMounted(() => {
@@ -38,8 +52,8 @@ onMounted(() => {
     <SpinnerBox v-if="isFetching" />
     <template v-else>
       <div class="d-flex mb-4 gap-2">
-        <input type="search" class="form-control form-control-sm" placeholder="Cari..." v-model="form.search" @change="fetchData">
-        <select class="form-control form-control-sm" v-model="form.status" @change="fetchData">
+        <input type="search" class="form-control form-control-sm" placeholder="Cari..." v-model="form.search" @change="navigate(1)">
+        <select class="form-control form-control-sm" v-model="form.status" @change="navigate(1)">
           <option value="">Semua status</option>
           <option value="in_process">in_process</option>
           <option value="sent">sent</option>
@@ -90,6 +104,7 @@ onMounted(() => {
           </tbody>
         </table>
       </div>
+      <PageBar :page="form.page" :total-data="total" @navigate="navigate" />
     </template>
   </div>
 </template>

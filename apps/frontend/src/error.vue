@@ -8,6 +8,9 @@ import { setTheme } from './utils/fns'
 const props = defineProps({
   error: Object
 })
+
+console.log(props.error);
+
 const misc = useMiscStore()
 if (!misc.config.site_name) {
   await misc.getConfig()

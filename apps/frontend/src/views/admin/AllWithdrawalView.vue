@@ -5,15 +5,21 @@ import { apiReq, formatDate, handleErrorApi, Rp } from '../../utils/fns';
 import { useAuthStore } from '../../stores/auth';
 import WithdrawForm from '../../components/modal/WithdrawForm.vue';
 import StatusLabel from '../../components/partial/StatusLabel.vue';
+import PageBar from '~/components/partial/PageBar.vue';
 
 const auth = useAuthStore()
 const isFetching = ref(true)
 const withdrawals = ref([])
+const total = ref(0)
+const form = ref({
+  page: 1,
+})
 
 const fetchData = () => {
   isFetching.value = true
-  apiReq('get', '/admin/withdrawals').then(res => {
+  apiReq('get', `/admin/withdrawals?page=${form.value.page}`).then(res => {
     withdrawals.value = res.data.withdrawals
+    total.value = res.data.total
   })
   .catch(handleErrorApi)
   .finally(() => {
@@ -33,6 +39,17 @@ const actionBtn = (wd, status) => {
     .finally(() => {
       isSending.value = false
     })
+}
+
+const navigate = (to) => {
+  if (to == 'prev') {
+    form.value.page--
+  } else if (to == 'next') {
+    form.value.page++
+  } else {
+    form.value.page = to
+  }
+  fetchData()
 }
 
 onMounted(() => {
@@ -94,6 +111,7 @@ onMounted(() => {
           </tbody>
         </table>
       </div>
+      <PageBar :page="form.page" :total-data="total" @navigate="navigate" />
     </template>
     <WithdrawForm :last-wd="withdrawals[0]" @updated="fetchData" />
   </div>

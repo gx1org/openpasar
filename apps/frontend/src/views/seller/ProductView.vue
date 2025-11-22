@@ -3,24 +3,39 @@ import { onMounted, ref } from 'vue';
 import SpinnerBox from '../../components/partial/SpinnerBox.vue';
 import { apiReq, formatDate, handleErrorApi, img, Rp } from '../../utils/fns';
 import ProductForm from '../../components/modal/ProductForm.vue';
+import PageBar from '~/components/partial/PageBar.vue';
 
 const isFetching = ref(true)
 const form = ref({
+  page: 1,
   is_active: 1,
   search: '',
 })
 const products = ref([])
+const total = ref(0)
 
 const fetchData = () => {
   productEditing.value = {}
   isFetching.value = true
-  apiReq('get', `/user/stores/products?is_active=${form.value.is_active}&search=${form.value.search}`).then(res => {
+  apiReq('get', `/user/stores/products?page=${form.value.page}&is_active=${form.value.is_active}&search=${form.value.search}`).then(res => {
     products.value = res.data.products
+    total.value = res.data.total
   })
   .catch(handleErrorApi)
   .finally(() => {
     isFetching.value = false
   })
+}
+
+const navigate = (to) => {
+  if (to == 'prev') {
+    form.value.page--
+  } else if (to == 'next') {
+    form.value.page++
+  } else {
+    form.value.page = to
+  }
+  fetchData()
 }
 
 const productEditing = ref({})
@@ -59,8 +74,8 @@ onMounted(() => {
     <SpinnerBox v-if="isFetching" />
     <template v-else>
       <div class="d-flex mb-4 gap-2">
-        <input type="search" class="form-control form-control-sm" placeholder="Cari..." v-model="form.search" @change="fetchData">
-        <select class="form-control form-control-sm" v-model="form.is_active" @change="fetchData">
+        <input type="search" class="form-control form-control-sm" placeholder="Cari..." v-model="form.search" @change="navigate(1)">
+        <select class="form-control form-control-sm" v-model="form.is_active" @change="navigate(1)">
           <option value="1">Produk aktif</option>
           <option value="0">Produk dihapus</option>
         </select>
@@ -119,6 +134,7 @@ onMounted(() => {
           </tbody>
         </table>
       </div>
+      <PageBar :page="form.page" :total-data="total" @navigate="navigate" />
     </template>
     <button id="ProductForm-btn" type="button" class="d-none" data-bs-toggle="modal" data-bs-target="#ProductForm"></button>
     <ProductForm :data="productEditing" @updated="fetchData" />
