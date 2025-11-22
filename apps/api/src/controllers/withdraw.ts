@@ -31,7 +31,8 @@ export const withdrawalList = async (c: Context): Promise<HandlerResponse<any>> 
     .limit(limit)
     .offset(offset);
 
-  return c.json({ withdrawals, total: Number(total[0].count) });
+  const [user] = await db.select().from(User).where(eq(User.id, userId)).limit(1);
+  return c.json({ withdrawals, total: Number(total[0].count), user });
 }
 
 export const withdrawalCreate = async (c: Context): Promise<HandlerResponse<any>> => {

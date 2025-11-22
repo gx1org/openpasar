@@ -3,6 +3,7 @@ import { onMounted, ref } from 'vue';
 import SpinnerBox from '../../components/partial/SpinnerBox.vue';
 import { apiReq, formatDate, handleErrorApi, Rp } from '../../utils/fns';
 import StatusLabel from '../../components/partial/StatusLabel.vue';
+import PageBar from '~/components/partial/PageBar.vue';
 
 const isFetching = ref(true)
 const transactions = ref([])
