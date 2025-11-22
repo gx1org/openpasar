@@ -18,7 +18,7 @@ export const useAuthStore = defineStore('auth', () => {
     await apiReq('post', '/refresh-token', { token: accessToken.value }).then(async res => {
       await setAuth(res.data)
     }).catch(e => {
-      if (e.response.status == 401) {
+      if (e.response?.status == 401) {
         setLogout()
       }
     })

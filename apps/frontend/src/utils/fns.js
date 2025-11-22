@@ -1,6 +1,20 @@
 import axios from "axios"
 import { useAuthStore } from "../stores/auth"
-import { useRuntimeConfig } from "nuxt/app";
+
+export const apiUrl = () => {
+  const input = useRuntimeConfig().public.apiUrl
+  if (!input) return '';
+  try {
+    if (!/^https?:\/\//i.test(input)) {
+      input = "https://" + input;
+    }
+    const url = new URL(input);
+    return url.origin;
+  } catch (err) {
+    console.error('Cannot refine api_url', err);
+    return '';
+  }
+}
 
 export const formatDate = (time) => {
   if (!time) return '';
@@ -45,11 +59,9 @@ export const handleErrorApi = (err) => {
   }
 }
 
-
 export const apiReq = (method, url, payload, config = {}) => {
-  const apiUrl = useRuntimeConfig().public.apiUrl
   const api = axios.create({
-    baseURL: apiUrl+'/api',
+    baseURL: apiUrl()+'/api',
   })
   api.interceptors.request.use(config => {
     const auth = useAuthStore()

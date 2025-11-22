@@ -15,12 +15,17 @@ const misc = useMiscStore()
 if (!misc.config.site_name) {
   await misc.getConfig()
 }
-setTheme()
+if (misc.config.site_theme) {
+  setTheme()
+}
 const handleError = () => clearError({ redirect: '/' })
 </script>
 
 <template>
-  <div class="container">
+  <div v-if="misc.error">
+    {{ misc.error }}
+  </div>
+  <div v-else-if="misc.loaded" class="container">
     <NavBar />
     <main class="bg-light px-3 d-flex flex-column overflow-y-auto pb-4">
       <div class="text-center card">

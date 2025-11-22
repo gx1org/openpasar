@@ -7,20 +7,20 @@ export const useMiscStore = defineStore('misc', () => {
   const error = ref('')
   const config = ref({})
   const getConfig = async () => {
-    const apiUrl = useRuntimeConfig().public.apiUrl
-    if (!apiUrl) {
+    const url = apiUrl()
+    if (!url) {
       error.value = 'Missing ENV variable: API_URL'
       return false
     }
 
-    const res = await fetch(apiUrl+'/api/config').then(res => {
+    const res = await fetch(url+'/api/config').then(res => {
       if (res.ok) {
         return res.json()
       }
     })
     .catch(e => {
       console.error(e)
-      error.value = `Cannot fetch data from API server (${apiUrl})`
+      error.value = `Cannot fetch data from API server (${url})`
       return false
     })
 
