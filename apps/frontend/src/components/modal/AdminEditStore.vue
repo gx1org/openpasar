@@ -13,7 +13,7 @@ const form = ref({})
 const closeBtn = ref(null)
 
 const isValidForm = computed(() => {
-  return form.value.name && form.value.email && form.value.phone && form.value.user_id
+  return form.value.name && form.value.email && form.value.phone && form.value.user_id && form.value.description
 })
 
 const isSending = ref(false)

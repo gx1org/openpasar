@@ -71,8 +71,9 @@ export const transactionListSchema = z.object({
 
 export const transactionStatusUpdateSchema = z.object({
   status: z.enum([
-    'rejected',
-    'sent',
+    'canceled',
+    'complained',
+    'completed'
   ]),
 })
 
