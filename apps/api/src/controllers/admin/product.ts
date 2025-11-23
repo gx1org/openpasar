@@ -2,8 +2,8 @@ import type { Context } from "hono";
 import type { HandlerResponse } from "hono/types";
 import { db } from "../../db.js";
 import { Product, Store } from "../../schema.js";
-import { and, asc, desc, eq, gt, ilike, ne, or, sql } from "drizzle-orm";
-import { productFeaturedSchema, productListSchema } from "../../validators/admin.js";
+import { and, asc, desc, eq, gt, ilike, inArray, ne, or, sql } from "drizzle-orm";
+import { productActionSchema, productFeaturedSchema, productListSchema } from "../../validators/admin.js";
 import z from "zod";
 import { parseError } from "../../utils/helper.js";
 import { adminProductCreateUpdateSchema } from "../../validators/admin.js";
@@ -201,4 +201,43 @@ export const adminProductUpdate = async (c: Context): Promise<HandlerResponse<an
       ...req
     }
   });
+}
+
+export const adminProductAction = async (c: Context): Promise<HandlerResponse<any>> => {
+  const valid = z.safeParse(productActionSchema, await c.req.json());
+  if (!valid.success) {
+    return c.json({ message: parseError(valid.error) }, 400);
+  }
+
+  const req = valid.data;
+  const set: Record<string, boolean | string | number> = {}
+  switch (req.action) {
+    case 'delete':
+      set.is_active = false
+      break;
+    case 'undelete':
+      set.is_active = true
+      break;
+    case 'private':
+      set.visibility = 'private'
+      break;
+    case 'public':
+      set.visibility = 'public'
+      break;
+    case 'pending_review':
+      set.visibility = 'pending_review'
+      break;
+    case 'featured':
+      set.featured = 1
+      break;
+    default:
+      return c.json({ message: 'Aksi tidak ditemukan' }, 400);
+  }
+
+  await db.update(Product)
+    .set(set)
+    .where(and(
+      inArray(Product.id, req.ids),
+    ));
+  return c.json({ message: `Success` });
 }

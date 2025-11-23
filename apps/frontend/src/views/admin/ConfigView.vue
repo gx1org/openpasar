@@ -223,7 +223,10 @@ onMounted(() => {
         </div>
       </div>
       <div class="p-3 border card bg-white mb-4">
-        <p>Email SMTP</p>
+        <div class="mb-3">
+          <p class="mb-1">Email SMTP</p>
+          <p v-if="!misc.installed" class="small text-muted mb-0">* Boleh dikosongkan jika belum punya SMTP</p>
+        </div>
         <div class="mb-3">
           <label for="" class="form-label">Host</label>
           <input type="text" class="form-control" v-model="form.smtp_host" placeholder="cth. smtp.example.com">

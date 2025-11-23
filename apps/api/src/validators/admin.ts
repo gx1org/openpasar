@@ -74,3 +74,8 @@ export const adminProductCreateUpdateSchema = z.object({
   image_url: z.string().nonempty(),
   visibility: z.enum(['public', 'private', 'pending_review']).nonoptional(),
 });
+
+export const productActionSchema = z.object({
+  ids: z.array(z.number().int().min(1)),
+  action: z.enum(['delete', 'undelete', 'featured', 'private', 'public', 'pending_review']),
+})

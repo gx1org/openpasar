@@ -37,3 +37,8 @@ export const transactionStatusUpdateSchema = z.object({
   ]),
   note: z.string().nonempty(),
 })
+
+export const productActionSchema = z.object({
+  ids: z.array(z.number().int().min(1)),
+  action: z.enum(['delete', 'undelete', 'private']),
+})

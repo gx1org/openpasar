@@ -2,8 +2,8 @@ import type { Context } from "hono";
 import type { HandlerResponse } from "hono/types";
 import { db } from "../db.js";
 import { Product } from "../schema.js";
-import { and, desc, eq, ilike, ne, or, sql } from "drizzle-orm";
-import { productCreateUpdateSchema, productListSchema } from "../validators/seller.js";
+import { and, desc, eq, ilike, inArray, ne, or, sql } from "drizzle-orm";
+import { productActionSchema, productCreateUpdateSchema, productListSchema } from "../validators/seller.js";
 import z from "zod";
 import { parseError } from "../utils/helper.js";
 import { sendEmail } from "../utils/email.js";
@@ -187,5 +187,37 @@ export const storeProductToggle = async (c: Context): Promise<HandlerResponse<an
   await db.update(Product)
     .set({ is_active: !product.is_active })
     .where(eq(Product.id, id));
+  return c.json({ message: `Success` });
+}
+
+export const storeProductAction = async (c: Context): Promise<HandlerResponse<any>> => {
+  const store = c.get('store');
+  const valid = z.safeParse(productActionSchema, await c.req.json());
+  if (!valid.success) {
+    return c.json({ message: parseError(valid.error) }, 400);
+  }
+
+  const req = valid.data;
+  const set: Record<string, boolean | string | number> = {}
+  switch (req.action) {
+    case 'delete':
+      set.is_active = false
+      break;
+    case 'undelete':
+      set.is_active = true
+      break;
+    case 'private':
+      set.visibility = 'private'
+      break;
+    default:
+      return c.json({ message: 'Aksi tidak ditemukan' }, 400);
+  }
+
+  await db.update(Product)
+    .set(set)
+    .where(and(
+      inArray(Product.id, req.ids),
+      eq(Product.store_id, store.id)
+    ));
   return c.json({ message: `Success` });
 }

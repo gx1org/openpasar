@@ -35,10 +35,18 @@ const editBtn = (p) => {
 
 const isSending = ref(false)
 
-const deleteBtn = (p) => {
+
+const checked = ref([])
+const action = ref('')
+const actionBtn = () => {
   isSending.value = true
-  apiReq('post', `/admin/products/${p.id}/toggle`)
+  apiReq('post', `/admin/products/actions`, {
+    action: action.value,
+    ids: checked.value
+  })
     .then(() => {
+      action.value = ''
+      checked.value = []
       fetchData()
     }) 
     .catch(handleErrorApi)
@@ -46,19 +54,6 @@ const deleteBtn = (p) => {
       isSending.value = false
     })
 }
-
-const publishBtn = (p) => {
-  isSending.value = true
-  apiReq('patch', `/admin/products/${p.id}/publish`)
-    .then(() => {
-      fetchData()
-    }) 
-    .catch(handleErrorApi)
-    .finally(() => {
-      isSending.value = false
-    })
-}
-
 
 const navigate = (to) => {
   if (to == 'prev') {
@@ -109,18 +104,14 @@ onMounted(() => {
           <tbody>
             <tr v-for="p,i in products" :key="i">
               <td>
-                <button :disabled="isSending" v-if="p.is_active" @click="editBtn(p)" class="btn btn-sm btn-primary">
-                  <i class="bi bi-pencil"></i>
-                </button>
-                <button :disabled="isSending" v-if="p.is_active" @click="deleteBtn(p)" class="btn btn-sm btn-danger ms-1">
-                  <i class="bi bi-trash"></i>
-                </button>
-                <button :disabled="isSending" v-else @click="deleteBtn(p)" class="btn btn-sm btn-success ms-1">
-                  <i class="bi bi-box-arrow-up"></i>
-                </button>
-                <button :disabled="isSending" v-if="p.visibility?.startsWith('pending')" @click="publishBtn(p)" class="btn btn-sm btn-warning ms-1">
-                  <i class="bi bi-check"></i>
-                </button>
+                <div class="d-flex">
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" v-model="checked" :value="p.id" style="cursor: pointer;">
+                  </div>
+                  <button v-if="p.is_active" @click="editBtn(p)" class="btn btn-sm btn-outline-primary">
+                    <i class="bi bi-pencil"></i>
+                  </button>
+                </div>
               </td>
               <td class="d-flex">
                 <img :src="img(p.image_url)" alt="img" width="32">
@@ -148,6 +139,17 @@ onMounted(() => {
             </tr>
           </tbody>
         </table>
+      </div>
+      <div v-if="checked.length > 0" class="input-group input-group-sm">
+        <select v-model="action" class="form-control border-danger">
+          <option value="">Pilih Aksi:</option>
+          <option v-if="form.is_active == '1'" value="delete">Hapus</option>
+          <option v-else value="undelete">Batal hapus</option>
+          <option value="private">Tampilkan privat</option>
+          <option value="publi">Tampilkan public</option>
+          <option value="pending_review">Tampilkan pending</option>
+        </select>
+        <button class="btn btn-outline-danger" @click="actionBtn" :disabled="isSending || action == ''">Submit</button>
       </div>
       <PageBar :page="form.page" :total-data="total" @navigate="navigate" />
     </template>
