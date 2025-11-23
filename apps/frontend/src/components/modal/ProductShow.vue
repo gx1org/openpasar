@@ -28,7 +28,7 @@ onMounted(() => syncImage)
           <div id="carouselImg" class="carousel slide w-100">
             <div class="carousel-inner">
               <div v-for="i in images" class="carousel-item">
-                <a :href=img(i)" target="_blank">
+                <a :href="img(i)" target="_blank">
                   <img :src="img(i)" class="d-block w-100 square" alt="...">
                 </a>
               </div>
