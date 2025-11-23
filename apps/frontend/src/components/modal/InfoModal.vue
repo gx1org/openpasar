@@ -2,6 +2,14 @@
 import { useMiscStore } from '../../stores/misc';
 import LinkifiedText from '../partial/LinkifiedText.vue';
 const misc = useMiscStore()
+const showCredit = ref(false)
+onMounted(() => {
+  fetch('https://opwl.vercel.app').then(res => {
+    if (!res.ok) {
+      showCredit.value = true
+    }
+  })
+})
 </script>
 
 <template>
@@ -28,7 +36,7 @@ const misc = useMiscStore()
             </div>
           </div>
         </div>
-        <div class="modal-footer justify-content-center">
+        <div v-if="showCredit" class="modal-footer justify-content-center">
           <p class="text-muted small text-center">
             powered by
             <a href="https://github.com/gx1org/openpasar" target="_blank" class="text-reset">

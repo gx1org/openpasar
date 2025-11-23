@@ -86,12 +86,11 @@ Setelah berhasil deploy API dan Frontend, lanjutkan dengan panduan berikut:
 
 ---
 
-## 🤝 Kontribusi
+## 🤝 Live Demo
 
-Kontribusi sangat dipersilakan!
+Mode Marketplace: https://geksapedia.com
 
-- Buat **GitHub Issue** jika menemukan bug atau ingin mengusulkan fitur.  
-- Kirim **Pull Request (PR)** jika ingin berkontribusi langsung.
+Mode Official Store: https://sepatuku-store.vercel.app
 
 ---
 
@@ -101,6 +100,17 @@ Project ini berbasis **MIT License**, dengan syarat tambahan:
 
 > Repository ini berisi credit link: **"powered by OpenPasar"** yang mengarah ke repository ini.  
 > Penghapusan credit tidak diperbolehkan.
+
+Jika tetap ingin memiliki website tanpa menampilkan credit, silakan beli lisensinya disini:
+
+- https://geksapedia.com/p/lisensi-openpasar-tahunan
+- https://geksapedia.com/p/lisensi-openpasar-lifetime
+
+Lisensi diatas sudah termasuk bantuan penginstalan dan support via Whatsapp/Google Meet
+
+Butuh bantuan menginstal saja?
+
+- https://geksapedia.com/p/jasa-instal-openpasar
 
 ---
 
