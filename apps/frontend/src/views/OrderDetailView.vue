@@ -210,10 +210,10 @@ onMounted(() => {
           </ul>
           <div v-if="['pending', 'sent'].includes(order.status)" class="card-footer">
             <p v-if="order.status == 'pending'" class="mb-0 small">
-              Pesanan akan batal otomatis jika tidak dibayar setelah {{ formatDateTime(order.created_at) }}
+              Pesanan akan batal otomatis jika tidak dibayar setelah 24 jam
             </p>
             <p v-if="order.status == 'sent'" class="mb-0 small">
-              Pesanan akan selesai otomatis jika tidak dikomplain setelah {{ formatDateTime(order.created_at) }}
+              Pesanan akan selesai otomatis jika tidak dikomplain setelah 48 jam
             </p>
           </div>
         </div>
