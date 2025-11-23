@@ -11,6 +11,13 @@ const images = ref(props.product.image_url?.split(','))
 useHead({
   title: (props.product.name || 'Produk tidak ditemukan') + ' | ' + misc.config.site_name,
 })
+
+const show = ref(false)
+onMounted(() => {
+  const el = document.querySelector('.carousel-item')
+  el?.classList.add('active')
+  show.value = true
+})
 </script>
 
 <template>
@@ -28,11 +35,11 @@ useHead({
       </div>
     </div>
     <template v-else>
-      <div class="">
+      <div v-show="show" class="">
           <div class="mb-3 border-bottom pb-3">
             <div id="carouselImg" class="carousel slide w-100">
               <div class="carousel-inner">
-                <div v-for="i, k in images" class="carousel-item" :key="i" :class="{active: k == 0}">
+                <div v-for="i, k in images" class="carousel-item" :key="i">
                   <a :href="img(i)" target="_blank">
                     <img :src="img(i)" class="d-block w-100 square" alt="...">
                   </a>
