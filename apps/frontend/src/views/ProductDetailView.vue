@@ -33,7 +33,9 @@ useHead({
             <div id="carouselImg" class="carousel slide w-100">
               <div class="carousel-inner">
                 <div v-for="i, k in images" class="carousel-item" :key="i" :class="{active: k == 0}">
-                  <img :src="img(i)" class="d-block w-100 square" alt="...">
+                  <a :href="img(i)" target="_blank">
+                    <img :src="img(i)" class="d-block w-100 square" alt="...">
+                  </a>
                 </div>
               </div>
               <button v-show="images.length > 1" class="carousel-control-prev" type="button" data-bs-target="#carouselImg" data-bs-slide="prev">
