@@ -37,6 +37,8 @@ Sebelum mulai, siapkan:
 
 ### ▶️ Hubungkan Vercel dan Github
 
+Setelah terdaftar dan berhasil masuk ke dashboard:
+
 1. Klik New > Projects
 2. Di bagian bawah Import Git Repository, klik Install untuk menginstal vercel ke Github
 3. Saat muncul popup, klik Install
