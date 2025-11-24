@@ -103,16 +103,11 @@ Project ini berbasis **MIT License**, dengan syarat tambahan:
 > Repository ini berisi credit link: **"powered by OpenPasar"** yang mengarah ke repository ini.  
 > Penghapusan credit tidak diperbolehkan.
 
-Jika tetap ingin memiliki website tanpa menampilkan credit, silakan beli lisensinya disini:
+Jika tetap ingin memiliki website tanpa menampilkan credit, atau membutuhkan bantuan untuk menginstal?
 
-- https://geksapedia.com/p/lisensi-openpasar-tahunan
-- https://geksapedia.com/p/lisensi-openpasar-lifetime
+Silakan hubungi kami:
 
-Lisensi diatas sudah termasuk bantuan penginstalan dan support via Whatsapp/Google Meet
-
-Butuh bantuan menginstal saja?
-
-- https://geksapedia.com/p/jasa-instal-openpasar
+- https://wa.me/+6289602727642
 
 ---
 
