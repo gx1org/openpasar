@@ -17,6 +17,15 @@ const syncImage = () => {
   }, 100);
 }
 
+const showCopied = ref(false)
+const copy = () => {
+  showCopied.value = true
+  navigator.clipboard.writeText(window.location.origin + '/p/' + prop.data.sku)
+  setTimeout(() => {
+    showCopied.value = false
+  }, 1000);
+}
+
 watch(() => prop.data.image_url, syncImage)
 onMounted(() => syncImage)
 </script>
@@ -83,9 +92,15 @@ onMounted(() => syncImage)
           </div>
         </div>
         <div class="modal-footer">
-          <RouterLink :to="'/cart?add='+data.sku" class="btn btn-primary w-100">
-            Beli Sekarang
-          </RouterLink>
+          <div class="d-flex w-100">
+            <RouterLink :to="'/cart?add='+data.sku" class="btn btn-primary w-100">
+              Beli Sekarang
+            </RouterLink>
+            <button @click="copy" class="btn btn-outline-primary ms-2">
+              <i class="bi bi-share-fill"></i>
+            </button>
+          </div>
+          <span v-if="showCopied" class="float-end text-success small">URL produk tersalin</span>
         </div>
       </div>
     </div>

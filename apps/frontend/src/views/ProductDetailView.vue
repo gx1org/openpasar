@@ -12,6 +12,15 @@ useHead({
   title: (props.product.name || 'Produk tidak ditemukan') + ' | ' + misc.config.site_name,
 })
 
+const showCopied = ref(false)
+const copy = () => {
+  showCopied.value = true
+  navigator.clipboard.writeText(window.location.origin + '/p/' + props.product.sku)
+  setTimeout(() => {
+    showCopied.value = false
+  }, 1000);
+}
+
 const show = ref(false)
 onMounted(() => {
   const el = document.querySelector('.carousel-item')
@@ -92,10 +101,16 @@ onMounted(() => {
             </div>
           </div>
           <div class="">
-            <RouterLink :to="'/cart?add='+product.sku" class="btn btn-primary w-100">
-              Beli Sekarang
-            </RouterLink>
-          </div>
+            <div class="d-flex w-100">
+              <RouterLink :to="'/cart?add='+product.sku" class="btn btn-primary w-100">
+                Beli Sekarang
+              </RouterLink>
+              <button @click="copy" class="btn btn-outline-primary ms-2">
+                <i class="bi bi-share-fill"></i>
+              </button>
+            </div>
+            <span v-if="showCopied" class="float-end text-success small">URL produk tersalin</span>
+        </div>
       </div>
     </template>
   </div>
