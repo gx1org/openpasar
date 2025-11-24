@@ -146,7 +146,7 @@ onMounted(() => {
           <option v-if="form.is_active == '1'" value="delete">Hapus</option>
           <option v-else value="undelete">Batal hapus</option>
           <option value="private">Tampilkan privat</option>
-          <option value="publi">Tampilkan public</option>
+          <option value="public">Tampilkan publik</option>
           <option value="pending_review">Tampilkan pending</option>
         </select>
         <button class="btn btn-outline-danger" @click="actionBtn" :disabled="isSending || action == ''">Submit</button>
