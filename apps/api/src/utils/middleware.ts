@@ -3,9 +3,10 @@ import { db } from "../db.js";
 import { Store } from "../schema.js";
 import { eq } from "drizzle-orm/sql/expressions/conditions";
 import { getConfig } from "../config.js";
+import { getJwtPayload } from "./jwt.js";
 
 export const hasStore = async (c: Context, next: () => Promise<void>) => {
-  const id = Number(c.get('jwtPayload')?.store_id);
+  const id = Number(getJwtPayload(c).store_id);
   if (isNaN(id)) {
     return c.json({ message: 'Hanya toko yang dapat menggunakan fitur ini' }, 403);
   }
@@ -21,7 +22,7 @@ export const hasStore = async (c: Context, next: () => Promise<void>) => {
 
 export const isAdmin = async (c: Context, next: () => Promise<void>) => {
   const admin_email = await getConfig('admin_email');
-  const userEmail = c.get('jwtPayload')?.email;
+  const userEmail = getJwtPayload(c).email;
   if (userEmail != admin_email) {
     return c.json({ message: 'Not admin' }, 403);
   }

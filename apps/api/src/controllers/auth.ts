@@ -4,6 +4,7 @@ import { db } from "../db.js";
 import { Store, User } from "../schema.js";
 import { eq } from "drizzle-orm";
 import { generateJwt } from "../utils/jwt.js";
+import { getJwtPayload } from "../utils/jwt.js";
 import { getConfig } from "../config.js";
 import z from "zod";
 import { parseError } from "../utils/helper.js";
@@ -60,7 +61,7 @@ export const authorize = async (c: Context): Promise<HandlerResponse<any>> => {
 }
 
 export const refreshToken = async (c: Context): Promise<HandlerResponse<any>> => {
-  const userId = c.get('jwtPayload')?.id;
+  const userId = Number(getJwtPayload(c).id);
   const [user] = await db.select().from(User).where(eq(User.id, userId)).limit(1);
   if (!user) {
     return c.json({ message: "Pengguna tidak ditemukan" }, 404);

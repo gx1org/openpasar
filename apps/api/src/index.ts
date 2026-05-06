@@ -36,7 +36,7 @@ api.get('/config', getSiteConfig);
 api.get('/config/clear', clearSiteConfigCache);
 api.post('/config', initialConfig, setSiteConfig);
 api.post('/authorize', authorize);
-api.post('/refresh-token', jwt({ secret: jwt_secret }), refreshToken);
+api.post('/refresh-token', jwt({ secret: jwt_secret, alg: 'HS256' }), refreshToken);
 api.post('/webhooks/pakasir', webhookPakasir)
 api.get('/automate', runAutomation)
 
@@ -46,7 +46,7 @@ api.get('/stores', storeList)
 api.get('/stores/:id', storeDetail)
 
 const userRoute = new Hono<{ Variables: Variables }>();
-userRoute.use('/*', jwt({ secret: jwt_secret }))
+userRoute.use('/*', jwt({ secret: jwt_secret, alg: 'HS256' }))
 
 userRoute.get('/profile', profile);
 userRoute.put('/profile', updateProfile);
@@ -80,7 +80,7 @@ userRoute.get('/stores/transactions/:id', hasStore, storeTransactionDetail)
 userRoute.patch('/stores/transactions/:id/status', hasStore, storeTransactionStatusUpdate)
 
 const adminRoute = new Hono<{ Variables: Variables }>();
-adminRoute.use('/*', jwt({ secret: jwt_secret }))
+adminRoute.use('/*', jwt({ secret: jwt_secret, alg: 'HS256' }))
 adminRoute.use('/*', isAdmin)
 
 adminRoute.get('/config', getSiteConfigAll);

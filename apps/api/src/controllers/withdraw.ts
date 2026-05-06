@@ -6,9 +6,10 @@ import { desc, eq, sql } from "drizzle-orm";
 import { withdrawalCreateSchema, withdrawalListSchema } from "../validators/user.js";
 import z from "zod";
 import { hashString, parseError } from "../utils/helper.js";
+import { getJwtPayload } from "../utils/jwt.js";
 
 export const withdrawalList = async (c: Context): Promise<HandlerResponse<any>> => {
-  const userId = c.get('jwtPayload')?.id;
+  const userId = Number(getJwtPayload(c).id);
   const valid = z.safeParse(withdrawalListSchema, c.req.query());
   if (!valid.success) {
     return c.json({ message: parseError(valid.error) }, 400);
@@ -43,7 +44,7 @@ export const withdrawalCreate = async (c: Context): Promise<HandlerResponse<any>
 
   const req = valid.data
   const wd = {
-    user_id: c.get('jwtPayload')?.id,
+    user_id: Number(getJwtPayload(c).id),
     amount: Number(req.amount),
     receiver: req.receiver,
     status: 'in_process',

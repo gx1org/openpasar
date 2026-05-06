@@ -8,9 +8,10 @@ import { hashString } from "../utils/helper.js";
 import { pinUpdateSchema, profileSchema } from "../validators/user.js";
 import z from "zod";
 import { parseError } from "../utils/helper.js";
+import { getJwtPayload } from "../utils/jwt.js";
 
 export const profile = async (c: Context): Promise<HandlerResponse<any>> => {
-  const userId = c.get('jwtPayload')?.id;
+  const userId = Number(getJwtPayload(c).id);
   const [user] = await db.select().from(User).where(eq(User.id, userId)).limit(1);
   if (!user) {
     return c.json({ message: 'Pengguna tidak ditemukan' }, 404);
@@ -20,14 +21,15 @@ export const profile = async (c: Context): Promise<HandlerResponse<any>> => {
 }
 
 export const updateProfile = async (c: Context): Promise<HandlerResponse<any>> => {
-  const payload = c.get('jwtPayload');
+  const payload = getJwtPayload(c);
   const valid = z.safeParse(profileSchema, await c.req.json())
   if (!valid.success) {
     return c.json({ message: parseError(valid.error) }, 400);
   }
 
   const req = valid.data
-  const [user] = await db.select().from(User).where(eq(User.id, payload.id)).limit(1);
+  const userId = Number(payload.id);
+  const [user] = await db.select().from(User).where(eq(User.id, userId)).limit(1);
   if (!user) {
     return c.json({ message: 'Pengguna tidak ditemukan' }, 404);
   }
@@ -37,7 +39,7 @@ export const updateProfile = async (c: Context): Promise<HandlerResponse<any>> =
       name: req.name,
       phone: req.phone,
     })
-    .where(eq(User.id, payload.id));
+    .where(eq(User.id, userId));
 
   return c.json({
     user: { ...user, ...req }
@@ -45,7 +47,7 @@ export const updateProfile = async (c: Context): Promise<HandlerResponse<any>> =
 }
 
 export const updatePin = async (c: Context): Promise<HandlerResponse<any>> => {
-  const userId = c.get('jwtPayload').id;
+  const userId = Number(getJwtPayload(c).id);
   const valid = z.safeParse(pinUpdateSchema, await c.req.json())
   if (!valid.success) {
     return c.json({ message: parseError(valid.error) }, 400);

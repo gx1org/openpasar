@@ -8,9 +8,10 @@ import { getConfig } from "../config.js";
 import z from "zod";
 import { parseError } from "../utils/helper.js";
 import { transactionListSchema, transactionStatusUpdateSchema } from "../validators/user.js";
+import { getJwtPayload } from "../utils/jwt.js";
 
 export const transactionList = async (c: Context): Promise<HandlerResponse<any>> => {
-  const userId = c.get('jwtPayload')?.id;
+  const userId = Number(getJwtPayload(c).id);
   const valid = z.safeParse(transactionListSchema, c.req.query())
   if (!valid.success) {
     return c.json({ message: parseError(valid.error) }, 400);
@@ -51,7 +52,7 @@ export const transactionDetail = async (c: Context): Promise<HandlerResponse<any
   if (isNaN(id)) {
     return c.json({ message: 'Transaksi tidak ditemukan' }, 404);
   }
-  const userId = c.get('jwtPayload')?.id;
+  const userId = Number(getJwtPayload(c).id);
   const [transaction] = await db.select({
     id: Transaction.id,
     store_id: Store.id,
@@ -92,7 +93,7 @@ export const transactionStatusUpdate = async (c: Context): Promise<HandlerRespon
     return c.json({ message: parseError(valid.error) }, 400);
   }
 
-  const userId = c.get('jwtPayload')?.id;
+  const userId = Number(getJwtPayload(c).id);
   const [transaction] = await db.select().from(Transaction)
     .where(and(
       eq(Transaction.id, Number(id)),

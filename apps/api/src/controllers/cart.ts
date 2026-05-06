@@ -7,9 +7,10 @@ import { statusPending } from "../utils/constant.js";
 import z from "zod";
 import { parseError } from "../utils/helper.js";
 import { cartSchema, checkoutSchema } from "../validators/user.js";
+import { getJwtPayload } from "../utils/jwt.js";
 
 export const cartList = async (c: Context): Promise<HandlerResponse<any>> => {
-  const userId = c.get('jwtPayload')?.id;
+  const userId = Number(getJwtPayload(c).id);
   const carts = await db.select({
     id: Cart.id,
     product_id: Cart.product_id,
@@ -48,7 +49,7 @@ export const addToCart = async (c: Context): Promise<HandlerResponse<any>> => {
     return c.json({ message: "Produk habis terjual" }, 400);
   }
 
-  const userId = c.get('jwtPayload')?.id;
+  const userId = Number(getJwtPayload(c).id);
   const [exist] = await db.select().from(Cart)
     .where(and(eq(Cart.user_id, userId), eq(Cart.product_id, product.id)))
     .limit(1);
@@ -70,7 +71,7 @@ export const addToCart = async (c: Context): Promise<HandlerResponse<any>> => {
 }
 
 export const removeFromCart = async (c: Context): Promise<HandlerResponse<any>> => {
-  const userId = c.get('jwtPayload')?.id;
+  const userId = Number(getJwtPayload(c).id);
   const id = Number(c.req.param("id"));
   if (isNaN(id)) {
     return c.json({ message: "Invalid id" }, 400);
@@ -95,7 +96,7 @@ export const removeFromCart = async (c: Context): Promise<HandlerResponse<any>> 
 }
 
 export const checkout = async (c: Context): Promise<HandlerResponse<any>> => {
-  const userId = c.get('jwtPayload')?.id;
+  const userId = Number(getJwtPayload(c).id);
   const valid = z.safeParse(checkoutSchema, await c.req.json());
   if (!valid.success) {
     return c.json({ message: parseError(valid.error) }, 400);

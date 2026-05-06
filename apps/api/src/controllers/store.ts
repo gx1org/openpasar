@@ -6,6 +6,7 @@ import { and, desc, eq, ilike, ne, sql } from "drizzle-orm";
 import { storeCreateUpdateSchema, storeListSchema } from "../validators/user.js";
 import z from "zod";
 import { parseError } from "../utils/helper.js";
+import { getJwtPayload } from "../utils/jwt.js";
 
 export const storeList = async (c: Context): Promise<HandlerResponse<any>> => {
   const valid = z.safeParse(storeListSchema, c.req.query())
@@ -43,7 +44,7 @@ export const storeList = async (c: Context): Promise<HandlerResponse<any>> => {
 }
 
 export const storeCreate = async (c: Context): Promise<HandlerResponse<any>> => {
-  const existingStore = Number(c.get('jwtPayload')?.store_id);
+  const existingStore = Number(getJwtPayload(c).store_id);
   if (existingStore) {
     return c.json({ message: "Anda sudah memiliki toko" }, 400);
   }
@@ -63,7 +64,7 @@ export const storeCreate = async (c: Context): Promise<HandlerResponse<any>> => 
   }
 
   const [store] = await db.insert(Store).values({
-    user_id: c.get('jwtPayload')?.id,
+    user_id: Number(getJwtPayload(c).id),
     name: req.name,
     email: req.email,
     phone: req.phone,
